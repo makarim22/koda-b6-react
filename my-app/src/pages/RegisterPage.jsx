@@ -31,9 +31,11 @@ const saveCredentials = (credentialsArray) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(credentialsArray));
 };
 
-function LoginPage() {
+function RegisterPage() {
+  const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -103,10 +105,25 @@ function LoginPage() {
     </div>
 
     {/* Heading */}
-    <h2 className="text-3xl font-bold text-center mb-2 text-gray-800">Login</h2>
+    <h2 className="text-3xl font-bold text-center mb-2 text-gray-800">Register</h2>
     <span className="block text-center text-gray-600 mb-8 text-sm">
       Fill out the form correctly
     </span>
+
+       <div className="mb-6">
+      <Input
+        label="Fullname"
+        type="text"
+        id="fullname"
+        name="fullname"
+        placeholder="Enter Your Fullname"
+        required
+        value={fullname}
+        onChange={(e) => setFullname(e.target.value)}
+        icon={mailIcon}
+        iconAlt="Email Icon"
+      />
+    </div>
 
     {/* Email Input */}
     <div className="mb-6">
@@ -140,6 +157,21 @@ function LoginPage() {
       />
     </div>
 
+        <div className="mb-2">
+      <Input
+        label="ConfirmPassword"
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Confirm Your Password"
+        required
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        icon={passwordIcon}
+        iconAlt="Password Icon"
+      />
+    </div>
+
     {/* Forgot Password */}
     <div className="text-right mb-6">
       <a
@@ -160,9 +192,9 @@ function LoginPage() {
 
     {/* Register Link */}
     <p className="text-center text-gray-600 text-sm mt-6">
-      Not Have an Account?{' '}
-      <Link to="/register" className="text-orange-500 hover:text-orange-600 font-bold transition duration-200">
-        Register
+      Already Have an Account?{' '}
+     <Link to="/login" className="text-orange-500 hover:text-orange-600 font-bold transition duration-200">
+        Login
       </Link>
       {/* <a 
         href="register.html" 
@@ -202,4 +234,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default RegisterPage;
