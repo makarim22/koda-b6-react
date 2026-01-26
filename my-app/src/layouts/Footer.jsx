@@ -24,7 +24,7 @@ const Footer = () => {
           <p className="mt-6 text-sm">&copy; {new Date().getFullYear()} CoffeeStore</p>
         </div>
 
-        {/* Product Section */}
+
         <div className="footer-section products text-center md:text-left">
           <h3 className="text-lg font-semibold text-white mb-4">Product</h3>
           <ul className="space-y-2">
@@ -36,7 +36,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Engage Section */}
         <div className="footer-section engage text-center md:text-left">
           <h3 className="text-lg font-semibold text-white mb-4">Engage</h3>
           <ul className="space-y-2">
@@ -48,7 +47,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Social Media Section */}
         <div className="footer-section social-media text-center md:text-left">
           <h3 className="text-lg font-semibold text-white mb-4">Social Media</h3>
           <div className="social-icons flex justify-center md:justify-start space-x-4">
