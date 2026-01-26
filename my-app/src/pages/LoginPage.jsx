@@ -6,7 +6,7 @@ import AuthLayout from '/src/layouts/AuthLayout';
 import loginImg from '../assets/coffee-cup.svg';
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 
 // Imports for logos inside the form
 import coffeeCupLogo from '../assets/icons/logo-coffee.svg';
@@ -34,6 +34,7 @@ const saveCredentials = (credentialsArray) => {
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -71,7 +72,7 @@ function LoginPage() {
       setPassword('');
 
       alert("Berhasil masuk! mengarahkan ke halaman utama");
-      window.location.href = "home.html";
+      navigate('/home');
     } else {
       alert("An unexpected error occurred. Please try again.");
     }
