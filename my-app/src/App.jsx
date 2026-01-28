@@ -10,6 +10,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import HomePage from "./pages/Homepage";
+import ProductPage from "./pages/ProductPage";
+import ChatPage from "./pages/ChatPage";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/home" element={<HomePage />} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/product" element={<ProductPage />} />
 
       </Routes>
     </Router>

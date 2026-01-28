@@ -1,16 +1,17 @@
-import React from 'react';
-import MenuIcon from '../../icons/home/Frame.svg';
-import LogoIcon from '../../icons/home/Logo.svg';
-import SearchIcon from '../../icons/Search.svg';
-import ShoppingCartIcon from '../../icons/ShoppingCart.svg';
-import CheckmarkIcon from '../../icons/checkmark.svg';
-import CoffeeCupIcon from '../../icons/coffee-cup.svg';
-import CoffeeShopIcon from '../../icons/coffee-shop.svg';
-import FacebookIcon from '../../icons/Facebook.svg';
-import TwitterIcon from '../../icons/Twitter.svg';
-import InstagramIcon from '../../icons/Instagram.png';
-import BaristaImage from '../../images/barista.svg';
-import GlobeImage from '../../images/globe.svg';
+// import React from 'react';
+// import MenuIcon from '../../icons/home/Frame.svg';
+// import LogoIcon from '../../icons/home/Logo.svg';
+// import SearchIcon from '../../icons/Search.svg';
+// import ShoppingCartIcon from '../../icons/ShoppingCart.svg';
+import CheckmarkIcon from '../assets/icons/homepage/checklist.svg';
+import CoffeeCupIcon from '../assets/icons/homepage/cup-brown.svg';
+import CoffeeShopIcon from '../assets/icons/homepage/CoffeeShop.svg';
+import FacebookIcon from '../assets/icons/homepage/facebook.svg';
+import TwitterIcon from '../assets/icons/homepage/twitter.svg';
+import InstagramIcon from '../assets/icons/homepage/Instagram.svg';
+import GrinderImage from '../assets/icons/homepage/coffee-grinder.svg';
+import BaristaImage from '../assets/icons/homepage/barista.png';
+import GlobeImage from '../assets/icons/homepage/globe.svg';
 
 import Header from '../layouts/header';
 
@@ -49,7 +50,7 @@ const HomePage = () => {
           </div>
         </div>
         <div className="hidden md:block image-section bg-cover bg-center h-full w-1/2 bg-gray-800">
-          {/* Hero background image placeholder */}
+          <img src={GrinderImage} alt="Barista" className="w-full h-full object-cover" />
         </div>
       </section>
 

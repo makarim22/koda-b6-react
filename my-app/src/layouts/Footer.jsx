@@ -1,11 +1,10 @@
 import React from 'react';
 
-
-import CoffeeCupIcon from '../../icons/coffee-cup.svg';
-import CoffeeShopIcon from '../../icons/coffee-shop.svg';
-import FacebookIcon from '../../icons/Facebook.svg';
-import TwitterIcon from '../../icons/Twitter.svg';
-import InstagramIcon from '../../icons/Instagram.png'; 
+import CoffeeCupIcon from '../assets/icons/homepage/cup-brown.svg';
+import CoffeeShopIcon from '../assets/icons/homepage/CoffeeShop.svg';
+import FacebookIcon from '../assets/icons/homepage/Facebook.svg';
+import TwitterIcon from '../assets/icons/homepage/twitter.svg';
+import InstagramIcon from '../assets/icons/homepage/Instagram.svg'; 
 
 const Footer = () => {
   return (

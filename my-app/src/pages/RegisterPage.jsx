@@ -6,7 +6,7 @@ import AuthLayout from '/src/layouts/AuthLayout';
 import loginImg from '../assets/coffee-cup.svg';
 
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // Imports for logos inside the form
 import coffeeCupLogo from '../assets/icons/logo-coffee.svg';
@@ -50,18 +50,18 @@ function RegisterPage() {
     let allCredentials = getStoredCredentials();
     console.log('Stored Credentials:', allCredentials);
 
-    const wrongPassword = allCredentials.some(
-      user => user.email === trimmedEmail && user.password !== password
-    );
-    if (wrongPassword) {
-      alert('Email atau password yang dimasukkan salah');
-      return;
-    }
+    // const wrongPassword = allCredentials.some(
+    //   user => user.email === trimmedEmail && user.password !== password
+    // );
+    // if (wrongPassword) {
+    //   alert('Email atau password yang dimasukkan salah');
+    //   return;
+    // }
 
-    if (!allCredentials.some(user => user.email === trimmedEmail)) {
-      alert('Email tersebut belum terdaftar di sistem kami');
-      return;
-    }
+    // if (!allCredentials.some(user => user.email === trimmedEmail)) {
+    //   alert('Email tersebut belum terdaftar di sistem kami');
+    //   return;
+    // }
 
     const userIndex = allCredentials.findIndex(user => user.email === trimmedEmail);
 
