@@ -7,16 +7,14 @@ export function Input({
   type = 'text',
   value,
   onChange,
-  icon, // New prop for the icon path
-  iconAlt, // New prop for icon alt text
-//   id, // Explicitly destructure id
-  ...props // Capture other props like placeholder, name, required, etc.
+  icon, 
+  iconAlt,
+  ...props 
 }) {
-  // Ensure a unique ID for the label association
   const inputId = label;
 
   return (
-    <div className="mb-4"> {/* Added margin bottom for spacing, can be overridden by parent */}
+    <div className="mb-4"> 
       {label && (
         <label htmlFor={inputId} className="block text-gray-700 text-sm font-bold mb-2">
           {label}
@@ -26,19 +24,17 @@ export function Input({
         <input
           type={type}
           id={inputId}
-          value={value} // Use the value prop directly from useState in parent
+          value={value} 
           onChange={onChange}
-          className="appearance-none border-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline flex-grow"
-          // Adjust padding-right if an icon is present to prevent text from overlapping it
-          // You might need to make this dynamic if you have different icon sizes
+          className="appearance-none border-none w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline grow"
           style={icon ? { paddingRight: '2.5rem' } : {}}
-          {...props} // Spread remaining props like placeholder, name, required, etc.
+          {...props} 
         />
         {icon && (
           <img
             src={icon}
-            alt={iconAlt || 'Input Icon'} // Provide a fallback alt text
-            className="absolute right-3 w-5 h-5 text-gray-500" // Tailwind classes for icon positioning and size
+            alt={iconAlt || 'Input Icon'} 
+            className="absolute left-3 w-5 h-5 text-gray-500" 
           />
         )}
       </div>
