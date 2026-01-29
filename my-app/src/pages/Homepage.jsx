@@ -6,8 +6,56 @@ import GlobeImage from '../assets/icons/homepage/globe.svg';
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 import { Link } from 'react-router-dom';
+import { ProductGrid } from '../component/ProductGrid';
+
+
+
 
 const HomePage = () => {
+
+   const products = [
+  {
+    id: 1,
+    image: './src/assets/icons/productPage/espresso.jfif',
+    title: 'Espresso', 
+    price: 'IDR 15.000', 
+    originalPrice: 'IDR 18.000', 
+    rating: 5,
+    reviews: 0, 
+    isFlashSale: true,
+  },
+  {
+    id: 2,
+    image: './src/assets/icons/productPage/latte.jpg',
+    title: 'Latte',
+    price: 'IDR 19.000',
+    originalPrice: 'IDR 22.000',
+    rating: 5,
+    reviews: 0,
+    isFlashSale: true,
+  },
+  {
+    id: 3,
+    image: './src/assets/icons/productPage/mocha.jfif',
+    title: 'Mocha',
+    price: 'IDR 21.000',
+    originalPrice: 'IDR 24.000',
+    rating: 4,
+    reviews: 0,
+    isFlashSale: true,
+  },
+  {
+    id: 4,
+    image: './src/assets/icons/productPage/americano.jfif',
+    title: 'Americano',
+    price: 'IDR 12.000', 
+    originalPrice: 'IDR 15.000', 
+    rating: 4,
+    reviews: 0,
+    isFlashSale: false,
+  }
+];
+
   return (
     <div className="font-sans antialiased text-gray-900">
       <Header />
@@ -79,6 +127,10 @@ const HomePage = () => {
         </div>
       </section>
 
+
+
+
+
       <section className="py-16 md:py-24 bg-gray-100 text-gray-800 px-8 md:px-32 text-center">
         <div className="mb-12">
           <p className="text-3xl md:text-4xl font-bold mb-4">
@@ -89,20 +141,7 @@ const HomePage = () => {
             yours too!
           </p>
         </div>
-        <div className="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold mb-2">Product Name 1</h3>
-            <p className="text-gray-600">Short description of the product.</p>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold mb-2">Product Name 2</h3>
-            <p className="text-gray-600">Short description of the product.</p>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-semibold mb-2">Product Name 3</h3>
-            <p className="text-gray-600">Short description of the product.</p>
-          </div>
-        </div>
+        <ProductGrid products={products} columns={4} />
       </section>
 
       <section className="py-16 md:py-24 bg-white text-gray-800 px-8 md:px-32 text-center">
