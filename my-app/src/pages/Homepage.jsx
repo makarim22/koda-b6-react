@@ -1,28 +1,16 @@
-// import React from 'react';
-// import MenuIcon from '../../icons/home/Frame.svg';
-// import LogoIcon from '../../icons/home/Logo.svg';
-// import SearchIcon from '../../icons/Search.svg';
-// import ShoppingCartIcon from '../../icons/ShoppingCart.svg';
 import CheckmarkIcon from '../assets/icons/homepage/checklist.svg';
-import CoffeeCupIcon from '../assets/icons/homepage/cup-brown.svg';
-import CoffeeShopIcon from '../assets/icons/homepage/CoffeeShop.svg';
-import FacebookIcon from '../assets/icons/homepage/facebook.svg';
-import TwitterIcon from '../assets/icons/homepage/twitter.svg';
-import InstagramIcon from '../assets/icons/homepage/Instagram.svg';
 import GrinderImage from '../assets/icons/homepage/coffee-grinder.svg';
 import BaristaImage from '../assets/icons/homepage/barista.png';
 import GlobeImage from '../assets/icons/homepage/globe.svg';
 
 import Header from '../layouts/header';
+import Footer from '../layouts/Footer';
 
 const HomePage = () => {
   return (
     <div className="font-sans antialiased text-gray-900">
-      
       <Header />
-  
-      {/* Hero Section */}
-      <section className="relative flex flex-col md:flex-row items-center justify-center min-h-screen bg-gray-900 text-white pt-20 md:pt-0">
+      <section className="relative flex flex-col md:flex-row items-center justify-center min-h-screen bg-linear-to-b from-neutral-500 to-stone-950 text-white pt-20 md:pt-0">
         <div className="flex flex-col items-center md:items-start text-center md:text-left p-8 md:p-16 w-full md:w-1/2">
           <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
             Start Your Day with Coffee and Good Meals
@@ -31,32 +19,31 @@ const HomePage = () => {
             We provide high-quality beans, good taste, and healthy meals made by
             love just for you. Start your day with us for a bigger smile!
           </p>
-          <button className="bg-[#FF8906] text-white font-semibold py-3 px-8 rounded-full text-lg hover:bg-orange-600 transition duration-300 mb-10">
+          <button className="bg-[#FF8906] text-white font-semibold py-3 px-8 text-lg rounded-md hover:bg-orange-600 transition duration-300 mb-10">
             Get Started
           </button>
           <div className="flex justify-center md:justify-start space-x-8 md:space-x-12 mt-8">
             <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-bold">90+</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-orange-400">90+</h2>
               <p className="text-gray-300">Staff</p>
             </div>
             <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-bold">30+</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-orange-400">30+</h2>
               <p className="text-gray-300">Stores</p>
             </div>
             <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-bold">800+</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-orange-400">800+</h2>
               <p className="text-gray-300">Customers</p>
             </div>
           </div>
         </div>
-        <div className="hidden md:block image-section bg-cover bg-center h-full w-1/2 bg-gray-800">
+        <div className="hidden md:block image-section bg-cover bg-center h-full w-1/2 bg-liear-to-b from-neutral-500 to-stone-950">
           <img src={GrinderImage} alt="Barista" className="w-full h-full object-cover" />
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="flex flex-col md:flex-row items-center justify-center py-16 md:py-24 bg-white text-gray-800 px-8 md:px-32">
-        <div className="w-full md:w-1/2 md:pr-12 mb-10 md:mb-0">
+      <section className="flex flex-col md:flex-row items-center justify-center bg-white text-gray-800 ">
+        <div className="w-full md:w-1/2 md:pr-12 mb-10 md:mb-0 py-8 md:py-24 px-8 md:px-22">
           <p className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
             We Provide <strong className="text-[#DEB887]">Good Coffee </strong> and
             <strong className="text-[#DEB887]"> Healthy Meals</strong>
@@ -67,29 +54,30 @@ const HomePage = () => {
           </p>
           <ul className="space-y-4">
             <li className="flex items-start text-lg">
-              <img src={CheckmarkIcon} alt="Checkmark" className="w-6 h-6 mr-3 mt-1 flex-shrink-0" />
+              <img src={CheckmarkIcon} alt="Checkmark" className="w-6 h-6 mr-3 mt-1 shrink-0" />
               High-quality beans
             </li>
             <li className="flex items-start text-lg">
-              <img src={CheckmarkIcon} alt="Checkmark" className="w-6 h-6 mr-3 mt-1 flex-shrink-0" />
+              <img src={CheckmarkIcon} alt="Checkmark" className="w-6 h-6 mr-3 mt-1 shrink-0" />
               Healthy meals, you can request the ingredients
             </li>
             <li className="flex items-start text-lg">
-              <img src={CheckmarkIcon} alt="Checkmark" className="w-6 h-6 mr-3 mt-1 flex-shrink-0" />
+              <img src={CheckmarkIcon} alt="Checkmark" className="w-6 h-6 mr-3 mt-1 shrink-0" />
               Chat with our staff to get a better experience for ordering
             </li>
             <li className="flex items-start text-lg">
-              <img src={CheckmarkIcon} alt="Checkmark" className="w-6 h-6 mr-3 mt-1 flex-shrink-0" />
+              <img src={CheckmarkIcon} alt="Checkmark" className="w-6 h-6 mr-3 mt-1 shrink-0" />
               Free member card with a minimum purchase of IDR 200.000.
             </li>
           </ul>
         </div>
-        <div className="w-full md:w-1/2 flex justify-center">
-          <img src={BaristaImage} alt="Barista" className="max-w-full h-auto rounded-lg shadow-lg" />
+        <div className="w-full md:w-1/2 flex justify-center self-stretch overflow-hidden">
+          <img src={BaristaImage} 
+          alt="Barista" 
+          className="h-full w-full object-cover shadow-lg" />
         </div>
       </section>
 
-      {/* Favorite Section */}
       <section className="py-16 md:py-24 bg-gray-100 text-gray-800 px-8 md:px-32 text-center">
         <div className="mb-12">
           <p className="text-3xl md:text-4xl font-bold mb-4">
@@ -139,53 +127,8 @@ const HomePage = () => {
         </p>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 text-gray-300 py-12 md:py-16 px-8 md:px-32">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-16">
-          <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <div className="flex items-center space-x-2 mb-4">
-              <img src={CoffeeCupIcon} alt="Coffee Cup" className="h-8 w-8" />
-              <img src={CoffeeShopIcon} alt="Coffee Shop Logo" className="h-8" />
-            </div>
-            <p className="mt-4 text-base max-w-xs">
-              Coffee Shop is a store that sells some good meals, and especially
-              coffee. We provide high quality beans.
-            </p>
-            <p className="mt-6 text-sm">&copy; {new Date().getFullYear()} CoffeeStore</p>
-          </div>
-
-          <div className="text-center md:text-left">
-            <h3 className="text-lg font-semibold text-white mb-4">Product</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white transition-colors duration-200">Our Product</a></li>
-              <li><a href="#" className="hover:text-white transition-colors duration-200">Pricing</a></li>
-              <li><a href="#" className="hover:text-white transition-colors duration-200">Locations</a></li>
-              <li><a href="#" className="hover:text-white transition-colors duration-200">Countries</a></li>
-              <li><a href="#" className="hover:text-white transition-colors duration-200">Blog</a></li>
-            </ul>
-          </div>
-
-          <div className="text-center md:text-left">
-            <h3 className="text-lg font-semibold text-white mb-4">Engage</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white transition-colors duration-200">Partner</a></li>
-              <li><a href="#" className="hover:text-white transition-colors duration-200">FAQ</a></li>
-              <li><a href="#" className="hover:text-white transition-colors duration-200">About Us</a></li>
-              <li><a href="#" className="hover:text-white transition-colors duration-200">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors duration-200">Terms of Service</a></li>
-            </ul>
-          </div>
-
-          <div className="text-center md:text-left">
-            <h3 className="text-lg font-semibold text-white mb-4">Social Media</h3>
-            <div className="flex justify-center md:justify-start space-x-4">
-              <a href="#" aria-label="Facebook"><img src={FacebookIcon} alt="Facebook" className="h-6 w-6 hover:opacity-75 transition-opacity duration-200" /></a>
-              <a href="#" aria-label="Twitter"><img src={TwitterIcon} alt="Twitter" className="h-6 w-6 hover:opacity-75 transition-opacity duration-200" /></a>
-              <a href="#" aria-label="Instagram"><img src={InstagramIcon} alt="Instagram" className="h-6 w-6 hover:opacity-75 transition-opacity duration-200" /></a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* Footer Section */}
+      <Footer />
 
     </div>
   );

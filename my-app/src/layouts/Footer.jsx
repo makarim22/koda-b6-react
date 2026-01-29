@@ -3,14 +3,13 @@ import React from 'react';
 import CoffeeCupIcon from '../assets/icons/homepage/cup-brown.svg';
 import CoffeeShopIcon from '../assets/icons/homepage/CoffeeShop.svg';
 import FacebookIcon from '../assets/icons/homepage/Facebook.svg';
-import TwitterIcon from '../assets/icons/homepage/twitter.svg';
+import TwitterIcon from '../assets/icons/homepage/Vector.svg';
 import InstagramIcon from '../assets/icons/homepage/Instagram.svg'; 
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-gray-300 py-12 md:py-16 px-8 md:px-32">
+    <footer className="bg-white text-gray-600 py-12 md:py-16 px-8 md:px-32">
       <div className="footer-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-16">
-        {/* About Section */}
         <div className="footer-section about flex flex-col items-center md:items-start text-center md:text-left">
           <div className="flex items-center space-x-2 mb-4">
             <img src={CoffeeCupIcon} alt="Coffee Cup" className="h-8 w-8" />
@@ -47,11 +46,11 @@ const Footer = () => {
         </div>
 
         <div className="footer-section social-media text-center md:text-left">
-          <h3 className="text-lg font-semibold text-white mb-4">Social Media</h3>
-          <div className="social-icons flex justify-center md:justify-start space-x-4">
-            <a href="#" aria-label="Facebook"><img src={FacebookIcon} alt="Facebook" className="h-6 w-6 hover:opacity-75 transition-opacity duration-200" /></a>
-            <a href="#" aria-label="Twitter"><img src={TwitterIcon} alt="Twitter" className="h-6 w-6 hover:opacity-75 transition-opacity duration-200" /></a>
-            <a href="#" aria-label="Instagram"><img src={InstagramIcon} alt="Instagram" className="h-6 w-6 hover:opacity-75 transition-opacity duration-200" /></a>
+          <h3 className="text-lg font-semibold text-gray-400 mb-4">Social Media</h3>
+          <div className="social-icons flex justify-center md:justify-start space-x-4 items-center bg-gray-200">
+           <img src={FacebookIcon} alt="Facebook"/>
+           <img src={TwitterIcon} alt="Twitter"/>
+           <img src={InstagramIcon} alt="Instagram"/>
           </div>
         </div>
       </div>
