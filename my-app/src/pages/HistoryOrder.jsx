@@ -1,5 +1,5 @@
 
-import { ChevronRight, MessageSquare, Search, ShoppingCart, Facebook, Twitter, Instagram } from 'lucide-react';
+import { ChevronRight, MessageSquare} from 'lucide-react';
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 

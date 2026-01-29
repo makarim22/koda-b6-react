@@ -1,7 +1,8 @@
 import React from 'react'
 
 function Invoice(props) {
-    const {order, delivery, tax, subtotal} = props
+    const {paymentDetails} = props;
+    const {order, delivery, tax, subtotal} = paymentDetails;
   return (
     <>
     <div>

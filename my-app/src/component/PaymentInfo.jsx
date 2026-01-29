@@ -2,6 +2,7 @@ import React from 'react'
 
 import mailIcon from '../assets/icons/mail.svg';
 import passwordIcon from '../assets/icons/Password.svg';
+import { Input } from './input';
 
 function PaymentInfo() {
     
@@ -31,8 +32,8 @@ function PaymentInfo() {
                 name="password"
                 placeholder="Enter Your Password"
                 required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                // value={password}
+                // onChange={(e) => setPassword(e.target.value)}
                 icon={passwordIcon}
                 iconAlt="Password Icon"
               />

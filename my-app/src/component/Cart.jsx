@@ -1,6 +1,7 @@
 
 function Cart(props) {
     const {items} = props;
+    console.log("items", items)
   return (
               <div className="summary-section order-items-section">
           <h3>Your Order</h3>
