@@ -1,13 +1,9 @@
-// pages/ProductPage.jsx
-// import { useState } from 'react';
 import { PromoSection } from '../component/PromoSection';
 import { ProductGrid } from '../component/ProductGrid';
 import { FilterSidebar } from '../component/FIlterSidebar';
-import { ProductCard } from '../component/ProductCard';
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
  const ProductPage = () => {
-  // const [filteredProducts, setFilteredProducts] = useState(PRODUCTS_DATA);
 
   const promoData = [
     {
@@ -39,78 +35,105 @@ import Footer from '../layouts/Footer';
   ];
 
   const sortOptions = [
-    { id: 1, name: 'Buy (get!)' },
+    { id: 1, name: 'Buy 1 get 1' },
     { id: 2, name: 'Flash sale' },
     { id: 3, name: 'Birthday Package' },
     { id: 4, name: 'Cheap' },
   ];
 
-  const productsData = [
-    {
-      id: 1,
-      image: '/images/hazelnut-latte.jpg',
-      title: 'Hazelnut Latte',
-      price: 'IDR 10.000',
-      originalPrice: 'IDR 15.000',
-      rating: 5,
-      reviews: 50,
-      isFlashSale: true,
-    },
-    // ... more products
-  ];
-
-  // const handleCategoryChange = (categoryId) => {
-  //   // Filter logic
-  // };
-
-  // const handleSortChange = (sortId) => {
-  //   // Sort logic
-  // };
-
-  // const handlePriceChange = (range) => {
-  //   // Price filter logic
-  // };
+ const productsData = [
+  {
+    id: 1,
+    image: './src/assets/icons/productPage/espresso.jfif',
+    title: 'Espresso', 
+    price: 'IDR 15.000', 
+    originalPrice: 'IDR 18.000', 
+    rating: 5,
+    reviews: 0, 
+    isFlashSale: true,
+  },
+  {
+    id: 2,
+    image: './src/assets/icons/productPage/latte.jpg',
+    title: 'Latte',
+    price: 'IDR 19.000',
+    originalPrice: 'IDR 22.000',
+    rating: 5,
+    reviews: 0,
+    isFlashSale: true,
+  },
+  {
+    id: 3,
+    image: './src/assets/icons/productPage/mocha.jfif',
+    title: 'Mocha',
+    price: 'IDR 21.000',
+    originalPrice: 'IDR 24.000',
+    rating: 4,
+    reviews: 0,
+    isFlashSale: true,
+  },
+  {
+    id: 4,
+    image: './src/assets/icons/productPage/americano.jfif',
+    title: 'Americano',
+    price: 'IDR 12.000', 
+    originalPrice: 'IDR 15.000', 
+    rating: 4,
+    reviews: 0,
+    isFlashSale: false,
+  },
+  {
+    id: 5,
+    image: './src/assets/icons/productPage/flat-white.jfif',
+    title: 'Flat White',
+    price: 'IDR 20.000',
+    originalPrice: 'IDR 23.000',
+    rating: 4,
+    reviews: 0,
+    isFlashSale: true,
+  },
+  {
+    id: 6,
+    image: './src/assets/icons/productPage/affogato.jfif',
+    title: 'Affogato',
+    price: 'IDR 25.000',
+    originalPrice: 'IDR 30.000',
+    rating: 5,
+    reviews: 0,
+    isFlashSale: false,
+  },
+];
 
   return (
     <>
-    <Header />
+    <Header bgColor="bg-black"/>
     <div className="min-h-screen bg-gray-50">
-      {/* Header Banner */}
       <div className="bg-cover bg-center h-64 flex items-center justify-center"
-        style={{ backgroundImage: 'url(/images/banner.jpg)' }}>
+        style={{ backgroundImage: 'url(./src/assets/icons/glasses.png)' }}>
         <h1 className="text-4xl font-bold text-white text-center">
           We Provide Good Coffee and Healthy Meals
         </h1>
       </div>
 
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Promo Section */}
         <PromoSection promos={promoData} />
 
-        {/* Products Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-6">
-            Our <span className="text-orange-500">Product</span>
+            Our <span className="text-yellow-800">Product</span>
           </h2>
 
           <div className="flex gap-6">
-            {/* Sidebar */}
-            <div className="w-full md:w-64 flex-shrink-0">
+            <div className="w-full md:w-64 shrink-0">
               <FilterSidebar
                 categories={categories}
                 sortOptions={sortOptions}
-                // onCategoryChange={handleCategoryChange}
-                // onSortChange={handleSortChange}
-                // onPriceChange={handlePriceChange}
               />
             </div>
 
-            {/* Product Grid */}
             <div className="flex-1">
-              <ProductGrid products={productsData} columns={3} />
+              <ProductGrid products={productsData} columns={2} />
 
-              {/* Pagination */}
               <div className="flex justify-center gap-2 mt-8">
                 <button className="w-8 h-8 rounded-full bg-orange-500 text-white">‹</button>
                 <button className="w-8 h-8 rounded-full bg-orange-500 text-white">1</button>

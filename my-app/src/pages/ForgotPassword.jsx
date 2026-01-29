@@ -1,18 +1,10 @@
-// src/pages/Auth/LoginPage.jsx
-import React from 'react';
 import { Input } from '../component/input';
 import { Button } from '/src/component/Button';
-import AuthLayout from '/src/layouts/AuthLayout';
 import ForgotPasswordImg from '../assets/icons/forgot-password.svg';
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-
-// Imports for logos inside the form
 import coffeeCupLogo from '../assets/icons/logo-coffee.svg';
 import coffeeShopLogo from '../assets/icons/cup.svg';
-
-// Imports for input icons
 import mailIcon from '../assets/icons/mail.svg';
 
 const STORAGE_KEY = 'user-data';

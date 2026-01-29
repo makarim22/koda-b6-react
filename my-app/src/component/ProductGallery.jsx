@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import './ProductGallery.css';
 
 export default function ProductGallery({ images }) {
   const [mainImage, setMainImage] = useState(images[0]);

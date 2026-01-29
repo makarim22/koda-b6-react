@@ -4,10 +4,12 @@ import MenuIcon from '../assets/icons/cup-white.svg';
 import LogoIcon from '../assets/icons/coffee-shop.svg';
 import SearchIcon from '../assets/icons/Search.svg';
 import ShoppingCartIcon from '../assets/icons/ShoppingCart.svg';
+import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header = (props) => {
+  const { bgColor } = props;
   return (
-    <header className="flex items-center justify-between px-5 md:px-32 py-4 fixed top-0 left-0 right-0 w-full bg-transparent z-10">
+    <header className={`flex items-center justify-between px-5 md:px-32 py-4 fixed top-0 left-0 right-0 w-full ${bgColor || 'bg-transparent'} z-10`}>
       <div className="flex items-center space-x-8">
         <div className="flex items-center space-x-2">
           <img src={MenuIcon} alt="Menu" className="h-6 w-6" />
@@ -15,8 +17,18 @@ const Header = () => {
         </div>
 
         <nav className="flex space-x-6">
-          <a href="#" className="text-white text-base hover:text-gray-300">Home</a>
-          <a href="product.html" className="text-white text-base hover:text-gray-300">Product</a>
+          <Link
+            to="/"
+            className="text-white text-base hover:text-gray-300"
+          >
+            Home
+          </Link>
+          <Link
+            to="/product"
+            className="text-white text-base hover:text-gray-300"
+          >
+            Product
+          </Link>
         </nav>
       </div>
 

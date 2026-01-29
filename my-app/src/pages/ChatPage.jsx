@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from '../layouts/header';
+import Header from '../layouts/Header';
 import GrinderImage from '../assets/icons/homepage/coffee-grinder.svg';
 
 function ChatPage() {

@@ -9,8 +9,7 @@ export const FilterSidebar = ({
   const [priceRange, setPriceRange] = useState([0, 100000]);
 
   return (
-    <div className="bg-white rounded-lg p-6 w-full md:w-64">
-      {/* Search */}
+    <div className="bg-black text-white rounded-lg p-6 w-full md:w-64">
       <div className="mb-6">
         <input
           type="text"
@@ -19,7 +18,6 @@ export const FilterSidebar = ({
         />
       </div>
 
-      {/* Category Filter */}
       <div className="mb-6">
         <h3 className="font-bold text-sm mb-3">Category</h3>
         <div className="space-y-2">
@@ -36,7 +34,6 @@ export const FilterSidebar = ({
         </div>
       </div>
 
-      {/* Sort By */}
       <div className="mb-6">
         <h3 className="font-bold text-sm mb-3">Sort By</h3>
         <div className="space-y-2">
@@ -54,7 +51,6 @@ export const FilterSidebar = ({
         </div>
       </div>
 
-      {/* Price Range */}
       <div className="mb-6">
         <h3 className="font-bold text-sm mb-3">Range Price</h3>
         <input

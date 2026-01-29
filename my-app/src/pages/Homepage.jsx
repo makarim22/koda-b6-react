@@ -3,8 +3,9 @@ import GrinderImage from '../assets/icons/homepage/coffee-grinder.svg';
 import BaristaImage from '../assets/icons/homepage/barista.png';
 import GlobeImage from '../assets/icons/homepage/globe.svg';
 
-import Header from '../layouts/header';
+import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
+import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   return (
@@ -104,7 +105,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Map Section */}
       <section className="py-16 md:py-24 bg-white text-gray-800 px-8 md:px-32 text-center">
         <p className="text-3xl md:text-4xl font-bold mb-4 max-w-3xl mx-auto">
           <strong className="text-[#8e6447]">Visit Our Store </strong>in the Spot on
@@ -119,7 +119,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Testimonial Section */}
       <section className="py-16 md:py-24 bg-gray-900 text-white px-8 md:px-32 text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Customers Say</h2>
         <p className="text-lg max-w-2xl mx-auto">
@@ -127,7 +126,6 @@ const HomePage = () => {
         </p>
       </section>
 
-      {/* Footer Section */}
       <Footer />
 
     </div>

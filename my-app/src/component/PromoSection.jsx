@@ -6,7 +6,7 @@ export const PromoSection = ({ promos }) => {
   return (
     <div className="mb-8">
       <h2 className="text-2xl font-bold mb-4">
-        Today <span className="text-orange-500">Promo</span>
+        Today <span className="text-yellow-800">Promo</span>
       </h2>
 
       <div className="flex gap-4 overflow-x-auto pb-4">
