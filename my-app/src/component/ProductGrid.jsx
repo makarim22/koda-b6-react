@@ -1,7 +1,7 @@
 import { ProductCard } from "./ProductCard";
 export const ProductGrid = ({ products, columns = 2 }) => {
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${columns} gap-6`}>
+    <div className={`grid grid-cols-1 md:grid-cols-${columns} lg:grid-cols-${columns} gap-6`}>
       {products.map((product) => (
         <ProductCard
           key={product.id}

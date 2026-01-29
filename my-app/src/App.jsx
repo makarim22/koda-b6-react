@@ -13,6 +13,8 @@ import HomePage from "./pages/Homepage";
 import ProductPage from "./pages/ProductPage";
 import ChatPage from "./pages/ChatPage";
 import ProductReview from "./pages/ProductReview";
+import HistoryOrder from "./pages/HistoryOrder";
+import DetailOrder from "./pages/DetailOrder";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/product" element={<ProductPage />} />
         <Route path="/product-review" element={<ProductReview />} />
+        <Route path="/order-history" element={<HistoryOrder/>} />
+        <Route path="/detail-order" element={<DetailOrder />} />
 
       </Routes>
     </Router>
