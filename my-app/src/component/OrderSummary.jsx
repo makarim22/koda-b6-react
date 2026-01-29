@@ -1,5 +1,5 @@
 import React from 'react';
-import './OrderSummary.css';
+
 
 export default function OrderSummary({ order = {} }) {
   const {

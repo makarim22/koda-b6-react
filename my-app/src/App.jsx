@@ -15,6 +15,7 @@ import ChatPage from "./pages/ChatPage";
 import ProductReview from "./pages/ProductReview";
 import HistoryOrder from "./pages/HistoryOrder";
 import DetailOrder from "./pages/DetailOrder";
+import ProductCheckout from "./pages/ProductCheckout";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/product" element={<ProductPage />} />
         <Route path="/product-review" element={<ProductReview />} />
+        <Route path="/product-checkout" element={<ProductCheckout />} />
         <Route path="/order-history" element={<HistoryOrder/>} />
         <Route path="/detail-order" element={<DetailOrder />} />
 
