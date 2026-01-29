@@ -3,7 +3,7 @@ import React from 'react';
 import { Input } from '../component/input';
 import { Button } from '/src/component/Button';
 import AuthLayout from '/src/layouts/AuthLayout';
-import loginImg from '../assets/coffee-cup.svg';
+import loginImg from '../assets/icons/barista-girl.svg';
 
 import { useState } from 'react';
 import { Link, useNavigate} from 'react-router-dom';
@@ -97,7 +97,7 @@ function LoginPage() {
       Fill out the form correctly
     </span>
 
-    <div className="mb-6">
+    <div className="mb-2">
       <Input
         label="Email"
         type="email"

@@ -3,7 +3,7 @@ import React from 'react';
 import { Input } from '../component/input';
 import { Button } from '/src/component/Button';
 import AuthLayout from '/src/layouts/AuthLayout';
-import loginImg from '../assets/coffee-cup.svg';
+import RegisterImg from '../assets/coffee-cup.svg';
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -80,37 +80,31 @@ function RegisterPage() {
   };
 
   return (
-    // Container utama: full height, flex row untuk side-by-side
-    <div className="min-h-screen flex flex-col md:flex-row font-sans bg-white bg-black">
+    <div className="min-h-screen flex flex-col md:flex-row font-sans bg-white">
 
-      {/* Bagian Kiri: Gambar (40% width) */}
-      <div className="hidden md:flex md:w-2/5 bg-gradient-to-br from-orange-50 to-orange-100 items-center justify-center p-8 overflow-hidden">
+      <div className="hidden md:flex md:w-3/10 bg-linear-to-br from-orange-50 to-orange-100 items-center justify-center overflow-hidden">
         <img 
-          src={loginImg} 
-          alt="Login Illustration" 
-          className="w-full h-full object-cover rounded-xl"
+          src={RegisterImg} 
+          alt="Barista Girl" 
+          className="w-full h-full object-cover "
         />
       </div>
 
-      {/* Bagian Kanan: Form Login (60% width) */}
-<div className="w-full md:w-3/5 flex items-center justify-center p-6 md:p-12 bg-white">
+<div className="w-full md:w-7/10 flex items-center justify-center p-6 md:p-12 bg-white">
   <form 
     onSubmit={handleSubmit} 
     className="w-full max-w-md flex flex-col"
   >
-    {/* Logo Container */}
-    <div className="flex flex-col items-center mb-8">
-      <img src={coffeeCupLogo} alt="Logo" className="w-14 h-14 mb-3" />
-      <img src={coffeeShopLogo} alt="Coffee Shop Logo" className="h-7" />
+    <div className="flex flex-row items-center gap-3">
+      <img src={coffeeShopLogo} alt="Logo" className="h-7" />
+      <img src={coffeeCupLogo} alt="Text" className="w-22 h-22" />
     </div>
 
-    {/* Heading */}
-    <h2 className="text-3xl font-bold text-center mb-2 text-gray-800">Register</h2>
-    <span className="block text-center text-gray-600 mb-8 text-sm">
+    <h2 className="text-3xl text-left mb-2 text-yellow-800 ">Register</h2>
+    <span className="block text-left text-gray-600 mb-8 text-sm">
       Fill out the form correctly
     </span>
-
-       <div className="mb-6">
+       <div className="mb-2">
       <Input
         label="Fullname"
         type="text"
@@ -125,8 +119,7 @@ function RegisterPage() {
       />
     </div>
 
-    {/* Email Input */}
-    <div className="mb-6">
+    <div className="mb-2">
       <Input
         label="Email"
         type="email"
@@ -141,7 +134,6 @@ function RegisterPage() {
       />
     </div>
 
-    {/* Password Input */}
     <div className="mb-2">
       <Input
         label="Password"
@@ -159,7 +151,7 @@ function RegisterPage() {
 
         <div className="mb-2">
       <Input
-        label="ConfirmPassword"
+        label="Confirm Password"
         type="password"
         id="password"
         name="password"
@@ -172,46 +164,33 @@ function RegisterPage() {
       />
     </div>
 
-    {/* Forgot Password */}
     <div className="text-right mb-6">
       <a
-        className="text-orange-500 hover:text-orange-600 text-sm font-medium transition duration-200"
+        className="text-orange-400 text-sm font-medium transition duration-200"
         href="forgot-password.html"
       >
         Forgot Password?
       </a>
     </div>
-
-    {/* Login Button */}
     <Button
       type="submit"
-      className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 transition duration-200"
+      className="w-full bg-orange-400 text-black font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 transition duration-200"
     >
-      Login
+      Register
     </Button>
-
-    {/* Register Link */}
     <p className="text-center text-gray-600 text-sm mt-6">
       Already Have an Account?{' '}
-     <Link to="/login" className="text-orange-500 hover:text-orange-600 font-bold transition duration-200">
+     <Link to="/login" className="text-orange-500 hover:text-orange-600 transition duration-200">
         Login
       </Link>
-      {/* <a 
-        href="register.html" 
-        className="text-orange-500 hover:text-orange-600 font-bold transition duration-200"
-      >
-        Register
-      </a> */}
     </p>
 
-    {/* Divider */}
     <div className="flex items-center mt-8 mb-6">
-      <div className="flex-grow border-t border-gray-300"></div>
-      <span className="mx-4 text-gray-500 text-sm">Or login with</span>
-      <div className="flex-grow border-t border-gray-300"></div>
+      <div className="grow border-t border-gray-300"></div>
+      <span className="mx-4 text-gray-500 text-sm">Or</span>
+      <div className="grow border-t border-gray-300"></div>
     </div>
 
-    {/* Social Media Login */}
     <div className="grid grid-cols-2 gap-4">
       <button
         type="button"
