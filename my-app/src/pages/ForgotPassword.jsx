@@ -3,7 +3,7 @@ import React from 'react';
 import { Input } from '../component/input';
 import { Button } from '/src/component/Button';
 import AuthLayout from '/src/layouts/AuthLayout';
-import loginImg from '../assets/coffee-cup.svg';
+import ForgotPasswordImg from '../assets/icons/forgot-password.svg';
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -60,37 +60,31 @@ function ForgotPasswordPage() {
   };
 
   return (
-    // Container utama: full height, flex row untuk side-by-side
-    <div className="min-h-screen flex flex-col md:flex-row font-sans bg-white bg-black">
+    <div className="min-h-screen flex flex-col md:flex-row font-sans bg-white">
 
-      {/* Bagian Kiri: Gambar (40% width) */}
-      <div className="hidden md:flex md:w-2/5 bg-gradient-to-br from-orange-50 to-orange-100 items-center justify-center p-8 overflow-hidden">
+      <div className="hidden md:flex md:w-3/10 bg-linear-to-br from-orange-50 to-orange-100 items-center justify-center p-9 overflow-hidden">
         <img 
-          src={loginImg} 
+          src={ForgotPasswordImg} 
           alt="Login Illustration" 
-          className="w-full h-full object-cover rounded-xl"
+          className="w-full h-full object-cover"
         />
       </div>
 
-      {/* Bagian Kanan: Form Login (60% width) */}
-<div className="w-full md:w-3/5 flex items-center justify-center p-6 md:p-12 bg-white">
+<div className="w-full md:w-7/10 flex items-center justify-center p-6 md:p-12 bg-white">
   <form 
     onSubmit={handleSubmit} 
     className="w-full max-w-md flex flex-col"
   >
-    {/* Logo Container */}
-    <div className="flex flex-col items-center mb-8">
-      <img src={coffeeCupLogo} alt="Logo" className="w-14 h-14 mb-3" />
-      <img src={coffeeShopLogo} alt="Coffee Shop Logo" className="h-7" />
-    </div>
+       <div className="flex flex-row items-center gap-3">
+         <img src={coffeeShopLogo} alt="Logo" className="h-7" />
+         <img src={coffeeCupLogo} alt="Text" className="w-22 h-22" />
+       </div>
+   
+       <h2 className="text-3xl text-left mb-2 text-yellow-800 ">Login</h2>
+       <span className="block text-left text-gray-600 mb-8 text-sm">
+         Fill out the form correctly
+       </span>
 
-    {/* Heading */}
-    <h2 className="text-3xl font-bold text-center mb-2 text-gray-800">Fill out the form correctly</h2>
-    <span className="block text-center text-gray-600 mb-8 text-sm">
-      We will send new password to your email
-    </span>
-
-    {/* Email Input */}
     <div className="mb-6">
       <Input
         label="Email"
@@ -105,10 +99,9 @@ function ForgotPasswordPage() {
       />
     </div>
 
-    {/* Login Button */}
     <Button
       type="submit"
-      className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 transition duration-200"
+      className="w-full bg-orange-400 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 transition duration-200"
     >
       Submit
     </Button>
