@@ -60,9 +60,9 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row font-sans bg-white">
+    <div className="min-h-screen flex flex-col md:flex-row font-sans">
 
-      <div className="hidden md:flex md:w-3/10 bg-linear-to-br from-orange-50 to-orange-100 items-center justify-center p-9 overflow-hidden">
+      <div className="hidden md:flex md:w-3/10 bg-linear-to-br from-orange-50 to-orange-100 items-center justify-center overflow-hidden">
         <img 
           src={ForgotPasswordImg} 
           alt="Login Illustration" 
@@ -80,9 +80,9 @@ function ForgotPasswordPage() {
          <img src={coffeeCupLogo} alt="Text" className="w-22 h-22" />
        </div>
    
-       <h2 className="text-3xl text-left mb-2 text-yellow-800 ">Login</h2>
+       <h2 className="text-3xl text-left mb-2 text-yellow-800 "> Fill out the form correctly </h2>
        <span className="block text-left text-gray-600 mb-8 text-sm">
-         Fill out the form correctly
+       We will send new password to your email
        </span>
 
     <div className="mb-6">
@@ -101,7 +101,7 @@ function ForgotPasswordPage() {
 
     <Button
       type="submit"
-      className="w-full bg-orange-400 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 transition duration-200"
+      className="w-full bg-orange-400 text-black font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 transition duration-200"
     >
       Submit
     </Button>
