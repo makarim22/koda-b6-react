@@ -11,7 +11,7 @@ export const PromoSection = ({ promos }) => {
 
       <div className="flex gap-4 overflow-x-auto pb-4">
         {promos.map((promo, index) => (
-          <div key={index} className="flex-shrink-0 w-72">
+          <div key={index} className="shrink-0 w-72">
             <PromoCard {...promo} />
           </div>
         ))}

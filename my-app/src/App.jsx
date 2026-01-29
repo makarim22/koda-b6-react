@@ -12,6 +12,7 @@ import ForgotPasswordPage from "./pages/ForgotPassword";
 import HomePage from "./pages/Homepage";
 import ProductPage from "./pages/ProductPage";
 import ChatPage from "./pages/ChatPage";
+import ProductReview from "./pages/ProductReview";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/product" element={<ProductPage />} />
+        <Route path="/product-review" element={<ProductReview />} />
 
       </Routes>
     </Router>
