@@ -16,6 +16,7 @@ import ProductReview from "./pages/ProductReview";
 import HistoryOrder from "./pages/HistoryOrder";
 import DetailOrder from "./pages/DetailOrder";
 import ProductCheckout from "./pages/ProductCheckout";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/product-checkout" element={<ProductCheckout />} />
         <Route path="/order-history" element={<HistoryOrder/>} />
         <Route path="/detail-order" element={<DetailOrder />} />
+        <Route path="/Profile" element={<Profile />} />
 
       </Routes>
     </Router>
