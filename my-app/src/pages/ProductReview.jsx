@@ -2,6 +2,7 @@ import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import ProductGallery from "../component/ProductGallery";
 import ProductOptions from "../component/ProductOptions";
+import { ProductGrid } from "../component/ProductGrid";
 
 function ProductReview() {
   const images = [
@@ -25,6 +26,41 @@ function ProductReview() {
     }
   ]
 
+  
+ const productsData = [
+  {
+    id: 1,
+    image: './src/assets/icons/productPage/espresso.jfif',
+    title: 'Espresso', 
+    price: 'IDR 15.000', 
+    originalPrice: 'IDR 18.000', 
+    rating: 5,
+    reviews: 0, 
+    isFlashSale: true,
+  },
+  {
+    id: 2,
+    image: './src/assets/icons/productPage/latte.jpg',
+    title: 'Latte',
+    price: 'IDR 19.000',
+    originalPrice: 'IDR 22.000',
+    rating: 5,
+    reviews: 0,
+    isFlashSale: true,
+  },
+  {
+    id: 3,
+    image: './src/assets/icons/productPage/mocha.jfif',
+    title: 'Mocha',
+    price: 'IDR 21.000',
+    originalPrice: 'IDR 24.000',
+    rating: 4,
+    reviews: 0,
+    isFlashSale: true,
+  }
+];
+
+
   return (
     <div>
       <Header bgColor="bg-black" />
@@ -36,6 +72,10 @@ function ProductReview() {
         <ProductOptions props={orderItems[0]}
         />
       </div>
+      </section>
+      <section>
+        <h1 className="text-4xl font-bold text-left mt-8 mb-4">Recommended for you</h1>
+        <ProductGrid products={productsData} columns={3} />
       </section>
     
 
