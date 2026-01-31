@@ -1,10 +1,7 @@
-
-
 import {
   BrowserRouter as Router,
   Routes,
-  Route,
-  Navigate,
+  Route
 } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -17,6 +14,7 @@ import HistoryOrder from "./pages/HistoryOrder";
 import DetailOrder from "./pages/DetailOrder";
 import ProductCheckout from "./pages/ProductCheckout";
 import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -33,8 +31,10 @@ function App() {
         <Route path="/product-checkout" element={<ProductCheckout />} />
         <Route path="/order-history" element={<HistoryOrder/>} />
         <Route path="/detail-order" element={<DetailOrder />} />
-        <Route path="/Profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} />
 
+        ///
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );
