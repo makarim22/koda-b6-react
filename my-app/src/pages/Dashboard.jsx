@@ -1,196 +1,177 @@
-import React from 'react'
+import React from "react";
 
-import NavbarAdmin from '../layouts/NavbarAdmin';
-import Sidebar from '../layouts/Sidebar';
+import NavbarAdmin from "../layouts/NavbarAdmin";
+import Sidebar from "../layouts/Sidebar";
+import Cup from "../assets/admin/glass.svg"
+import Truck from "../assets/admin/truck.svg"
+import UserChecked from "../assets/admin/user-checked.svg"
+import ArrowRise from "../assets/admin/arrowRise.svg"
+import Calendar from "../assets/admin/Calendar.svg"
+import Chart from "../assets/admin/chart.svg"
 
 function Dashboard() {
   return (
     <>
-    <div>
-      
-      <NavbarAdmin />
-      <Sidebar />
-      {/* CONTENT WRAPPER */}
-      <div className="flex flex-col gap-8 p-8 flex-1 overflow-y-auto">
-        {/* STAT CARDS */}
-        <section className="flex gap-6 justify-between">
-          <div className="flex flex-col gap-4 p-6 rounded-lg flex-1 min-w-[200px] text-white">
-            <div className="flex ">
-              <div className="stat-icon icon-progress">
-                <img src="./src/icons/dashboard/cup.svg" alt="Progress" />
+      <div className="flex flex-col h-screen">
+        <NavbarAdmin />
+        <div className="flex flex-1">
+          <Sidebar />
+          <main className="flex-1 p-8 overflow-y-auto">
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              <div className="flex flex-col gap-4 p-6 rounded-lg flex-1 min-w-[200px] text-white  bg-green-500">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-full bg-white bg-opacity-20">
+                    <img src={Cup} alt="Progress" />
+                  </div>
+                  <p className="text-lg font-semibold">Order On Progress</p>
+                </div>
+                <div className="flex items-baseline">
+                  <h2 className="text-4xl font-bold">200</h2>
+                  <span className="flex items-center text-white text-base">
+                    <img src={ArrowRise} alt="Up" className="w-4 h-4 mr-1"/>
+                    +11.01%
+                  </span>
+                </div>
               </div>
-              <p className="stat-title">Order On Progress</p>
-            </div>
-            <div className="stat-content">
-              <h2 className="stat-number">200</h2>
-              <span className="stat-change positive">
-                <img src="./src/icons/dashboard/Arrow-rise.svg" alt="Up" />
-                +11.01%
-              </span>
-            </div>
-          </div>
-          <div className="stat-card card-shipping">
-            <div className="stat-header">
-              <div className="stat-icon icon-shipping">
-                <img src="./src/icons/dashboard/truck.svg" alt="Shipping" />
+              <div className="flex flex-col gap-4 p-6 rounded-lg flex-1 min-w-[200px] text-white bg-indigo-500">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-full bg-white bg-opacity-20">
+                    <img src={Truck} alt="Shipping"  />
+                  </div>
+                  <p className="text-lg font-semibold">Order Shipping</p>
+                </div>
+                <div className="flex items-baseline">
+                  <h2 className="text-4xl font-bold">100</h2>
+                  <span className="flex items-center text-white text-base">
+                    <img src={ArrowRise}  alt="Up" className="w-4 h-4 mr-1"/>
+                    +4.01%
+                  </span>
+                </div>
               </div>
-              <p className="stat-title">Order Shipping</p>
-            </div>
-            <div className="stat-content">
-              <h2 className="stat-number">100</h2>
-              <span className="stat-change positive">
-                <img src="./src/icons/dashboard/Arrow-rise.svg" alt="Up" />
-                +4.01%
-              </span>
-            </div>
-          </div>
-          <div className="stat-card card-done">
-            <div className="stat-header">
-              <div className="stat-icon icon-done">
-                <img src="./src/icons/dashboard/customers.svg" alt="Done" />
+              <div className="flex flex-col gap-4 p-6 rounded-lg flex-1 min-w-[200px] text-white bg-pink-400">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-full bg-white bg-opacity-20">
+                    <img src={UserChecked} alt="Done" />
+                  </div>
+                  <p className="text-lg font-semibold">Order Done</p>
+                </div>
+                <div className="flex items-baseline">
+                  <h2 className="text-4xl font-bold">50</h2>
+                  <span className="flex items-center text-white text-base">
+                    <img src={ArrowRise}  alt="Up" className="w-4 h-4 mr-1" />
+                    +2.01%
+                  </span>
+                </div>
               </div>
-              <p className="stat-title">Order Done</p>
+            </section>
+            <section className="bg-white p-6 rounded-lg shadow-md mb-8">
+              <div className="flex flex-col justify-between  mb-4">
+                <h2 className="text-xl font-semibold text-gray-800">Total Penjualan</h2>
+                <p className="text-sm text-gray-500">
+                  1000 cup (16 - 23 January 2023)
+                </p>
+              </div>
+              <div className="flex items-center space-x-2 border rounded-md px-3 py-2 text-gray-700 bg-white">
+                  <img src={Calendar} alt="Calendar" />
+                  <select>
+                    <option>16 - 23 January 2023</option>
+                  </select>
+                </div>
+         <div className="chart-container relative h-64">
+              <canvas id="salesChart" className="absolute inset-0 w-full h-full" />
+              <img src={Chart} alt="Chart Placeholder" className="absolute inset-0 w-full h-full object-contain" />
             </div>
-            <div className="stat-content">
-              <h2 className="stat-number">50</h2>
-              <span className="stat-change positive">
-                <img src="./src/icons/dashboard/Arrow-rise.svg" alt="Up" />
-                +2.01%
-              </span>
+            </section>
+             <section className="bg-white p-6 rounded-lg shadow-md">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-gray-800">Produk Terlaris</h2>
+              <div className="flex items-center space-x-2 border rounded-md px-3 py-2 text-gray-700 bg-white">
+                <img src={Calendar} alt="Calendar" className="w-4 h-4" />
+                <select className="bg-transparent outline-none cursor-pointer text-sm">
+                  <option>16 - 23 January 2023</option>
+                </select>
+              </div>
             </div>
-          </div>
-        </section>
-        {/* CHART SECTION */}
-        <section className="chart-section">
-          <div className="chart-header">
-            <h2>Total Penjualan</h2>
-            <p className="chart-subtitle">1000 cup (16 - 23 January 2023)</p>
-            <div className="chart-date-picker">
-              <img src="./src/icons/calendar.svg" alt="Calendar" />
-              <select>
-                <option>16 - 23 January 2023</option>
-              </select>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Produk</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Terjual</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keuntungan</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Caramel Machiato</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">300 Cup</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 ">IDR 9.000.000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Hazelnut Latte</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">200 Cup</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 ">IDR 8.000.000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">3</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Kopi Susu</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">100 Cup</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">IDR 7.000.000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">4</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Espresso Supreme</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">90 Cup</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 ">IDR 6.000.000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">5</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Caramel Velvet Latte</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">80 Cup</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 ">IDR 5.000.000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">6</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Hazelnut Dream Brew</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">70 Cup</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 ">IDR 4.000.000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">7</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Vanilla Silk Mocha</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">60 Cup</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">IDR 3.000.000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">8</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Dark Roast Delight</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">50 Cup</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">IDR 2.000.000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">9</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Ethiopian Yirgacheffe Euphoria</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">40 Cup</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">IDR 1.000.000</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">10</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Indonesian Sumatra Reserve</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">30 Cup</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 ">IDR 500.000</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          </div>
-          <div className="chart-container">
-            <canvas id="salesChart" />
-            <div>
-              <img src="./src/icons/dashboard/dashboard.jpg" alt="Chart" />
-              <img src="./src/icons/dashboard/graph.svg" alt="Chart" />
-            </div>
-          </div>
-        </section>
-        {/* TABLE SECTION */}
-        <section className="table-section">
-          <div className="table-header">
-            <h2>Produk Terlaris</h2>
-            <div className="table-date-picker">
-              <img src="./src/icons/calendar.svg" alt="Calendar" />
-              <select>
-                <option>16 - 23 January 2023</option>
-              </select>
-            </div>
-          </div>
-          <div className="table-responsive">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Nama Produk</th>
-                  <th>Terjual</th>
-                  <th>Keuntungan</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Caramel Machiato</td>
-                  <td>300 Cup</td>
-                  <td>
-                    <span className="revenue">IDR 9.000.000</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Hazelnut Latte</td>
-                  <td>200 Cup</td>
-                  <td>
-                    <span className="revenue">IDR 8.000.000</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Kopi Susu</td>
-                  <td>100 Cup</td>
-                  <td>
-                    <span className="revenue">IDR 7.000.000</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>Espresso Supreme</td>
-                  <td>90 Cup</td>
-                  <td>
-                    <span className="revenue">IDR 6.000.000</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>Caramel Velvet Latte</td>
-                  <td>80 Cup</td>
-                  <td>
-                    <span className="revenue">IDR 5.000.000</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>Hazelnut Dream Brew</td>
-                  <td>70 Cup</td>
-                  <td>
-                    <span className="revenue">IDR 4.000.000</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>7</td>
-                  <td>Vanilla Silk Mocha</td>
-                  <td>60 Cup</td>
-                  <td>
-                    <span className="revenue">IDR 3.000.000</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td>Dark Roast Delight</td>
-                  <td>50 Cup</td>
-                  <td>
-                    <span className="revenue">IDR 2.000.000</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td>Ethiopian Yirgacheffe Euphoria</td>
-                  <td>40 Cup</td>
-                  <td>
-                    <span className="revenue">IDR 1.000.000</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td>Indonesian Sumatra Reserve</td>
-                  <td>30 Cup</td>
-                  <td>
-                    <span className="revenue">IDR 500.000</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+          </section>
+          </main>
+        </div>
       </div>
-      </div>
-      </>
-
-  )
+    </>
+  );
 }
 
-export default Dashboard
+export default Dashboard;

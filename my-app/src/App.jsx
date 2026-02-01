@@ -29,9 +29,9 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        /// user
         <Route path="/" element={<HomePage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/product" element={<ProductPage />} />
@@ -51,7 +51,7 @@ function App() {
 
         <Route path="/list-user" element={<ListUsers />} />
         <Route path="/insert-user" element={<InsertUser />} />
-          <Route path="/edit-user" element={<EditUser />} />
+        <Route path="/edit-user" element={<EditUser />} />
 
       </Routes>
     </Router>

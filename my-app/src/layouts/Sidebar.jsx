@@ -7,30 +7,29 @@ import Users from '../assets/admin/users.svg'
 
 function Sidebar() {
   return (
-    <div className='pt-5'>
-      <aside>
-        <div>
+    <div className='w-64 bg-white h-full shadow-lg p-4 pt-6'>
+      <aside className='flex flex-col'>
+        <div className='flex items-center gap-3 p-3 mb-2 bg-orange-500 text-black rounded-lg cursor-pointer'>
             <img src={Option} alt="" ></img>
-            <span>Dashboard</span> 
+            <span className='font-semibold'>Dashboard</span> 
         </div>
-        <nav>
-            <a href="">
-                <img src={GlassTea}></img>
-                <span>Product</span>
-            </a>
-            <a href="">
-                <img src={Bag}></img>
-                <span>Order</span>
-            </a>
-            <a href="">
-                <img src={Users}></img>
-                <span>User</span>
-            </a>
-            <a href="">
-                <img src={Logout}></img>
-                <span>Keluar</span>
-            </a>
-        </nav>
+                <div className='flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer'>
+            <img src={GlassTea} alt="" ></img>
+            <span className='font-semibold'>Product</span> 
+        </div>
+                <div className='flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer'>
+            <img src={Bag} alt="" ></img>
+            <span className='font-semibold'>Order</span> 
+        </div>
+                <div className='flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer'>
+            <img src={Users} alt="" ></img>
+            <span className='font-semibold'>User</span> 
+        </div>
+                <div className='flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer'>
+            <img src={Logout} alt="" ></img>
+            <span className='font-semibold'>Keluar</span> 
+        </div>
+
       </aside>
     </div>
   )
