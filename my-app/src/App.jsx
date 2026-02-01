@@ -16,6 +16,7 @@ import ProductCheckout from "./pages/ProductCheckout";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import AdminProduct from "./pages/AdminProduct";
+import AdminInsertProduct from "./pages/AdminInsertProduct";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         /// admin
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin-product" element={<AdminProduct />} />
+        <Route path="/admin-insert-product" element={<AdminInsertProduct />} />
 
       </Routes>
     </Router>
