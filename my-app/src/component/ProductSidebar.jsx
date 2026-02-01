@@ -60,8 +60,7 @@ export default function ProductSidebar({ onClose = () => {} }) {
   };
 
   return (
-    <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-xl overflow-y-auto z-50">
-      {/* Header */}
+    <div >
       <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
         <h2 className="text-xl font-bold text-gray-800">Add Product</h2>
         <button
@@ -72,16 +71,14 @@ export default function ProductSidebar({ onClose = () => {} }) {
         </button>
       </div>
 
-      {/* Form Content */}
       <div className="p-6 space-y-6">
         
-        {/* Photo Product Section */}
-        <div>
+        <div >
           <label className="block text-sm font-semibold text-gray-800 mb-3">
             Photo Product
           </label>
           
-          <div className="relative">
+          <div className="relative w-15 m-0">
             {formData.photo ? (
               <div className="relative w-full">
                 <img
@@ -91,17 +88,17 @@ export default function ProductSidebar({ onClose = () => {} }) {
                 />
                 <label
                   htmlFor="photo-upload"
-                  className="absolute bottom-2 right-2 bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm font-medium cursor-pointer transition-colors"
+                  className="absolute bottom-2 right-2 bg-orange-400 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm font-medium cursor-pointer transition-colors"
                 >
                   Change
                 </label>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-orange-500 transition-colors">
-                <div className="text-4xl text-gray-300 mb-2">📷</div>
+              <div className="border-2rounded-lg text-center hover:border-orange-400 transition-colors">
+                <div className="text-4xl text-gray-300 mb-2"></div>
                 <label
                   htmlFor="photo-upload"
-                  className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-medium cursor-pointer transition-colors"
+                  className="inline-block bg-orange-400 hover:bg-orange-600 text-black px-4 py-2  rounded font-medium cursor-pointer transition-colors"
                 >
                   Upload
                 </label>
@@ -117,8 +114,6 @@ export default function ProductSidebar({ onClose = () => {} }) {
             />
           </div>
         </div>
-
-        {/* Product Name */}
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-2">
             Product name
@@ -133,7 +128,6 @@ export default function ProductSidebar({ onClose = () => {} }) {
           />
         </div>
 
-        {/* Price */}
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-2">
             Price
@@ -148,7 +142,6 @@ export default function ProductSidebar({ onClose = () => {} }) {
           />
         </div>
 
-        {/* Description */}
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-2">
             Description
@@ -162,8 +155,6 @@ export default function ProductSidebar({ onClose = () => {} }) {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"
           />
         </div>
-
-        {/* Product Size */}
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-3">
             Product Size
@@ -184,8 +175,6 @@ export default function ProductSidebar({ onClose = () => {} }) {
             ))}
           </div>
         </div>
-
-        {/* Stock */}
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-2">
             Stock
@@ -199,8 +188,6 @@ export default function ProductSidebar({ onClose = () => {} }) {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
           />
         </div>
-
-        {/* Action Buttons */}
         <div className="flex gap-3 pt-6">
           <button
             onClick={handleReset}
@@ -210,7 +197,7 @@ export default function ProductSidebar({ onClose = () => {} }) {
           </button>
           <button
             onClick={handleSave}
-            className="flex-1 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors"
+            className="flex-1 px-4 py-3 bg-orange-400 hover:bg-orange-600 text-black font-semibold rounded-lg transition-colors"
           >
             Save Product
           </button>
