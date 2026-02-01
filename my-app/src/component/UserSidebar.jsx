@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, User, Mail, Phone, Lock, MapPin, Eye, EyeOff } from 'lucide-react';
 
-export default function UserSidebar({ onClose = () => {} }) {
+export default function UserSidebar({ onClose = () => {}, title, isInsert = false , action}) {
   const [formData, setFormData] = useState({
     image: null,
     fullName: '',
@@ -51,7 +51,7 @@ export default function UserSidebar({ onClose = () => {} }) {
   return (
     <div >
       <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-800">Insert User</h2>
+        <h2 className="text-xl font-bold text-gray-800">{title}</h2>
         <button
           onClick={onClose}
           className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
@@ -87,7 +87,7 @@ export default function UserSidebar({ onClose = () => {} }) {
                 <div className="text-4xl text-gray-300 mb-2"></div>
                 <label
                   htmlFor="image-upload"
-                  className="inline-block bg-orange-400 hover:bg-orange-600 text-white px-4 py-2 rounded font-medium cursor-pointer transition-colors"
+                  className="inline-block bg-orange-400 hover:bg-orange-600 text-black px-4 py-2 rounded font-medium cursor-pointer transition-colors"
                 >
                   Upload
                 </label>
@@ -201,8 +201,8 @@ export default function UserSidebar({ onClose = () => {} }) {
             />
           </div>
         </div>
-
-        <div>
+  
+        {isInsert && (<div>
           <label className="block text-sm font-semibold text-gray-800 mb-3">
             Type of User
           </label>
@@ -228,14 +228,15 @@ export default function UserSidebar({ onClose = () => {} }) {
               Admin
             </button>
           </div>
-        </div>
+        </div>)}
+              
 
         <div className="flex gap-3 pt-4">
           <button
             onClick={handleSave}
-            className="flex-1 px-4 py-3 bg-orange-400 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors"
+            className="flex-1 px-4 py-3 bg-orange-400 hover:bg-orange-600 text-black font-semibold rounded-lg transition-colors"
           >
-            Add User
+            {action}
           </button>
         </div>
       </div>
