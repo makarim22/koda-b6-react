@@ -1,57 +1,56 @@
-import React from 'react'
-import NavbarAdmin from '../layouts/NavbarAdmin'
-import Sidebar from '../layouts/Sidebar'
-import UserTable from '../component/userTable'
+import React from "react";
+import NavbarAdmin from "../layouts/NavbarAdmin";
+import Sidebar from "../layouts/Sidebar";
+import UserTable from "../component/userTable";
 import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
 import Dropdown from "../assets/admin/dropdown.svg";
 
 function ListUsers() {
-    const users = [
-        {
-            id: 1,
-            image: '/src/assets/user/user1.png',
-            name: 'Eleanor Pena',
-            phone: '(205) 555-0100',
-            address: '3517 W. Gray St. Utica, Pennsylvania 57867',
-            email: 'cikaracak@gmail.com',   
-        },
-        {
-            id: 2,
-            name: 'Eleanor Pena',
-            image: '/src/assets/user/user2.png',
-            phone: '(205) 555-0100',
-            address: '3517 W. Gray St. Utica, Pennsylvania 57867',
-            email: 'cikaracak@gmail.com',   
-        },
-        {
-            id: 3,
-            name: 'Eleanor Pena',
-            image: '/src/assets/user/user3.png',
-            phone: '(205) 555-0100',
-            address: '3517 W. Gray St. Utica, Pennsylvania 57867',
-            email: 'cikaracak@gmail.com',   
-        },
-        {
-            id: 4,
-            name: 'Eleanor Pena',
-            image: '/src/assets/user/user4.png',
-            phone: '(205) 555-0100',
-            address: '3517 W. Gray St. Utica, Pennsylvania 57867',
-            email: 'cikaracak@gmail.com',   
-        },
-        {
-            id: 5,
-            name: 'Eleanor Pena',
-            image: '/src/assets/user/user5.png',
-            phone: '(205) 555-0100',
-            address: '3517 W. Gray St. Utica, Pennsylvania 57867',
-            email: 'cikaracak@gmail.com',   
-        },
-    ];
+  const users = [
+    {
+      id: 1,
+      image: "/src/assets/user/user1.png",
+      name: "Eleanor Pena",
+      phone: "(205) 555-0100",
+      address: "3517 W. Gray St. Utica, Pennsylvania 57867",
+      email: "cikaracak@gmail.com",
+    },
+    {
+      id: 2,
+      name: "Eleanor Pena",
+      image: "/src/assets/user/user2.png",
+      phone: "(205) 555-0100",
+      address: "3517 W. Gray St. Utica, Pennsylvania 57867",
+      email: "cikaracak@gmail.com",
+    },
+    {
+      id: 3,
+      name: "Eleanor Pena",
+      image: "/src/assets/user/user3.png",
+      phone: "(205) 555-0100",
+      address: "3517 W. Gray St. Utica, Pennsylvania 57867",
+      email: "cikaracak@gmail.com",
+    },
+    {
+      id: 4,
+      name: "Eleanor Pena",
+      image: "/src/assets/user/user4.png",
+      phone: "(205) 555-0100",
+      address: "3517 W. Gray St. Utica, Pennsylvania 57867",
+      email: "cikaracak@gmail.com",
+    },
+    {
+      id: 5,
+      name: "Eleanor Pena",
+      image: "/src/assets/user/user5.png",
+      phone: "(205) 555-0100",
+      address: "3517 W. Gray St. Utica, Pennsylvania 57867",
+      email: "cikaracak@gmail.com",
+    },
+  ];
   return (
-
-        <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen">
       <NavbarAdmin />
       <div className="flex flex-1">
         <Sidebar />
@@ -87,11 +86,11 @@ function ListUsers() {
             </div>
           </div>
 
-        <UserTable users={users}/>
+          <UserTable users={users} />
         </main>
       </div>
-    </div> 
-  )
+    </div>
+  );
 }
 
-export default ListUsers
+export default ListUsers;

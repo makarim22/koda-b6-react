@@ -47,22 +47,9 @@ export default function UserSidebar({ onClose = () => {} }) {
     console.log('User Data:', formData);
   };
 
-  const handleReset = () => {
-    setFormData({
-      image: null,
-      fullName: '',
-      email: '',
-      phone: '',
-      password: '',
-      address: '',
-      userType: 'Normal User',
-    });
-    setShowPassword(false);
-  };
 
   return (
-    <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-xl overflow-y-auto z-50">
-      {/* Header */}
+    <div >
       <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
         <h2 className="text-xl font-bold text-gray-800">Insert User</h2>
         <button
@@ -73,10 +60,8 @@ export default function UserSidebar({ onClose = () => {} }) {
         </button>
       </div>
 
-      {/* Form Content */}
       <div className="p-6 space-y-5">
-        
-        {/* Image User Section */}
+
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-3">
             Image User
@@ -92,17 +77,17 @@ export default function UserSidebar({ onClose = () => {} }) {
                 />
                 <label
                   htmlFor="image-upload"
-                  className="absolute bottom-2 right-2 bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm font-medium cursor-pointer transition-colors"
+                  className="absolute bottom-2 right-2 bg-orange-400 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm font-medium cursor-pointer transition-colors"
                 >
                   Change
                 </label>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-orange-500 transition-colors">
-                <div className="text-4xl text-gray-300 mb-2">👤</div>
+              <div className=" rounded-lg  text-center hover:border-orange-500 transition-colors w-15 h-20">
+                <div className="text-4xl text-gray-300 mb-2"></div>
                 <label
                   htmlFor="image-upload"
-                  className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-medium cursor-pointer transition-colors"
+                  className="inline-block bg-orange-400 hover:bg-orange-600 text-white px-4 py-2 rounded font-medium cursor-pointer transition-colors"
                 >
                   Upload
                 </label>
@@ -119,7 +104,6 @@ export default function UserSidebar({ onClose = () => {} }) {
           </div>
         </div>
 
-        {/* Full Name */}
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-2">
             Full Name
@@ -137,7 +121,6 @@ export default function UserSidebar({ onClose = () => {} }) {
           </div>
         </div>
 
-        {/* Email */}
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-2">
             Email
@@ -154,8 +137,6 @@ export default function UserSidebar({ onClose = () => {} }) {
             />
           </div>
         </div>
-
-        {/* Phone */}
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-2">
             Phone
@@ -173,7 +154,6 @@ export default function UserSidebar({ onClose = () => {} }) {
           </div>
         </div>
 
-        {/* Password */}
         <div>
           <div className="flex justify-between items-center mb-2">
             <label className="block text-sm font-semibold text-gray-800">
@@ -205,8 +185,6 @@ export default function UserSidebar({ onClose = () => {} }) {
             </button>
           </div>
         </div>
-
-        {/* Address */}
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-2">
             Address
@@ -224,7 +202,6 @@ export default function UserSidebar({ onClose = () => {} }) {
           </div>
         </div>
 
-        {/* Type of User */}
         <div>
           <label className="block text-sm font-semibold text-gray-800 mb-3">
             Type of User
@@ -253,17 +230,10 @@ export default function UserSidebar({ onClose = () => {} }) {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex gap-3 pt-4">
           <button
-            onClick={handleReset}
-            className="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg transition-colors"
-          >
-            Reset
-          </button>
-          <button
             onClick={handleSave}
-            className="flex-1 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors"
+            className="flex-1 px-4 py-3 bg-orange-400 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors"
           >
             Add User
           </button>
