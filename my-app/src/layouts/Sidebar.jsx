@@ -9,7 +9,7 @@ function Sidebar() {
   return (
     <div className='w-64 bg-white h-full shadow-lg p-4 pt-6'>
       <aside className='flex flex-col'>
-        <div className='flex items-center gap-3 p-3 mb-2 bg-orange-500 text-black rounded-lg cursor-pointer'>
+        <div className='flex items-center gap-3 p-3 mb-2 bg-orange-400 text-black rounded-lg cursor-pointer'>
             <img src={Option} alt="" ></img>
             <span className='font-semibold'>Dashboard</span> 
         </div>

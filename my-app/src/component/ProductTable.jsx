@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Edit2, Trash2 } from 'lucide-react'; // Keep these imports
+import { Edit2, Trash2 } from 'lucide-react'; 
 
 export const ProductTable = ({
   products,
-  onEdit, // Keep these props in the component signature
-  onDelete, // Keep these props in the component signature
+  onEdit, 
+  onDelete, 
   itemsPerPage = 5,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,17 +15,13 @@ export const ProductTable = ({
 
   return (
     <div className="flex flex-col gap-6 bg-white p-8 rounded-lg flex-1 overflow-y-auto">
-      {/* Table Container */}
       <div className="overflow-x-auto rounded-lg border border-gray-200">
         <table className="w-full border-collapse">
-          {/* Table Header */}
           <thead>
             <tr className="bg-gray-50 border-b-2 border-gray-200">
               <th className="px-4 py-3 text-left">
                 <input
                   type="checkbox"
-                  // checked={isAllSelected}
-                  // onChange={(e) => handleSelectAll(e.target.checked)}
                   className="w-4 h-4 cursor-pointer accent-orange-500"
                 />
               </th>
@@ -50,14 +46,12 @@ export const ProductTable = ({
               <th className="px-4 py-3 text-left font-semibold text-gray-600 text-xs uppercase whitespace-nowrap">
                 Stock
               </th>
-              {/* Keep the 'Action' column header */}
               <th className="px-4 py-3 text-left font-semibold text-gray-600 text-xs uppercase whitespace-nowrap">
                 Action
               </th>
             </tr>
           </thead>
 
-          {/* Table Body */}
           <tbody>
             {paginatedProducts.map((product) => (
               <tr
@@ -67,8 +61,6 @@ export const ProductTable = ({
                 <td className="px-4 py-3">
                   <input
                     type="checkbox"
-                    //   checked={selectedItems.has(product.id)}
-                    //   onChange={(e) => handleSelectItem(product.id, e.target.checked)}
                     className="w-4 h-4 cursor-pointer accent-orange-500"
                   />
                 </td>
@@ -91,30 +83,28 @@ export const ProductTable = ({
                   </span>
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm">
-                  {product.size || '-'}
+                  {product.size.join(', ') || '-'}
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm">
-                  {product.method || '-'}
+                  {product.method.join(', ') || '-'}
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm font-medium">
                   {product.stock}
                 </td>
-                {/* Keep the actions column with Edit/Delete buttons */}
                 <td className="px-4 py-3 flex gap-2">
-                  {/* The buttons are rendered, but won't do anything if onEdit is not provided */}
                   <button
-                    onClick={() => onEdit && onEdit(product)} // Only call if onEdit prop is provided
+                    onClick={() => onEdit && onEdit(product)} 
                     className="p-1.5 hover:bg-orange-100 rounded-lg transition-colors"
                     title="Edit"
-                    disabled={!onEdit} // Disable if no onEdit function is passed
+                    disabled={!onEdit} 
                   >
                     <Edit2 size={16} className={`${onEdit ? 'text-orange-500' : 'text-gray-400'}`} />
                   </button>
                   <button
-                    onClick={() => onDelete && onDelete(product.id)} // Only call if onDelete prop is provided
+                    onClick={() => onDelete && onDelete(product.id)} 
                     className="p-1.5 hover:bg-red-100 rounded-lg transition-colors"
                     title="Delete"
-                    disabled={!onDelete} // Disable if no onDelete function is passed
+                    disabled={!onDelete} 
                   >
                     <Trash2 size={16} className={`${onDelete ? 'text-red-500' : 'text-gray-400'}`} />
                   </button>
@@ -125,13 +115,11 @@ export const ProductTable = ({
         </table>
       </div>
 
-      {/* Footer with Pagination & Info */}
       <div className="flex justify-between items-center pt-4 border-t border-gray-200">
         <p className="text-gray-600 text-sm">
           Show {paginatedProducts.length} product of {products.length} product
         </p>
 
-        {/* Pagination */}
         <div className="flex gap-2 items-center">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -149,7 +137,7 @@ export const ProductTable = ({
                   onClick={() => setCurrentPage(page)}
                   className={`px-3 py-1 text-sm font-medium rounded transition-colors ${
                     currentPage === page
-                      ? 'bg-orange-500 text-white'
+                      ? ' text-orange-400'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
