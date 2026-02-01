@@ -2,6 +2,7 @@ import React from 'react'
 import NavbarAdmin from '../layouts/NavbarAdmin'
 import { ProductTable } from '../component/ProductTable'
 import ProductSidebar from '../component/ProductSidebar'
+import Sidebar from '../layouts/Sidebar';
 
 function AdminEditProduct() {
      const Products = [
@@ -59,6 +60,7 @@ function AdminEditProduct() {
   return (
     <div>
       <NavbarAdmin />
+      <Sidebar />
       <ProductTable products={Products} />
       <ProductSidebar />
     </div>
