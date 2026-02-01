@@ -21,6 +21,8 @@ import AdminEditProduct from "./pages/AdminEditProduct";
 import AdminOrder from "./pages/AdminOrder";
 import AdminOrderDetail from "./pages/AdminOrderDetail";
 import ListUsers from "./pages/ListUsers";
+import InsertUser from "./pages/InsertUser";
+import EditUser from "./pages/EditUser";
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
         <Route path="/orders-detail" element={< AdminOrderDetail />} />
 
         <Route path="/list-user" element={<ListUsers />} />
+        <Route path="/insert-user" element={<InsertUser />} />
+          <Route path="/edit-user" element={<EditUser />} />
 
       </Routes>
     </Router>
