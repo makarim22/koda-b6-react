@@ -66,7 +66,7 @@ export default function AdminProduct() {
         <main className="flex-1 overflow-y-auto ">
           <div className="flex flex-row justify-between pl-7 pr-7">
             <div className="flex flex-col">
-              Product
+              Product List
               <button className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg">
                 {" "}
                 + Add Product
