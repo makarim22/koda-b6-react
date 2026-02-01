@@ -97,7 +97,7 @@ function AdminInsertProduct() {
           </div>
       <div className="flex flex-col">
         <div className="fixed right-0 top-10 h-full w-full max-w-md bg-white shadow-xl overflow-y-auto z-50">
-          <ProductSidebar />
+          <ProductSidebar title="Insert" action="Save" />
         </div>
         <ProductTable products={Products} />
       </div>

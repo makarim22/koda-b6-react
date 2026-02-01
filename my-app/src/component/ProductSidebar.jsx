@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 
-export default function ProductSidebar({ onClose = () => {} }) {
+export default function ProductSidebar({ onClose = () => {}, title='', action }) {
+  
   const [formData, setFormData] = useState({
     photo: null,
     productName: '',
@@ -62,7 +63,7 @@ export default function ProductSidebar({ onClose = () => {} }) {
   return (
     <div >
       <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-800">Add Product</h2>
+        <h2 className="text-xl font-bold text-gray-800">{title} Product</h2>
         <button
           onClick={onClose}
           className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
@@ -199,7 +200,7 @@ export default function ProductSidebar({ onClose = () => {} }) {
             onClick={handleSave}
             className="flex-1 px-4 py-3 bg-orange-400 hover:bg-orange-600 text-black font-semibold rounded-lg transition-colors"
           >
-            Save Product
+            {action} Product
           </button>
         </div>
       </div>
