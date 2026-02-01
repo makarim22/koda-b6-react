@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Edit2, Trash2, Eye } from 'lucide-react';
+import { Edit2, Trash2, Eye, NotebookText } from 'lucide-react';
 
 export default function UserTable({ users = [] }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,10 +33,8 @@ export default function UserTable({ users = [] }) {
 
   return (
     <div className="flex flex-col gap-6 bg-white p-8 rounded-lg flex-1 overflow-y-auto">
-      {/* Table Container */}
       <div className="overflow-x-auto rounded-lg border border-gray-200">
         <table className="w-full border-collapse">
-          {/* Table Header */}
           <thead>
             <tr className="bg-gray-50 border-b-2 border-gray-200">
               <th className="px-4 py-3 text-left">
@@ -68,7 +66,6 @@ export default function UserTable({ users = [] }) {
             </tr>
           </thead>
 
-          {/* Table Body */}
           <tbody>
             {paginatedUsers.map((user) => (
               <tr
@@ -106,7 +103,7 @@ export default function UserTable({ users = [] }) {
                 </td>
                 <td className="px-4 py-3 flex gap-2">
                   <button className="p-1.5 hover:bg-blue-100 rounded-lg transition-colors">
-                    <Eye size={16} className="text-blue-500" />
+                    <NotebookText size={16} className="text-amber-500" />
                   </button>
                   <button className="p-1.5 hover:bg-orange-100 rounded-lg transition-colors">
                     <Edit2 size={16} className="text-orange-500" />
@@ -121,13 +118,10 @@ export default function UserTable({ users = [] }) {
         </table>
       </div>
 
-      {/* Footer with Pagination & Info */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-4 border-t border-gray-200">
         <p className="text-gray-600 text-sm">
           Show {paginatedUsers.length} user of {users.length} user
         </p>
-
-        {/* Pagination */}
         <div className="flex gap-2 items-center flex-wrap">
           <button
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
@@ -143,9 +137,9 @@ export default function UserTable({ users = [] }) {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`px-2 py-1 text-sm font-medium rounded transition-colors ${
+                  className={`px-2 py-1  rounded transition-colors ${
                     currentPage === page
-                      ? 'bg-orange-500 text-white'
+                      ? ' text-black'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
