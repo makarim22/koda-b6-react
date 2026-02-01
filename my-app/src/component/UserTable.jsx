@@ -86,12 +86,12 @@ export default function UserTable({ users = [] }) {
                 <td className="px-4 py-3">
                   <img
                     src={user.image}
-                    alt={user.fullName}
+                    alt={user.name}
                     className="w-12 h-12 rounded-lg object-cover"
                   />
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm font-medium">
-                  {user.fullName}
+                  {user.name}
                 </td>
                 <td className="px-4 py-3 text-gray-700 text-sm">
                   {user.phone}
