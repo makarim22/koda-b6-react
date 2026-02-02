@@ -1,4 +1,10 @@
 import React from 'react'
+import BCA from '../assets/icons/productPage/BCA.svg';
+import BRI from '../assets/icons/productPage/BRI.svg';
+import DANA from '../assets/icons/productPage/DANA.svg';
+import Gopay from '../assets/icons/productPage/gopay.svg';
+import OVO from '../assets/icons/productPage/Ovo.svg';
+import Paypal from '../assets/icons/productPage/Paypal.svg';
 
 function Invoice(props) {
     const { paymentDetails } = props;
@@ -32,12 +38,12 @@ function Invoice(props) {
             <div>
                 <p className="text-sm text-gray-600 mb-3">We Accept</p>
                 <div className="grid grid-cols-6 gap-2 mb-4">
-                    <img src="/icons/bank-central-asia.svg" alt="Bank Central Asia" className="w-full h-auto" />
-                    <img src="/icons/bca.svg" alt="BCA" className="w-full h-auto" />
-                    <img src="/icons/mandiri.svg" alt="Mandiri" className="w-full h-auto" />
-                    <img src="/icons/bni.svg" alt="BNI" className="w-full h-auto" />
-                    <img src="/icons/ovo.svg" alt="OVO" className="w-full h-auto" />
-                    <img src="/icons/paypal.svg" alt="PayPal" className="w-full h-auto" />
+                    <img src={BRI} alt="Bank Central Asia" className="w-full h-auto" />
+                    <img src={DANA} alt="BCA" className="w-full h-auto" />
+                    <img src={BCA}  alt="Mandiri" className="w-full h-auto" />
+                    <img src={Gopay} alt="BNI" className="w-full h-auto" />
+                    <img src={OVO}alt="OVO" className="w-full h-auto" />
+                    <img src={Paypal} alt="PayPal" className="w-full h-auto" />
                 </div>
                 <p className="text-xs text-gray-500 text-center">
                     *Get Discount if you pay with Bank Central Asia

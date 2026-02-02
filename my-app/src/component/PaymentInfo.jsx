@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 
 import mailIcon from '../assets/icons/mail.svg'
+import Location from '../assets/icons/productPage/Location.svg'
+import Profile from '../assets/icons/productPage/Profile.svg'
 import {User,  MapPinPen} from 'lucide-react'
 import { Input } from './input'
 
@@ -32,7 +34,7 @@ function PaymentInfo() {
                         name="fullname"
                         placeholder="Enter Your Full Name"
                         required
-                        icon={User}
+                        icon={Profile}
                         iconAlt="User Icon"
                     />
                 </div>
@@ -44,7 +46,7 @@ function PaymentInfo() {
                         name="address"
                         placeholder="Enter Your Address"
                         required
-                        icon={MapPinPen}
+                        icon={Location}
                         iconAlt="Location Icon"
                     />
                 </div>
