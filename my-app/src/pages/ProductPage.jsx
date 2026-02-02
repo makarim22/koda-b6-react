@@ -3,26 +3,34 @@ import { ProductGrid } from '../component/ProductGrid';
 import { FilterSidebar } from '../component/FIlterSidebar';
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
+import Woman from '../assets/icons/productPage/coupon1.png';
+import Man from '../assets/icons/productPage/coupon2.png';
  const ProductPage = () => {
 
   const promoData = [
     {
-      icon: '👩',
+      icon: Woman,
       title: 'HAPPY MOTHER\'S DAY',
       description: 'Get up to 50% off on selected items',
-      bgColor: 'bg-green-100',
+      bgColor: 'bg-emerald-500',
     },
     {
-      icon: '👩',
+      icon: Woman,
       title: 'HAPPY MOTHER\'S DAY',
       description: 'Get up to 50% off on selected items',
-      bgColor: 'bg-green-100',
+      bgColor: 'bg-emerald-500',
+    },
+     {
+      icon: Woman,
+      title: 'HAPPY MOTHER\'S DAY',
+      description: 'Get up to 50% off on selected items',
+      bgColor: 'bg-emerald-500',
     },
     {
-      icon: '☕',
+      icon: Man,
       title: 'HAPPY COFFEE DAY',
       description: 'Free drink on saturday morning',
-      bgColor: 'bg-yellow-100',
+      bgColor: 'bg-amber-400',
     },
   ];
 
