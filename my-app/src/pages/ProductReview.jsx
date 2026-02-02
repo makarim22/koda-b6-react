@@ -7,10 +7,13 @@ import { ProductGrid } from "../component/ProductGrid";
 function ProductReview() {
   const images = [
     "./src/assets/icons/productPage/affogato.jfif",
-    "./src/assets/icons/productPage/affogato.jfif",
-    "./src/assets/icons/productPage/affogato.jfif",
-    "./src/assets/icons/productPage/affogato.jfif",
   ];
+
+  const thumbnails = [
+        "./src/assets/icons/productPage/americano.jfif",
+    "./src/assets/icons/productPage/espresso.jfif",
+    "./src/assets/icons/productPage/flat-white.jfif",
+  ]
 
   const orderItems =[
     {
@@ -66,7 +69,7 @@ function ProductReview() {
       <Header bgColor="bg-black" />
       <section className="grid grid-cols-2 pt-16"> 
       <div className="w-full max-w-2xl mx-auto p-8 bg-white">
-      <ProductGallery images={images} />
+      <ProductGallery images={images} thumbnails={thumbnails} />
       </div>
       <div>
         <ProductOptions props={orderItems[0]}
