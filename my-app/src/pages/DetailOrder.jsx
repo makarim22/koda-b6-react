@@ -7,13 +7,15 @@ import { ProductGrid } from '../component/ProductGrid'
 function DetailOrder() {
     const orderData = [
         {
-   name : "John Doe",
-   address: "123 Main St, Anytown, USA",
-   paymentMethod: "Credit Card",
-   phone: "123-456-7890",
-   shipping: "Standard",
-   status: "Shipped",
-   total: "$100.00",
+   orderNumber: "#12354-09893",
+   date: "2023-01-26",
+   name : "Ghaluh Wizard Anggoro",
+   address: "Griya Bandung Indah",
+   paymentMethod: "Cash",
+   phone: "082116304338",
+   shipping: "Dine In",
+   status: "Done",
+   total: "IDR  40000",
         }
     ]
 

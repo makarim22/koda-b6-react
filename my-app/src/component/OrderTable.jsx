@@ -30,7 +30,7 @@ export const OrderTable = ({
 
 
   return (
-    <div className="flex flex-col gap-6 bg-white p-8 rounded-lg flex-1 overflow-y-auto">
+    <div className="flex flex-col gap-6 bg-white p-8 pt-20 rounded-lg flex-1 overflow-y-auto">
       <div className="overflow-x-auto rounded-lg border border-gray-200">
         <table className="w-full border-collapse">
           <thead>
