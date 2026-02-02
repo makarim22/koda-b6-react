@@ -124,9 +124,9 @@ export default function ProductOptions({ props }) {
           Buy
         </button>
         <button className="flex-1 border-2 border-orange-500 text-orange-500 font-bold py-3 px-6 rounded hover:bg-orange-50 transition flex items-center justify-center gap-2">
-          <span>🛒</span> add to cart
+          <span></span> add to cart
         </button>
-      </div>
+      </div> 
     </div>
   );
 }

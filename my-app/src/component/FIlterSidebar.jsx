@@ -10,7 +10,12 @@ export const FilterSidebar = ({
 
   return (
     <div className="bg-black text-white rounded-lg p-6 w-full md:w-64">
-      <div className="mb-6">
+      <div className="flex justify-between flex-row mb-6">
+        <h2 className="font-bold text-lg mb-3">Filter</h2>
+        <h2 className="font-bold text-lg mb-3">Reset Filter</h2>
+      </div>
+      <span >Search</span>
+      <div className="mb-6 mt-2">
         <input
           type="text"
           placeholder="Search Your Product"
@@ -69,7 +74,7 @@ export const FilterSidebar = ({
         </div>
       </div>
 
-      <button className="w-full bg-orange-500 text-white py-2 rounded font-medium text-sm">
+      <button className="w-full bg-orange-400 text-black py-2 rounded font-medium text-sm">
         Apply Filter
       </button>
     </div>

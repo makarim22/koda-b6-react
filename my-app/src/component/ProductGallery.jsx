@@ -5,8 +5,8 @@ export default function ProductGallery({ images, thumbnails }) {
 
   return (
     <div className="w-full max-w-2xl mx-auto p-4 md:p-8 bg-white">
-      <div className="bg-white rounded-lg overflow-hidden shadow-md">
-        <div className="mb-4">
+      <div className="bg-white w-145 rounded-lg overflow-hidden shadow-md">
+        <div className="mb-4 w-full">
           <img
             src={mainImage}
             alt="Main Product"
@@ -14,13 +14,13 @@ export default function ProductGallery({ images, thumbnails }) {
           />
         </div>
 
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="flex flex-row h-50 justify-between gap-1">
           {thumbnails.map((img, idx) => (
             <img
               key={idx}
               src={img}
               alt={`Product thumbnail ${idx + 1}`}
-              className={`w-20 h-20 object-cover rounded-md cursor-pointer border-2 transition-all duration-200
+              className={`w-48 object-cover rounded-md cursor-pointer border-2 transition-all duration-200
                           ${thumbnails === img ? 'border-blue-500 shadow-md' : 'border-gray-300 hover:border-blue-300'}`}
               onClick={() => setMainImage(img)}
             />
