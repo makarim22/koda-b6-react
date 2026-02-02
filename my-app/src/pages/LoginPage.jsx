@@ -66,7 +66,7 @@ function LoginPage() {
       setPassword('');
 
       alert("Berhasil masuk! mengarahkan ke halaman utama");
-      navigate('/home');
+      navigate('/');
     } else {
       alert("An unexpected error occurred. Please try again.");
     }

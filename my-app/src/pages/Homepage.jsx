@@ -17,6 +17,7 @@ const HomePage = () => {
       title: "Espresso",
       price: "IDR 15.000",
       originalPrice: "IDR 18.000",
+      description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
       rating: 5,
       reviews: 0,
       isFlashSale: true,
@@ -27,6 +28,7 @@ const HomePage = () => {
       title: "Latte",
       price: "IDR 19.000",
       originalPrice: "IDR 22.000",
+      description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
       rating: 5,
       reviews: 0,
       isFlashSale: true,
@@ -37,6 +39,7 @@ const HomePage = () => {
       title: "Mocha",
       price: "IDR 21.000",
       originalPrice: "IDR 24.000",
+      description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
       rating: 4,
       reviews: 0,
       isFlashSale: true,
@@ -47,6 +50,7 @@ const HomePage = () => {
       title: "Americano",
       price: "IDR 12.000",
       originalPrice: "IDR 15.000",
+      description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
       rating: 4,
       reviews: 0,
       isFlashSale: false,
@@ -207,7 +211,11 @@ const HomePage = () => {
             be yours too!
           </p>
         </div>
-        <ProductGrid products={products} columns={4} />
+        <ProductGrid 
+        products={products}
+         columns={4}
+         showOriginalPrice= {false}
+         showRating= {false}/>
       </section>
 
       <section className="py-16 md:py-24 bg-white text-gray-800 px-8 md:px-32 text-center">
@@ -219,22 +227,13 @@ const HomePage = () => {
           You can explore the menu that we provide with fun and have their own
           taste and make your day better.
         </p>
-        <div className="flex justify-center">
+        <div className="w-full">
           <img
             src={GlobeImage}
             alt="World Map"
             className="max-w-full h-auto rounded-lg shadow-lg"
           />
         </div>
-      </section>
-
-      <section className="py-16 md:py-24 bg-gray-900 text-white px-8 md:px-32 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          What Our Customers Say
-        </h2>
-        <p className="text-lg max-w-2xl mx-auto">
-          Placeholder for testimonials or customer reviews.
-        </p>
       </section>
 
       <TestimonyCard testimonies={testimonials} />

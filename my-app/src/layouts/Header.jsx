@@ -36,21 +36,18 @@ const Header = (props) => {
         <img src={SearchIcon} alt="Search" className="h-5 w-5 cursor-pointer" />
         <img src={ShoppingCartIcon} alt="Cart" className="h-5 w-5 cursor-pointer" />
 
-        <a
-          id="login"
-          href="login.html"
-          className="text-white text-sm border-2 border-white px-4 py-2 rounded-md hover:bg-white hover:text-black transition-colors duration-200"
+        <Link 
+         to="/login"
+         className="text-white text-sm border-2 border-white px-4 py-2 rounded-md hover:bg-white hover:text-black transition-colors duration-200"
         >
           Sign In
-        </a>
-
-        <a
-          id="register"
-          href="register.html"
-          className="text-[#0B132A] text-sm bg-[#FF8906] px-4 py-2 rounded-md hover:bg-orange-600 transition-colors duration-200"
+        </Link>
+        <Link 
+         to="/register"
+         className="text-[#0B132A] text-sm bg-[#FF8906] px-4 py-2 rounded-md hover:bg-orange-600 transition-colors duration-200"
         >
           Sign Up
-        </a>
+        </Link>
       </nav>
     </header>
   );

@@ -19,7 +19,7 @@ export default function TestimonyCard({ testimonies }) {
   const currentTestimony = testimonies[currentIndex];
 
   return (
-    <div className="bg-gray-900 text-white p-8 rounded-lg">
+    <div className="bg-stone-950 text-white p-8 rounded-lg">
       <div className="flex gap-8 max-w-4xl">
         <div className="shrink-0">
           <img

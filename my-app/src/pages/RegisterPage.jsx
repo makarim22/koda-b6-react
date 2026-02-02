@@ -1,4 +1,4 @@
-// src/pages/Auth/LoginPage.jsx
+
 import React from 'react';
 import { Input } from '../component/input';
 import { Button } from '/src/component/Button';
@@ -7,18 +7,14 @@ import RegisterImg from '../assets/coffee-cup.svg';
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
-// Imports for logos inside the form
 import coffeeCupLogo from '../assets/icons/logo-coffee.svg';
 import coffeeShopLogo from '../assets/icons/cup.svg';
-
-// Imports for input icons
 import mailIcon from '../assets/icons/mail.svg';
+import ProfileIcon from '../assets/icons/productPage/Profile.svg';
 import passwordIcon from '../assets/icons/Password.svg';
-
-// Social media icons
 import facebookIcon from '../assets/icons/facebook.svg';
 import googleIcon from '../assets/icons/google.svg';
+import { useNavigate } from 'react-router-dom';
 
 const STORAGE_KEY = 'user-data';
 
@@ -37,46 +33,56 @@ function RegisterPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
 
     const trimmedEmail = email.trim();
+    if (!fullname || !trimmedEmail || !password || !confirmPassword) {
+      alert("All fields are required.");
+      return;
+    }
 
     if (password.length < 8) {
       alert("Password must be at least 8 characters long.");
       return;
     }
 
-    let allCredentials = getStoredCredentials();
-    console.log('Stored Credentials:', allCredentials);
-
-    // const wrongPassword = allCredentials.some(
-    //   user => user.email === trimmedEmail && user.password !== password
-    // );
-    // if (wrongPassword) {
-    //   alert('Email atau password yang dimasukkan salah');
-    //   return;
-    // }
-
-    // if (!allCredentials.some(user => user.email === trimmedEmail)) {
-    //   alert('Email tersebut belum terdaftar di sistem kami');
-    //   return;
-    // }
-
-    const userIndex = allCredentials.findIndex(user => user.email === trimmedEmail);
-
-    if (userIndex !== -1) {
-      allCredentials[userIndex] = { ...allCredentials[userIndex], isLoggedIn: true };
-      saveCredentials(allCredentials);
-
-      setEmail('');
-      setPassword('');
-
-      alert("Berhasil masuk! mengarahkan ke halaman utama");
-      window.location.href = "home.html";
-    } else {
-      alert("An unexpected error occurred. Please try again.");
+    if (password !== confirmPassword) {
+      alert("Password and Confirm Password do not match.");
+      return;
     }
+
+    let allCredentials = getStoredCredentials();
+    console.log('Current stored credentials before new registration:', allCredentials);
+
+    if (allCredentials.some(user => user.email === trimmedEmail)) {
+      alert('Email already registered. Please use a different email or proceed to login.');
+      return;
+    }
+
+    const newUser = {
+      fullname: fullname,
+      email: trimmedEmail,
+      password: password, 
+      isLoggedIn: false, 
+    };
+
+
+    const updatedCredentials = [...allCredentials, newUser]; 
+
+    saveCredentials(updatedCredentials);
+    console.log('Updated stored credentials after new registration:', updatedCredentials);
+
+
+    alert("Registration successful! You can now log in.");
+    navigate('/login');
+
+    setFullname('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
   };
 
   return (
@@ -114,8 +120,8 @@ function RegisterPage() {
         required
         value={fullname}
         onChange={(e) => setFullname(e.target.value)}
-        icon={mailIcon}
-        iconAlt="Email Icon"
+        icon={ProfileIcon}
+        iconAlt="Profile Icon"
       />
     </div>
 
