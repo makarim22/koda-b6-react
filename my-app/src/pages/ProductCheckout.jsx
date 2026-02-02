@@ -36,15 +36,20 @@ function ProductCheckout() {
 
 
   return (
-    <div>
-      <Header /> 
-      <div className='flex flex-row'>
+    <div className='flex flex-col h-screen '>
+      <Header bgColor="bg-black" /> 
+      <div className='grid grid-cols-2'>
+        <div className='flex flex-col '>
         <Cart items={products} />
         <PaymentInfo />
       </div>
-      <div>
+      <div className='flex flex-col pt-30'>
+        <h1>Invoice</h1>
         <Invoice paymentDetails={payment} />
       </div>
+
+      </div>
+    
       <Footer />
       
     </div>
