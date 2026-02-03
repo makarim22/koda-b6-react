@@ -1,5 +1,6 @@
 import React from 'react';
 import Cart from '../assets/user/ShoppingCart.svg';
+import { useNavigate } from 'react-router-dom';
 
 export const ProductCard = ({ 
   image, 
@@ -12,11 +13,23 @@ export const ProductCard = ({
   isFlashSale = false,
   onAddToCart,
   showRating = true,
-  showOriginalPrice = true
+  showOriginalPrice = true,
+  product
 }) => {
+    const navigate = useNavigate(); 
+
+  const handleBuyClick = () => {
+    navigate(`/product-review/${product?.id}`);
+  };
+
+  const handleAddToCartClick = () => {
+    if (onAddToCart) {
+      onAddToCart();
+    }
+  };
+
   return (
     <div className="w-full max-w-sm rounded-lg overflow-hidden shadow-lg transition-all duration-300 bg-white">
-      {/* Image Container */}
       <div className="relative h-64 overflow-hidden bg-gray-100">
         {image ? (
           <img 
@@ -42,7 +55,6 @@ export const ProductCard = ({
         )}
       </div>
 
-      {/* Content Container - Positioned BELOW image, not overlapping */}
       <div className="p-5 bg-white">
         <h3 className="font-bold text-xl text-gray-900 mb-2">{title}</h3>
 
@@ -69,13 +81,13 @@ export const ProductCard = ({
 
         <div className="flex gap-3">
           <button
-            onClick={onAddToCart}
+            onClick={handleBuyClick} 
             className="flex-1 bg-orange-400 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold text-base transition duration-200"
           >
             Buy
           </button>
           <button
-            onClick={onAddToCart}
+            onClick={handleAddToCartClick}
             className="p-3 border-2 border-orange-500 text-orange-500 hover:bg-orange-50 rounded-lg transition duration-200 flex items-center justify-center"
             title="Add to cart"
           >
