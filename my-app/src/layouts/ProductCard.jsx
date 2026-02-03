@@ -3,13 +3,11 @@ import StarIcon from '../../icons/star.svg';
 import productImages from '../../utils/productImages';
 
 const ProductCard = ({ products = [] }) => {
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(amount);
-  };
+
+const formatCurrency = (amount) => 
+  amount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+
+
 
   return (
     <section className="py-16 md:py-24 bg-gray-100 text-gray-800 px-8 md:px-32">

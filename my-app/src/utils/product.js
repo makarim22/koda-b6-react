@@ -43,6 +43,29 @@ export const getAllProducts = () => [
       reviews: 0,
       isFlashSale: false,
     },
+    
+  {
+    id: 5,
+    image: './src/assets/icons/productPage/flat-white.jfif',
+    title: 'Flat White',
+    price: 'IDR 20.000',
+    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
+    originalPrice: 'IDR 23.000',
+    rating: 4,
+    reviews: 0,
+    isFlashSale: true,
+  },
+  {
+    id: 6,
+    image: './src/assets/icons/productPage/affogato.jfif',
+    title: 'Affogato',
+    price: 'IDR 25.000',
+    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
+    originalPrice: 'IDR 30.000',
+    rating: 5,
+    reviews: 0,
+    isFlashSale: false,
+  },
   
 ]
 
