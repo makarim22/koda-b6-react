@@ -2,7 +2,9 @@ import React from 'react'
 
 function Cart(props) {
     const { items } = props;
+    console.log("itemsnya", items);
 
+    const cartItems = Array.isArray(items) ? items : (items ? [items] : []);
     return (
         <div className="bg-white rounded-lg p-6">
             <div className='flex flex-row justify-between'> 
@@ -14,7 +16,7 @@ function Cart(props) {
             </div>
             
             <div className="space-y-4 mb-6">
-                {items.map((item, idx) => (
+                {cartItems.map((item, idx) => (
                     <div key={idx} className="border border-gray-200 rounded-lg p-4 flex gap-4">
                         <div className="flex-shrink-0">
                             <img 

@@ -1,16 +1,44 @@
 import React, { useState } from 'react'
-
 import mailIcon from '../assets/icons/mail.svg'
 import Location from '../assets/icons/productPage/Location.svg'
 import Profile from '../assets/icons/productPage/Profile.svg'
-import {User,  MapPinPen} from 'lucide-react'
 import { Input } from './input'
 
-function PaymentInfo() {
-    const [deliveryMethod, setDeliveryMethod] = useState('dine-in')
+function PaymentInfo({ 
+  onDeliveryMethodChange, 
+  onFormDataChange, 
+  selectedDeliveryMethod = 'dine-in' 
+}) {
+    const [deliveryMethod, setDeliveryMethod] = useState(selectedDeliveryMethod)
+    const [formData, setFormData] = useState({
+        email: '',
+        fullName: '',
+        address: ''
+    })
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        const updatedFormData = {
+            ...formData,
+            [name]: value
+        };
+        setFormData(updatedFormData);
+        
+        if (onFormDataChange) {
+            onFormDataChange(updatedFormData);
+        }
+    }
+
+    const handleDeliveryChange = (method) => {
+        setDeliveryMethod(method)
+        
+        if (onDeliveryMethodChange) {
+            onDeliveryMethodChange(method);
+        }
+    }
 
     return (
-        <div className="bg-white rounded-lg p-6 w-full">
+        <div className="bg-white rounded-lg p-6 w-full shadow">
             <h2 className="text-2xl font-bold mb-6 text-gray-900">Payment Info & Delivery</h2>
 
             <form className="space-y-5">
@@ -24,6 +52,8 @@ function PaymentInfo() {
                         required
                         icon={mailIcon}
                         iconAlt="Email Icon"
+                        value={formData.email}
+                        onChange={handleInputChange}
                     />
                 </div>
                 <div>
@@ -31,13 +61,16 @@ function PaymentInfo() {
                         label="Full Name"
                         type="text"
                         id="fullname"
-                        name="fullname"
+                        name="fullName"
                         placeholder="Enter Your Full Name"
                         required
                         icon={Profile}
                         iconAlt="User Icon"
+                        value={formData.fullName}
+                        onChange={handleInputChange}
                     />
                 </div>
+
                 <div>
                     <Input
                         label="Address"
@@ -48,29 +81,37 @@ function PaymentInfo() {
                         required
                         icon={Location}
                         iconAlt="Location Icon"
+                        value={formData.address}
+                        onChange={handleInputChange}
                     />
                 </div>
+
                 <div>
                     <label className="block text-gray-900 font-semibold mb-3">
-                        Delivery
+                        Delivery Method
                     </label>
                     <div className="grid grid-cols-3 gap-3">
                         {[
-                            { id: 'dine-in', label: 'Dine in' },
+                            { id: 'dine-in', label: 'Dine In' },
                             { id: 'door-delivery', label: 'Door Delivery' },
                             { id: 'pick-up', label: 'Pick Up' }
                         ].map((option) => (
                             <button
                                 key={option.id}
                                 type="button"
-                                onClick={() => setDeliveryMethod(option.id)}
-                                className={`py-2 px-4 rounded-lg font-semibold transition ${
+                                onClick={() => handleDeliveryChange(option.id)}
+                                className={`py-3 px-3 rounded-lg font-semibold transition relative ${
                                     deliveryMethod === option.id
                                         ? 'bg-orange-500 text-white border-2 border-orange-500'
-                                        : 'bg-white text-gray-700 border-2 border-orange-500 hover:bg-orange-50'
+                                        : 'bg-white text-gray-700 border-2 border-gray-300 hover:border-orange-500'
                                 }`}
                             >
-                                {option.label}
+                                <div>{option.label}</div>
+                                <div className={`text-xs mt-1 ${
+                                    deliveryMethod === option.id ? 'text-orange-100' : 'text-gray-500'
+                                }`}>
+                                    {option.info}
+                                </div>
                             </button>
                         ))}
                     </div>
@@ -80,4 +121,4 @@ function PaymentInfo() {
     )
 }
 
-export default PaymentInfo
+export default PaymentInfo;

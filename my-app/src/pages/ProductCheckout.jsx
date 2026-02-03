@@ -3,39 +3,68 @@ import Footer from '../layouts/Footer';
 import PaymentInfo from '../component/PaymentInfo';
 import Cart from '../component/Cart';
 import Invoice from '../component/Invoice';
-function ProductCheckout() {
-  const products = [
-    {
-      id: 1,
-      image: './src/assets/icons/productPage/espresso.jfif',
-      name: 'Hazelnut Latte',
-      quantity: 2,
-      size: 'Regular',
-      temperature: 'Hot',
-      originalPrice: 'IDR 25.000',
-      price: 'IDR 18.000',
-      isFlashSale: true
-    },
-    {
-      id: 2,
-      name: 'Latte',
-      image: './src/assets/icons/productPage/latte.jpg',
-      quantity: 1,
-      size: 'Medium',
-      temperature: 'Ice',
-      originalPrice: 'IDR 40.000',
-      price: 'IDR 20.000',
-      isFlashSale: true
-    }
-  ];
+import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 
-  const payment = {
-    order : 'IDR 38.000',
-    delivery : 'IDR 5.000',
-    tax : 'IDR 1.000',
-    subtotal : 'IDR 44.000'
+function ProductCheckout() {
+  const {productId} = useParams();
+  console.log("idnyaa", productId);
+
+  
+  const [deliveryMethod, setDeliveryMethod] = useState('dine-in');
+
+  const getCartfromLocalStorage = () => {
+    const cart = localStorage.getItem(`order_${productId}`);
+    return cart ? JSON.parse(cart) : [];
   };
 
+  const cartItems = getCartfromLocalStorage();
+  console.log("cartItems", cartItems);
+
+    const calculatePayment = () => {
+    if (!cartItems || Object.keys(cartItems).length === 0) {
+      return {
+        order: 'IDR 0',
+        delivery: 'IDR 5.000',
+        tax: 'IDR 0',
+        subtotal: 'IDR 5.000'
+      };
+    }
+    const price = parseInt(cartItems.price?.replace(/\D/g, '') || 0);
+    const quantity = cartItems.quantity || 1;
+    
+    const orderTotal = price * quantity;
+    
+
+    let delivery = 0;
+    if (deliveryMethod === 'door-delivery') {
+      delivery = 5000;
+    } else if (deliveryMethod === 'dine-in' || deliveryMethod === 'pick-up') {
+      delivery = 0;
+    }
+
+    const tax = Math.round(orderTotal * 0.1); 
+    const subtotal = orderTotal + delivery + tax;
+
+    return {
+      order: `IDR ${orderTotal.toLocaleString('id-ID')}`,
+      delivery: `IDR ${delivery.toLocaleString('id-ID')}`,
+      tax: `IDR ${tax.toLocaleString('id-ID')}`,
+      subtotal: `IDR ${subtotal.toLocaleString('id-ID')}`
+    };
+  };
+
+  const payment = calculatePayment();
+
+  //  const handlePaymentFormChange = (formData) => {
+  //   setPaymentFormData(formData);
+  //   console.log("Payment Form Data:", formData);
+  // };
+
+  const handleDeliveryMethodChange = (method) => {
+    setDeliveryMethod(method);
+    console.log("Delivery Method Changed to:", method);
+  };
 
   return (
     <div className='flex flex-col h-screen '>
@@ -43,8 +72,12 @@ function ProductCheckout() {
       <div className='grid grid-cols-2 gap-4 pt-25'>
         <div className='flex flex-col'>
           <h1 className='p-6 text-3xl'>Payment Details</h1>
-        <Cart items={products} />
-        <PaymentInfo />
+        <Cart items={cartItems} />
+         <PaymentInfo 
+                onDeliveryMethodChange={handleDeliveryMethodChange}
+                // onFormDataChange={handlePaymentFormChange}
+                selectedDeliveryMethod={deliveryMethod}
+              />
       </div>
       <div className='flex flex-col pt-30 '>
         <Invoice paymentDetails={payment} />

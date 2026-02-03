@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductOptions({ props }) {
+
   const {
+    id = 1,
     title = "Hazelnut Latte",
     originalPrice = "IDR 20.000",
     price = "IDR 10.000",
@@ -17,10 +20,32 @@ export default function ProductOptions({ props }) {
   const [selectedSize, setSelectedSize] = useState(size);
   const [selectedTemp, setSelectedTemp] = useState(temperature);
   const [qty, setQty] = useState(quantity);
+  const Navigate = useNavigate();
 
   const handleQuantityChange = (delta) => {
     setQty(Math.max(1, qty + delta));
   };
+
+  const handleBuy = () => {
+    const orderData = {
+      id,
+      title,
+      price,
+      originalPrice,
+      quantity: qty,
+      size: selectedSize,
+      temperature: selectedTemp,
+      image: props?.image || "",
+      totalPrice: qty * parseInt(price.replace(/\D/g, "")), 
+      timestamp: new Date().toISOString(),
+    };
+
+    localStorage.setItem(`order_${id}`, JSON.stringify(orderData));
+    console.log("Order data tersimpan:", orderData);
+    alert(`Order dibuat! ${qty}x ${title} - Total: IDR ${qty * parseInt(price.replace(/\D/g, ""))}`);
+    Navigate(`/product-checkout/${id}`);
+  };
+
 
   return (
     <div className="w-full max-w-2xl mx-auto p-8 bg-white">
@@ -120,7 +145,8 @@ export default function ProductOptions({ props }) {
       </div>
 
       <div className="flex gap-3">
-        <button className="flex-1 bg-orange-500 text-white font-bold py-3 px-6 rounded hover:bg-orange-600 transition">
+        <button 
+          onClick={handleBuy} className="flex-1 bg-orange-500 text-white font-bold py-3 px-6 rounded hover:bg-orange-600 transition">
           Buy
         </button>
         <button className="flex-1 border-2 border-orange-500 text-orange-500 font-bold py-3 px-6 rounded hover:bg-orange-50 transition flex items-center justify-center gap-2">

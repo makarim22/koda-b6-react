@@ -37,6 +37,7 @@ function App() {
         <Route path="/product" element={<ProductPage />} />
          <Route path="/product-review" element={<ProductReview />} />
         <Route path="/product-review/:productId" element={<ProductReview />} />
+        <Route path="/product-checkout/:productId" element={<ProductCheckout />} />
         <Route path="/product-checkout" element={<ProductCheckout />} />
         <Route path="/order-history" element={<HistoryOrder/>} />
         <Route path="/detail-order" element={<DetailOrder />} />
