@@ -27,7 +27,8 @@ function ProductCheckout() {
         order: 'IDR 0',
         delivery: 'IDR 5.000',
         tax: 'IDR 0',
-        subtotal: 'IDR 5.000'
+        subtotal: 'IDR 5.000',
+        status: 'On Progress'
       };
     }
     const price = parseInt(cartItems.price?.replace(/\D/g, '') || 0);
@@ -50,7 +51,8 @@ function ProductCheckout() {
       order: `IDR ${orderTotal.toLocaleString('id-ID')}`,
       delivery: `IDR ${delivery.toLocaleString('id-ID')}`,
       tax: `IDR ${tax.toLocaleString('id-ID')}`,
-      subtotal: `IDR ${subtotal.toLocaleString('id-ID')}`
+      subtotal: `IDR ${subtotal.toLocaleString('id-ID')}`,
+      image: cartItems.image,
     };
   };
 

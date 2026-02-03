@@ -5,11 +5,54 @@ import DANA from '../assets/icons/productPage/DANA.svg';
 import Gopay from '../assets/icons/productPage/gopay.svg';
 import OVO from '../assets/icons/productPage/Ovo.svg';
 import Paypal from '../assets/icons/productPage/Paypal.svg';
+import { useNavigate } from 'react-router-dom';
 
 function Invoice(props) {
     const { paymentDetails } = props;
-    const { order, delivery, tax, subtotal } = paymentDetails;
+    const { order, delivery, tax, subtotal, image } = paymentDetails;
+    const navigate = useNavigate();
 
+        const generateOrderId = () => {
+        const timestampPart = Date.now().toString().slice(-7);  
+        return `#${timestampPart}`;
+    };
+   
+      const handleSubmit = () => {
+
+        const newOrderId = generateOrderId(); 
+        const newOrder = {
+            id: newOrderId,
+            date: new Date().toLocaleDateString('en-ID'), 
+            order: order,
+            delivery: delivery,
+            tax: tax,
+            subtotal: subtotal,
+            status: 'On Progress',
+            image: image
+        };
+        
+        const existingOrdersString = localStorage.getItem('order');
+        let existingOrders = [];
+
+        if (existingOrdersString) {
+            try {
+                const parsed = JSON.parse(existingOrdersString);
+                if (Array.isArray(parsed)) {
+                    existingOrders = parsed;
+                } else {
+                    console.warn("Data 'order' di localStorage bukan array. Menginisialisasi ulang.");
+                }
+            } catch (error) {
+                console.error("Gagal parse riwayat pesanan dari localStorage:", error);
+            }
+        }
+
+        const updatedOrders = [...existingOrders, newOrder];
+        localStorage.setItem('order', JSON.stringify(updatedOrders));
+        
+        alert('Pesanan berhasil dibuat!');
+        navigate('/order-history'); 
+    }
     return (
         <div className="bg-white rounded-lg p-6 w-full md:w-80">
             <h3 className="text-xl font-bold mb-6 text-gray-900">Total</h3>
@@ -32,7 +75,9 @@ function Invoice(props) {
                 </div>
             </div>
 
-            <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg mb-6 transition">
+            <button
+             onClick={handleSubmit}
+             className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg mb-6 transition">
                 Checkout
             </button>
             <div>

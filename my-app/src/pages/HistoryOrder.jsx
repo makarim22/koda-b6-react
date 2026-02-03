@@ -2,39 +2,39 @@
 import { ChevronRight, MessageSquare} from 'lucide-react';
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
+import { useEffect, useState } from 'react';
+import Calendar from '../assets/user/calendar.svg'
 
 export default function HistoryOrder() {
-  const orders = [
-    {
-      id: '#12354-09893',
-      date: '23 January 2023',
-      total: 'Idr 40.000',
-      status: 'On Progress',
-      image: '/coffee-cup.jpg'
-    },
-    {
-      id: '#12354-09893',
-      date: '24 January 2023',
-      total: 'Idr 40.000',
-      status: 'On Progress',
-      image: '/coffee-cup.jpg'
-    },
-    {
-      id: '#12354-09893',
-      date: '25 January 2023',
-      total: 'Idr 40.000',
-      status: 'On Progress',
-      image: '/coffee-cup.jpg'
-    },
-    {
-      id: '#12354-09893',
-      date: '26 January 2023',
-      total: 'Idr 40.000',
-      status: 'On Progress',
-      image: '/coffee-cup.jpg'
-    }
-  ];
+  const [userOrders, setUserOrders] = useState([]);
 
+   useEffect(() => {
+    const fetchOrders = () => {
+      try {
+        const orderData = localStorage.getItem('order');
+        console.log("ordernya", orderData); 
+        if (orderData) {
+          const parsedOrder = JSON.parse(orderData);
+
+          if (Array.isArray(parsedOrder)) {
+            setUserOrders(parsedOrder);
+          } else {
+            console.warn("Data 'order' di localStorage bukan array:", parsedOrder);
+            setUserOrders([]); 
+          }
+        } else {
+          setUserOrders([]); 
+        }
+      } catch (error) {
+        console.error('Error parsing order data from localStorage:', error);
+        setUserOrders([]); 
+      }
+    };
+
+    fetchOrders(); 
+  }, []); 
+
+  
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pt-10">
       <Header bgColor="bg-black" />
@@ -46,24 +46,27 @@ export default function HistoryOrder() {
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-8">
               <h1 className="text-4xl font-bold">History Order</h1>
-              <span className="bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm">2</span>
+              <span className="bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm">{userOrders.length}</span>
             </div>
 
-            <div className="flex gap-4 mb-8">
+            <div className="flex flex-row justify-between gap-4 mb-8">
+              <div className='flex flex-row gap-4 h-15'>
               <button className="px-6 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">On Progress</button>
               <button className="px-6 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Sending Goods</button>
               <button className="px-6 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Finish Order</button>
-            </div>
-
-            <div className="mb-8 flex items-center gap-2 text-gray-700">
-              <span>📅</span>
+              </div>
+              <div className="mb-8 flex items-center gap-2 text-gray-700">
+              <span><img src={Calendar} alt="Calendar" className="w-6 h-6" /></span>
               <select className="bg-white border border-gray-300 rounded px-4 py-2">
                 <option>January 2023</option>
               </select>
             </div>
 
+            </div>
+
+ 
             <div className="space-y-4">
-              {orders.map((order, index) => (
+              {userOrders.map((order, index) => (
                 <div key={index} className="bg-white rounded-lg p-6 flex gap-6 hover:shadow-md transition">
                   <img 
                     src={order.image} 
@@ -85,7 +88,7 @@ export default function HistoryOrder() {
 
                     <div>
                       <div className="text-sm text-gray-600 mb-1">Total</div>
-                      <div className="font-semibold text-gray-900">{order.total}</div>
+                      <div className="font-semibold text-gray-900">{order.subTotal}</div>
                     </div>
 
                     <div>

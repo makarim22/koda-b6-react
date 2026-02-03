@@ -22,7 +22,6 @@ const Header = (props) => {
         if (usersString) {
           const allUsers = JSON.parse(usersString); 
           const activeUser = allUsers.find(user => user.isLoggedIn === true);
-          console.log("Header - Found active user:", activeUser);
 
           if (activeUser) {
             setLoggedinUser(activeUser);
@@ -33,7 +32,7 @@ const Header = (props) => {
           setLoggedinUser(null);
         }
       } catch (error) {
-        console.error('Header - Error loading or parsing user data from localStorage:', error);
+        console.error('Error parsing users data:', error);
         setLoggedinUser(null);
       } 
     };
@@ -109,7 +108,6 @@ const Header = (props) => {
           </button>
         </div>
       ) : (
-        // Jika user belum login
         <>
           <Link
             to="/login"
