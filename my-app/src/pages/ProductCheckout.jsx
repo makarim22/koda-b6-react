@@ -63,7 +63,6 @@ function ProductCheckout() {
 
   const handleDeliveryMethodChange = (method) => {
     setDeliveryMethod(method);
-    console.log("Delivery Method Changed to:", method);
   };
 
   return (
