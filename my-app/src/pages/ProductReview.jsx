@@ -52,7 +52,7 @@ function ProductReview() {
       </section>
       <section className="px-4">
         <h1 className="text-4xl font-bold text-left mt-8 mb-4">Recommended for you</h1>
-        <ProductGrid products={productsData} columns={3} />
+        <ProductGrid products={productsData} columns={3} qty={3}/>
       </section>
 
       <Footer />

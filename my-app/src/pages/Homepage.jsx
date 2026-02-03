@@ -214,6 +214,7 @@ const HomePage = () => {
         <ProductGrid 
         products={products}
          columns={4}
+         qty={4}
          showOriginalPrice= {false}
          showRating= {false}/>
       </section>

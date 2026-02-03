@@ -55,6 +55,7 @@ import Man from '../assets/icons/productPage/coupon2.png';
     image: './src/assets/icons/productPage/espresso.jfif',
     title: 'Espresso', 
     price: 'IDR 15.000', 
+    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
     originalPrice: 'IDR 18.000', 
     rating: 5,
     reviews: 0, 
@@ -65,6 +66,7 @@ import Man from '../assets/icons/productPage/coupon2.png';
     image: './src/assets/icons/productPage/latte.jpg',
     title: 'Latte',
     price: 'IDR 19.000',
+    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
     originalPrice: 'IDR 22.000',
     rating: 5,
     reviews: 0,
@@ -75,6 +77,7 @@ import Man from '../assets/icons/productPage/coupon2.png';
     image: './src/assets/icons/productPage/mocha.jfif',
     title: 'Mocha',
     price: 'IDR 21.000',
+    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
     originalPrice: 'IDR 24.000',
     rating: 4,
     reviews: 0,
@@ -85,6 +88,7 @@ import Man from '../assets/icons/productPage/coupon2.png';
     image: './src/assets/icons/productPage/americano.jfif',
     title: 'Americano',
     price: 'IDR 12.000', 
+    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
     originalPrice: 'IDR 15.000', 
     rating: 4,
     reviews: 0,
@@ -95,6 +99,7 @@ import Man from '../assets/icons/productPage/coupon2.png';
     image: './src/assets/icons/productPage/flat-white.jfif',
     title: 'Flat White',
     price: 'IDR 20.000',
+    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
     originalPrice: 'IDR 23.000',
     rating: 4,
     reviews: 0,
@@ -105,6 +110,7 @@ import Man from '../assets/icons/productPage/coupon2.png';
     image: './src/assets/icons/productPage/affogato.jfif',
     title: 'Affogato',
     price: 'IDR 25.000',
+    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
     originalPrice: 'IDR 30.000',
     rating: 5,
     reviews: 0,
@@ -140,7 +146,7 @@ import Man from '../assets/icons/productPage/coupon2.png';
             </div>
 
             <div className="flex-1">
-              <ProductGrid products={productsData} columns={2} />
+              <ProductGrid products={productsData} columns={2} qty={6}/>
 
               <div className="flex justify-center gap-2 mt-8">
                 <button className="w-8 h-8 rounded-full bg-orange-500 text-white">‹</button>

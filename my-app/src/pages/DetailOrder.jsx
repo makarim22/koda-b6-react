@@ -48,7 +48,7 @@ function DetailOrder() {
       <div className='pt-20 flex flex-row '>
       <OrderInformation props={orderData[0]} />
       <div>
-      <ProductGrid products={productsData} columns={1} />
+      {/* <ProductGrid products={productsData} columns={1} /> */}
       </div>
       
       </div>
