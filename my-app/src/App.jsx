@@ -1,7 +1,8 @@
 import {
   BrowserRouter as Router,
   Routes,
-  Route
+  Route,
+  ScrollRestoration 
 } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -23,10 +24,13 @@ import AdminOrderDetail from "./pages/AdminOrderDetail";
 import ListUsers from "./pages/ListUsers";
 import InsertUser from "./pages/InsertUser";
 import EditUser from "./pages/EditUser";
+import ScrollToTop from "./utils/scrollRestoration";
+
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -40,7 +44,7 @@ function App() {
         <Route path="/product-checkout/:productId" element={<ProductCheckout />} />
         <Route path="/product-checkout" element={<ProductCheckout />} />
         <Route path="/order-history" element={<HistoryOrder/>} />
-        <Route path="/detail-order" element={<DetailOrder />} />
+        <Route path="/detail-order/:id" element={<DetailOrder />} />
         <Route path="/profile" element={<Profile />} />
 
         /// admin
