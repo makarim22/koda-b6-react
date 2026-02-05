@@ -78,7 +78,7 @@ const Header = (props) => {
 
   return (
     <header
-      className={`flex items-center justify-between px-5 md:px-32 py-4 fixed top-0 left-0 right-0 w-full ${bgColor || "bg-transparent"} z-10`}
+      className={`flex items-center justify-between px-5 md:px-32 py-4 fixed top-0 left-0 right-0 w-full ${bgColor || "bg-transparent"} z-10  shadow-md border-b border-white/20  `}
     >
       <div className="flex items-center space-x-8">
         <div className="flex items-center space-x-2">
