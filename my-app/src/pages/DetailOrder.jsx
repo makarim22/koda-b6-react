@@ -46,18 +46,20 @@ function DetailOrder() {
         }
     ]
 
-  return (
+
+return (
     <div>
       <Header bgColor="bg-black" />
-      <div className='pt-20 flex flex-row '>
-      <OrderInformation props={orderData[0]} />
-      <div>
-      {/* <ProductGrid products={productsData} columns={1} /> */}
-      <Cart props={order} />
+      <div className='pt-20 grid grid-cols-1 md:grid-cols-2 gap-8 w-full min-h-screen px-5 md:px-32'>
+  
+        <div className="col-span-1"> 
+          <OrderInformation props={orderData[0]} /> 
+        </div>
+        <div className="col-span-1"> 
+          <Cart items={order} />
+        </div>
       </div>
-      
-      </div>
-      
+
       <Footer />
     </div>
   )

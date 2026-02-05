@@ -1,13 +1,36 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
-function Cart(props) {
+function Cart({items}) {
     // const navigate = useNavigate();
     
-    const { items } = props;
+    
+
     console.log("itemsnya", items);
 
-    const cartItems = Array.isArray(items) ? items : (items ? [items] : []);
+    let arrayItems = [];
+
+    if (items){
+        if(Array.isArray(items)){
+            arrayItems = items;
+        } else if(typeof items === "object"){
+            const singleItem = {
+                id: items.id || 'unknown-id', 
+                name: items.title || "Produk Pesanan", 
+                quantity: items.quantity || 1, 
+                originalPrice: items.originalPrice || "IDR 20.000", 
+                temperature: items.temperature || "Normal", 
+                size: items.size || "Reguler", 
+                price: items.price || "IDR 20.000", 
+                image: items.image 
+
+            }
+            arrayItems = [singleItem];
+        }
+    }
+
+    console.log("arrayItems", arrayItems);
+
 
     
     return (
@@ -23,7 +46,7 @@ function Cart(props) {
             </div>
             
             <div className="space-y-4 mb-6">
-                {cartItems.map((item, idx) => (
+                {arrayItems.map((item, idx) => (
                     <div key={idx} className="border border-gray-200 rounded-lg p-4 flex gap-4">
                         <div className="flex-shrink-0">
                             <img 
