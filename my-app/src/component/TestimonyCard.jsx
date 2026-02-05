@@ -20,8 +20,8 @@ export default function TestimonyCard({ testimonies }) {
 
   return (
     <div className="bg-stone-950 text-white p-8 rounded-lg">
-      <div className="flex gap-8 max-w-4xl">
-        <div className="shrink-0">
+      <div className="flex flex-col md:flex-row lg:flex-row gap-8 max-w-4xl">
+        <div className="shrink-0 ">
           <img
             src={currentTestimony.image}
             alt={currentTestimony.name}

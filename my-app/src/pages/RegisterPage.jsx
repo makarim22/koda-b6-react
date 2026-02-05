@@ -171,12 +171,18 @@ function RegisterPage() {
     </div>
 
     <div className="text-right mb-6">
-      <a
+      {/* <a
         className="text-orange-400 text-sm font-medium transition duration-200"
         href="forgot-password.html"
       >
         Forgot Password?
-      </a>
+      </a> */}
+      <Link
+        className="text-orange-400 text-sm font-medium transition duration-200"
+        to="/forgot-password"
+      >
+        Forgot Password?
+      </Link>
     </div>
     <Button
       type="submit"

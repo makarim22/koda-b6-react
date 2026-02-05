@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
 function Cart(props) {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     
     const { items } = props;
     console.log("itemsnya", items);
@@ -15,7 +15,7 @@ function Cart(props) {
             <div className='flex flex-row justify-between'> 
                 <h3 className="text-xl font-bold mb-6">Your Order</h3>
             <button
-            onClick={navigate('/product')}
+            // onClick={navigate('/product')}
              className="bg-orange-400 text-black w-35 rounded-lg">
                 {" "}
                 + Add Menu

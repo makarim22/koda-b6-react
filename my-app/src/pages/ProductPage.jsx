@@ -137,7 +137,7 @@ import Man from '../assets/icons/productPage/coupon2.png';
             Our <span className="text-yellow-800">Product</span>
           </h2>
 
-          <div className="flex gap-6">
+          <div className="flex flex-col md:flex-row lg:flex-row gap-6">
             <div className="w-full md:w-64 shrink-0">
               <FilterSidebar
                 categories={categories}
