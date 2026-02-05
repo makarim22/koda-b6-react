@@ -4,9 +4,11 @@ import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 import { useEffect, useState } from 'react';
 import Calendar from '../assets/user/calendar.svg'
+import { useNavigate } from 'react-router-dom';
 
 export default function HistoryOrder() {
   const [userOrders, setUserOrders] = useState([]);
+  const navigate = useNavigate();
 
    useEffect(() => {
     const fetchOrders = () => {
@@ -67,7 +69,7 @@ export default function HistoryOrder() {
  
             <div className="space-y-4">
               {userOrders.map((order, index) => (
-                <div key={index} className="bg-white rounded-lg p-6 flex gap-6 hover:shadow-md transition">
+                <div key={index} onClick={() => {navigate(`/detail-order/${order?.id}`);}} className="bg-white rounded-lg p-6 flex gap-6 hover:shadow-md transition">
                   <img 
                     src={order.image} 
                     alt="Coffee" 

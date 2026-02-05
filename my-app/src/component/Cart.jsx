@@ -3,20 +3,19 @@ import { useNavigate } from 'react-router-dom';
 
 function Cart(props) {
     const navigate = useNavigate();
+    
     const { items } = props;
     console.log("itemsnya", items);
 
     const cartItems = Array.isArray(items) ? items : (items ? [items] : []);
 
-    const handleChangePage = () => {
-        navigate('/product');
-    }
+    
     return (
         <div className="bg-white rounded-lg p-6">
             <div className='flex flex-row justify-between'> 
                 <h3 className="text-xl font-bold mb-6">Your Order</h3>
             <button
-            onClick={handleChangePage}
+            onClick={navigate('/product')}
              className="bg-orange-400 text-black w-35 rounded-lg">
                 {" "}
                 + Add Menu

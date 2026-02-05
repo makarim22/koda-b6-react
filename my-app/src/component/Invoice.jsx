@@ -14,7 +14,7 @@ function Invoice(props) {
 
         const generateOrderId = () => {
         const timestampPart = Date.now().toString().slice(-7);  
-        return `#${timestampPart}`;
+        return timestampPart;
     };
    
       const handleSubmit = () => {

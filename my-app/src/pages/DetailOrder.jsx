@@ -3,8 +3,35 @@ import Footer from '../layouts/Footer'
 import OrderInformation from '../component/OrderInformation'
 import Header from '../layouts/Header'
 import { ProductGrid } from '../component/ProductGrid'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import Cart from '../component/Cart'
 
 function DetailOrder() {
+  const { id } = useParams();
+  console.log("orderIdnyaa", id);
+  const [order] = useState(() => {
+    const orderData = localStorage.getItem('order');
+    
+    if (orderData) {
+      try {
+        const orderInit = JSON.parse(orderData);
+        console.log("orderInit", orderInit);
+        const order = orderInit.find((order) => order.id === id);
+        console.log("orderThis", order);
+        return order;
+      } catch (error) {
+        console.error('Error parsing order data:', error);
+        return null;
+      }
+    }
+    return null;
+  });
+
+
+ console.log("State order:", order);
+
+
     const orderData = [
         {
    orderNumber: "#12354-09893",
@@ -19,29 +46,6 @@ function DetailOrder() {
         }
     ]
 
-     const productsData = [
-  {
-    id: 1,
-    image: './src/assets/icons/productPage/espresso.jfif',
-    title: 'Espresso', 
-    price: 'IDR 15.000', 
-    originalPrice: 'IDR 18.000', 
-    rating: 5,
-    reviews: 0, 
-    isFlashSale: true,
-  },
-  {
-    id: 2,
-    image: './src/assets/icons/productPage/latte.jpg',
-    title: 'Latte',
-    price: 'IDR 19.000',
-    originalPrice: 'IDR 22.000',
-    rating: 5,
-    reviews: 0,
-    isFlashSale: true,
-  }
-];
-
   return (
     <div>
       <Header bgColor="bg-black" />
@@ -49,6 +53,7 @@ function DetailOrder() {
       <OrderInformation props={orderData[0]} />
       <div>
       {/* <ProductGrid products={productsData} columns={1} /> */}
+      <Cart props={order} />
       </div>
       
       </div>

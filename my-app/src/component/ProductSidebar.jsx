@@ -13,6 +13,7 @@ export default function ProductSidebar({ onClose = () => {}, title='', action })
   });
 
   const sizeOptions = ['R', 'L', 'XL', '250 gr', '500gr'];
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
