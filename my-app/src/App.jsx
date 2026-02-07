@@ -35,7 +35,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        /// user
+        
         <Route path="/" element={<HomePage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/product" element={<ProductPage />} />
@@ -47,7 +47,6 @@ function App() {
         <Route path="/detail-order/:id" element={<DetailOrder />} />
         <Route path="/profile" element={<Profile />} />
 
-        /// admin
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin-product" element={<AdminProduct />} />
         <Route path="/admin-insert-product" element={<AdminInsertProduct />} />
