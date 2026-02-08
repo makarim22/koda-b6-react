@@ -1,6 +1,6 @@
 // src/pages/Auth/LoginPage.jsx
 import React from 'react';
-import { Input } from '../component/input';
+import { Input } from '../component/Input';
 import { Button } from '/src/component/Button';
 import AuthLayout from '/src/layouts/AuthLayout';
 import loginImg from '../assets/icons/barista-girl.svg';
