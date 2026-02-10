@@ -18,10 +18,11 @@ const Header = (props) => {
 
  const dispatch = useDispatch();
  
+ 
  const authState = useSelector((state) => state.auth.user);
  console.log('auth state', authState)
 
- const loggedInUser = authState.fullname
+ const loggedInUser = authState?.fullname 
  console.log ("logged in user", loggedInUser)
 
   const handleLogout = () => {
