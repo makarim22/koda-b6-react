@@ -5,7 +5,7 @@ import { Button } from '/src/component/Button';
 import AuthLayout from '/src/layouts/AuthLayout';
 import loginImg from '../assets/icons/barista-girl.svg';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate} from 'react-router-dom';
 import coffeeCupLogo from '../assets/icons/logo-coffee.svg';
 import coffeeShopLogo from '../assets/icons/cup.svg';
@@ -14,7 +14,13 @@ import passwordIcon from '../assets/icons/Password.svg';
 import facebookIcon from '../assets/icons/facebook.svg';
 import googleIcon from '../assets/icons/google.svg';
 
+import {loginSuccess} from '../features/user/authSlice'
+
+  import {useDispatch, useSelector} from 'react-redux'
+
 const STORAGE_KEY = 'user-data';
+
+
 
 const getStoredCredentials = () => {
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -29,6 +35,20 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const authState = useSelector((state) => state.auth);
+  console.log("Current Auth State:", authState);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  // Effect to redirect if already authenticated via Redux
+  useEffect(() => {
+    if (isAuthenticated) {
+      alert("You are already logged in! Redirecting to home.");
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -60,7 +80,12 @@ function LoginPage() {
 
     if (userIndex !== -1) {
       allCredentials[userIndex] = { ...allCredentials[userIndex], isLoggedIn: true };
+      const loggedInUser = { ...allCredentials[userIndex], isLoggedIn: true };
+      
+      allCredentials[userIndex] = loggedInUser;
       saveCredentials(allCredentials);
+       
+      dispatch(loginSuccess(loggedInUser));
 
       setEmail('');
       setPassword('');

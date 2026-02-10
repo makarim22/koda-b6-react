@@ -5,69 +5,31 @@ import LogoIcon from "../assets/icons/coffee-shop.svg";
 import SearchIcon from "../assets/icons/Search.svg";
 import ShoppingCartIcon from "../assets/icons/ShoppingCart.svg";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import {useDispatch, useSelector} from 'react-redux'
+import {logout} from '../features/user/authSlice'
 
 const Header = (props) => {
   const STORAGE_KEY = "user-data";
-  const [loggedinUser, setLoggedinUser] = React.useState({});
+
   const { bgColor } = props;
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const loadUser = () => {
-      try {
-        const usersString = localStorage.getItem(STORAGE_KEY);
+ const dispatch = useDispatch();
+ 
+ const authState = useSelector((state) => state.auth.user);
+ console.log('auth state', authState)
 
-        if (usersString) {
-          const allUsers = JSON.parse(usersString);
-          const activeUser = allUsers.find((user) => user.isLoggedIn === true);
-
-          if (activeUser) {
-            setLoggedinUser(activeUser);
-          } else {
-            setLoggedinUser(null);
-          }
-        } else {
-          setLoggedinUser(null);
-        }
-      } catch (error) {
-        console.error("Error parsing users data:", error);
-        setLoggedinUser(null);
-      }
-    };
-    loadUser();
-  }, []);
+ const loggedInUser = authState.fullname
+ console.log ("logged in user", loggedInUser)
 
   const handleLogout = () => {
-    const usersString = localStorage.getItem(STORAGE_KEY);
-    if (usersString) {
-      try {
-        let allUsers = JSON.parse(usersString);
-        const loggedInUserIndex = allUsers.findIndex(
-          (user) => user.isLoggedIn === true,
-        );
+    const user = authState.fullname
 
-        if (loggedInUserIndex !== -1) {
-          allUsers[loggedInUserIndex].isLoggedIn = false;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(allUsers));
-        }
-
-        setLoggedinUser(null);
-        navigate("/login");
-      } catch (error) {
-        console.error(
-          "Error parsing or updating users data during logout:",
-          error,
-        );
-        setLoggedinUser(null);
-        navigate("/login");
-      }
-    } else {
-      setLoggedinUser(null);
-      navigate("/login");
-    }
+    dispatch(logout(user))
+    navigate('login')
+  
   };
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
@@ -116,7 +78,7 @@ const Header = (props) => {
           />
         </div>
 
-        {loggedinUser ? (
+        {loggedInUser ? (
           <div className="hidden md:flex items-center space-x-4">
             <button
               className="text-white text-sm text-right border-2 border-white px-4 py-2 rounded-md hover:bg-white hover:text-black transition-colors duration-200"
@@ -124,7 +86,7 @@ const Header = (props) => {
             >
               <p className="text-sm font-semibold">
                 {" "}
-                Hi, {loggedinUser.fullname}!{" "}
+                Hi, {loggedInUser}!{" "}
               </p>
             </button>
             <button
@@ -187,7 +149,7 @@ const Header = (props) => {
               </div>
 
               <div className="border-t border-gray-700 px-4 py-6 mt-auto">
-                {loggedinUser ? (
+                {loggedInUser ? (
                   <>
                     <button
                       className="w-full text-black text-sm border-2 border-white px-4 py-3 rounded-lg hover:bg-white hover:text-black transition-colors duration-200 mb-3"
@@ -196,7 +158,7 @@ const Header = (props) => {
                         toggleMobileMenu();
                       }}
                     >
-                      Hi, {loggedinUser.fullname}!
+                      Hi, {loggedInUser}!
                     </button>
                     <button
                       onClick={() => {
