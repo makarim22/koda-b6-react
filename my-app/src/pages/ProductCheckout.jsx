@@ -14,7 +14,7 @@ function ProductCheckout() {
   const [deliveryMethod, setDeliveryMethod] = useState('dine-in');
 
   const getCartfromLocalStorage = () => {
-    const cart = localStorage.getItem(`order_${productId}`);
+    const cart = localStorage.getItem('cart');
     return cart ? JSON.parse(cart) : [];
   };
 
@@ -22,7 +22,7 @@ function ProductCheckout() {
   console.log("cartItems", cartItems);
 
     const calculatePayment = () => {
-    if (!cartItems || Object.keys(cartItems).length === 0) {
+    if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
       return {
         order: 'IDR 0',
         delivery: 'IDR 5.000',
@@ -31,10 +31,19 @@ function ProductCheckout() {
         status: 'On Progress'
       };
     }
-    const price = parseInt(cartItems.price?.replace(/\D/g, '') || 0);
-    const quantity = cartItems.quantity || 1;
+
+    let totalItemPrice = 0
+    cartItems.forEach(cart => {
+      const price = parseInt(cart.price?.replace(/\D/g, '') || 0)
+      const quantity = cart.quantity || 1
+      totalItemPrice += price * quantity
+    });
+    // const price = parseInt(cartItems.price?.replace(/\D/g, '') || 0);
+    // const quantity = cartItems.quantity || 1;
+    // console.log('quantity', quantity);
+    // console.log('price', price);
     
-    const orderTotal = price * quantity;
+    // const orderTotal = price * quantity;
     
 
     let delivery = 0;
@@ -44,15 +53,16 @@ function ProductCheckout() {
       delivery = 0;
     }
 
-    const tax = Math.round(orderTotal * 0.1); 
-    const subtotal = orderTotal + delivery + tax;
+    const tax = Math.round(totalItemPrice * 0.1); 
+    const subtotal = totalItemPrice + delivery + tax;
 
     return {
-      order: `IDR ${orderTotal.toLocaleString('id-ID')}`,
+      order: `IDR ${totalItemPrice.toLocaleString('id-ID')}`,
       delivery: `IDR ${delivery.toLocaleString('id-ID')}`,
       tax: `IDR ${tax.toLocaleString('id-ID')}`,
       subtotal: `IDR ${subtotal.toLocaleString('id-ID')}`,
       image: cartItems.image,
+      cartHistory : cartItems
     };
   };
 
@@ -81,7 +91,7 @@ function ProductCheckout() {
               />
       </div>
       <div className='flex flex-col pt-30 '>
-        <Invoice paymentDetails={payment} />
+        <Invoice paymentDetails={payment} cartItems={cartItems}/>
       </div>
 
       </div>

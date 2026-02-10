@@ -40,7 +40,11 @@ export default function ProductOptions({ props }) {
       timestamp: new Date().toISOString(),
     };
 
-    localStorage.setItem(`order_${id}`, JSON.stringify(orderData));
+    let currentCart = JSON.parse(localStorage.getItem('cart') || '[]' )
+
+    currentCart.push(orderData)
+
+    localStorage.setItem('cart', JSON.stringify(currentCart));
     console.log("Order data tersimpan:", orderData);
     alert(`Order dibuat! ${qty}x ${title} - Total: IDR ${qty * parseInt(price.replace(/\D/g, ""))}`);
     Navigate(`/product-checkout/${id}`);

@@ -46,6 +46,10 @@ function DetailOrder() {
         }
     ]
 
+    const cartHistory = order.cartHistory
+    console.log("cart history", cartHistory);
+    
+
 
 return (
     <div>
@@ -53,10 +57,10 @@ return (
       <div className='pt-20 grid grid-cols-1 md:grid-cols-2 gap-8 w-full min-h-screen px-5 md:px-32'>
   
         <div className="col-span-1"> 
-          <OrderInformation props={orderData[0]} /> 
+          <OrderInformation props={order} /> 
         </div>
         <div className="col-span-1"> 
-          <Cart items={order} />
+          <Cart items={cartHistory} />
         </div>
       </div>
 

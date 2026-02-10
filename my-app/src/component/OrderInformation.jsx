@@ -8,8 +8,9 @@ import {
 } from "lucide-react";
 
 function OrderInformation({ props }) {
-  const { name, address, paymentMethod, phone, shipping, status, total, orderNumber, date } =
-    props;
+  console.log("props", props)
+  const { name, address, paymentMethod, phone, shipping, status, total, orderNumber, date } = props;
+  console.log("name", name)
   return (
     <div className="w-full max-w-2xl mx-auto p-8 bg-white shadow-lg rounded-lg mb-4">
       <h1 className="text-3xl">Order {orderNumber}</h1>

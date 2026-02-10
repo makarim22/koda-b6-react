@@ -8,7 +8,8 @@ import Paypal from '../assets/icons/productPage/Paypal.svg';
 import { useNavigate } from 'react-router-dom';
 
 function Invoice(props) {
-    const { paymentDetails } = props;
+    const { paymentDetails, cartItems } = props;
+    console.log("cartttt", cartItems);
     const { order, delivery, tax, subtotal, image } = paymentDetails;
     const navigate = useNavigate();
 
@@ -28,7 +29,8 @@ function Invoice(props) {
             tax: tax,
             subtotal: subtotal,
             status: 'On Progress',
-            image: image
+            image: image,
+            cartHistory: cartItems
         };
         
         const existingOrdersString = localStorage.getItem('order');
@@ -49,6 +51,8 @@ function Invoice(props) {
 
         const updatedOrders = [...existingOrders, newOrder];
         localStorage.setItem('order', JSON.stringify(updatedOrders));
+
+        localStorage.removeItem('cart')
         
         alert('Pesanan berhasil dibuat!');
         navigate('/order-history'); 
