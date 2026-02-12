@@ -7,14 +7,18 @@ import ProductOptions from "../component/ProductOptions";
 import { ProductGrid } from "../component/ProductGrid";
 import { findProductById, getRecommendedProducts } from '../utils/product';
 
+import americano from './../assets/icons/productPage/americano.jfif';
+import espresso from './../assets/icons/productPage/espresso.jfif';
+import flatWhite from './../assets/icons/productPage/flat-white.jfif';
+
 function ProductReview() {
   const { productId } = useParams();
   console.log("idnyaa", productId);
 
   const thumbnails = [
-    "./src/assets/icons/productPage/americano.jfif",
-    "./src/assets/icons/productPage/espresso.jfif",
-    "./src/assets/icons/productPage/flat-white.jfif",
+   americano,
+   espresso,
+   flatWhite
   ];
 
   const selectedProduct = useMemo(() => {

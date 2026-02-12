@@ -27,6 +27,12 @@ import Man from '../assets/icons/productPage/coupon2.png';
       bgColor: 'bg-emerald-500',
     },
     {
+      icon: Woman,
+      title: 'HAPPY MOTHER\'S DAY',
+      description: 'Get up to 50% off on selected items',
+      bgColor: 'bg-emerald-500',
+    },
+    {
       icon: Man,
       title: 'HAPPY COFFEE DAY',
       description: 'Free drink on saturday morning',

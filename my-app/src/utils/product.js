@@ -1,7 +1,25 @@
+import espressoImage from '../assets/icons/productPage/espresso.jfif';  
+import latteImage from '../assets/icons/productPage/latte.jpg';  
+import mochaImage from '../assets/icons/productPage/mocha.jfif';  
+import americanoImage from '../assets/icons/productPage/americano.jfif';  
+import flatWhiteImage from '../assets/icons/productPage/flat-white.jfif';  
+import affogatoImage from '../assets/icons/productPage/affogato.jfif';  
+
+// You might create a map for easier lookup if you have many images  
+const productImages = {  
+    espresso: espressoImage,  
+    latte: latteImage,  
+    mocha: mochaImage,  
+    americano: americanoImage,  
+    flatWhite: flatWhiteImage, // Use string keys for names with hyphens  
+    affogato: affogatoImage,  
+    
+};  
+
 export const getAllProducts = () => [
     {
       id: 1,
-      image: "./src/assets/icons/productPage/espresso.jfif",
+      image: productImages.espresso,
       title: "Espresso",
       price: "IDR 15.000",
       originalPrice: "IDR 18.000",
@@ -12,7 +30,7 @@ export const getAllProducts = () => [
     },
     {
       id: 2,
-      image: "./src/assets/icons/productPage/latte.jpg",
+      image: productImages.latte,
       title: "Latte",
       price: "IDR 19.000",
       originalPrice: "IDR 22.000",
@@ -23,7 +41,7 @@ export const getAllProducts = () => [
     },
     {
       id: 3,
-      image: "./src/assets/icons/productPage/mocha.jfif",
+      image: productImages.mocha,
       title: "Mocha",
       price: "IDR 21.000",
       originalPrice: "IDR 24.000",
@@ -34,7 +52,7 @@ export const getAllProducts = () => [
     },
     {
       id: 4,
-      image: "./src/assets/icons/productPage/americano.jfif",
+      image: productImages.americano,
       title: "Americano",
       price: "IDR 12.000",
       originalPrice: "IDR 15.000",
@@ -46,7 +64,7 @@ export const getAllProducts = () => [
     
   {
     id: 5,
-    image: './src/assets/icons/productPage/flat-white.jfif',
+    image: productImages.flatWhite,
     title: 'Flat White',
     price: 'IDR 20.000',
     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
@@ -57,7 +75,7 @@ export const getAllProducts = () => [
   },
   {
     id: 6,
-    image: './src/assets/icons/productPage/affogato.jfif',
+    image: productImages.affogato,
     title: 'Affogato',
     price: 'IDR 25.000',
     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
