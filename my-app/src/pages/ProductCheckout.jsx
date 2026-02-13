@@ -58,9 +58,9 @@ function ProductCheckout() {
     if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
       return {
         order: 'IDR 0',
-        delivery: 'IDR 5.000',
+        delivery: 'IDR 0',
         tax: 'IDR 0',
-        subtotal: 'IDR 5.000',
+        subtotal: 'IDR 0',
         status: 'On Progress'
       };
     }
@@ -72,6 +72,7 @@ function ProductCheckout() {
       totalItemPrice += price * quantity
     });
 
+    console.log("total item price", totalItemPrice)
 
     let delivery = 0;
     if (deliveryMethod === 'door-delivery' && cartItems.length > 0) {
@@ -104,6 +105,8 @@ function ProductCheckout() {
   };
 
   const payment = calculatePayment();
+
+  console.log('paymentnya', payment)
 
   const handleDeliveryMethodChange = (method) => {
     setDeliveryMethod(method);
