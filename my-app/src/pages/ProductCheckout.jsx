@@ -4,22 +4,57 @@ import PaymentInfo from '../component/PaymentInfo';
 import Cart from '../component/Cart';
 import Invoice from '../component/Invoice';
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function ProductCheckout() {
   const {productId} = useParams();
   console.log("idnyaa", productId);
 
-  
   const [deliveryMethod, setDeliveryMethod] = useState('dine-in');
 
-  const getCartfromLocalStorage = () => {
-    const cart = localStorage.getItem('cart');
-    return cart ? JSON.parse(cart) : [];
-  };
+    const [cartItems, setCartItems] = useState([]);
 
-  const cartItems = getCartfromLocalStorage();
-  console.log("cartItems", cartItems);
+    function getCartFromLocalStorage() {
+        try {
+            const cart = localStorage.getItem('cart');
+            return cart ? JSON.parse(cart) : [];
+        } catch (error) {
+            console.error('Error reading cart from localStorage:', error);
+            return [];
+        }
+    }
+    
+
+    useEffect(() => {
+        const cartLoad = getCartFromLocalStorage();
+        console.log("cartItems from localStorage:", cartLoad);
+        
+        if (cartItems) {
+            setCartItems(cartLoad);
+        }
+    }, []);
+
+    function saveCartToLocalStorage(updatedCart) {
+        try {
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            console.log('Cart saved to localStorage:', updatedCart);
+        } catch (error) {
+            console.error('Error saving cart to localStorage:', error);
+        }
+    }
+
+
+        function handleRemoveItem(arrayIndex) {
+        console.log("Parent: Removing item at index:", arrayIndex);
+      
+        const updatedCart = cartItems.filter((item, idx) => idx !== arrayIndex);
+        
+        setCartItems(updatedCart);
+        
+        saveCartToLocalStorage(updatedCart);
+        
+        console.log("Item at index " + arrayIndex + " removed. Updated cart:", updatedCart);
+    }
 
     const calculatePayment = () => {
     if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
@@ -38,13 +73,7 @@ function ProductCheckout() {
       const quantity = cart.quantity || 1
       totalItemPrice += price * quantity
     });
-    // const price = parseInt(cartItems.price?.replace(/\D/g, '') || 0);
-    // const quantity = cartItems.quantity || 1;
-    // console.log('quantity', quantity);
-    // console.log('price', price);
-    
-    // const orderTotal = price * quantity;
-    
+
 
     let delivery = 0;
     if (deliveryMethod === 'door-delivery') {
@@ -68,11 +97,6 @@ function ProductCheckout() {
 
   const payment = calculatePayment();
 
-  //  const handlePaymentFormChange = (formData) => {
-  //   setPaymentFormData(formData);
-  //   console.log("Payment Form Data:", formData);
-  // };
-
   const handleDeliveryMethodChange = (method) => {
     setDeliveryMethod(method);
   };
@@ -83,10 +107,9 @@ function ProductCheckout() {
       <div className='grid grid-cols-2 gap-4 pt-25'>
         <div className='flex flex-col'>
           <h1 className='p-6 text-3xl'>Payment Details</h1>
-        <Cart items={cartItems} />
+        <Cart items={cartItems} onRemoveItem={handleRemoveItem}/>
          <PaymentInfo 
                 onDeliveryMethodChange={handleDeliveryMethodChange}
-                // onFormDataChange={handlePaymentFormChange}
                 selectedDeliveryMethod={deliveryMethod}
               />
       </div>
