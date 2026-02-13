@@ -13,6 +13,7 @@ function ProductCheckout() {
   const [deliveryMethod, setDeliveryMethod] = useState('dine-in');
 
     const [cartItems, setCartItems] = useState([]);
+    console.log('cartItems', cartItems)
 
     function getCartFromLocalStorage() {
         try {
@@ -27,7 +28,7 @@ function ProductCheckout() {
 
     useEffect(() => {
         const cartLoad = getCartFromLocalStorage();
-        console.log("cartItems from localStorage:", cartLoad);
+        console.log("data Cart:", cartLoad);
         
         if (cartItems) {
             setCartItems(cartLoad);
@@ -37,23 +38,20 @@ function ProductCheckout() {
     function saveCartToLocalStorage(updatedCart) {
         try {
             localStorage.setItem('cart', JSON.stringify(updatedCart));
-            console.log('Cart saved to localStorage:', updatedCart);
+            console.log('Tidak dapat menyimpan ke localstorage:', updatedCart);
         } catch (error) {
-            console.error('Error saving cart to localStorage:', error);
+            console.error('Error menyimpan keranjang ke localstorage:', error);
         }
     }
 
 
         function handleRemoveItem(arrayIndex) {
-        console.log("Parent: Removing item at index:", arrayIndex);
       
         const updatedCart = cartItems.filter((item, idx) => idx !== arrayIndex);
         
         setCartItems(updatedCart);
         
         saveCartToLocalStorage(updatedCart);
-        
-        console.log("Item at index " + arrayIndex + " removed. Updated cart:", updatedCart);
     }
 
     const calculatePayment = () => {
@@ -76,14 +74,24 @@ function ProductCheckout() {
 
 
     let delivery = 0;
-    if (deliveryMethod === 'door-delivery') {
+    if (deliveryMethod === 'door-delivery' && cartItems.length > 0) {
       delivery = 5000;
     } else if (deliveryMethod === 'dine-in' || deliveryMethod === 'pick-up') {
       delivery = 0;
     }
 
+    console.log('delivery', delivery)
+
     const tax = Math.round(totalItemPrice * 0.1); 
-    const subtotal = totalItemPrice + delivery + tax;
+
+    console.log('tax', tax)
+
+    let subtotal = 0
+    if (cartItems.length > 0){
+      console.log("panjangnyaa", cartItems.length)
+      subtotal = totalItemPrice + delivery + tax;
+    }
+
 
     return {
       order: `IDR ${totalItemPrice.toLocaleString('id-ID')}`,
