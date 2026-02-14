@@ -32,7 +32,7 @@ export default function ProductOptions({ props, user }) {
   const handleBuy = () => {
     
       if (!user) {
-      alert('ilakan Login terlebih dahulu');
+      alert('Silakan Login terlebih dahulu');
       return;
     }
     const orderData = {

@@ -62,7 +62,20 @@ function RegisterPage() {
       return;
     }
 
+    // helper function
+
+    const ID_COUNTER_KEY = 'user-id-counter';
+
+const getNextUserId = () => {
+  let currentId = localStorage.getItem(ID_COUNTER_KEY);
+  currentId = currentId ? parseInt(currentId) : 0;
+  const nextId = currentId + 1;
+  localStorage.setItem(ID_COUNTER_KEY, nextId.toString());
+  return nextId;
+};
+
     const newUser = {
+      id : getNextUserId(),
       fullname: fullname,
       email: trimmedEmail,
       password: password, 
