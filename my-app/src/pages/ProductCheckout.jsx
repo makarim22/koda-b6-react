@@ -12,6 +12,7 @@ function ProductCheckout() {
 
   const [isRemoveShowed] = useState(true)
   const [showAddMenu] = useState(true)
+  const [user, setUser]= useState('')
 
   const [deliveryMethod, setDeliveryMethod] = useState('dine-in');
 
@@ -27,15 +28,38 @@ function ProductCheckout() {
             return [];
         }
     }
-    
+
+     const getActiveUser = () => {
+      try{
+     const activeUser = JSON.parse(localStorage.getItem('currentUserSession'))
+     console.log('active user', activeUser)
+     return activeUser
+      } catch (error){
+        console.warn("tidak bisa mengabil data user", error)
+        return null
+      }
+     
+  }
+  
+
+    useEffect(() => {
+    const userData = getActiveUser();
+    if (userData) {
+      setUser(userData);
+    } else {
+      console.warn('No active user session found');
+    }
+  }, []);
+
+   
 
     useEffect(() => {
         const cartLoad = getCartFromLocalStorage();
         console.log("data Cart:", cartLoad);
         
-        if (cartItems) {
-            setCartItems(cartLoad);
-        }
+        
+        setCartItems(cartLoad);
+        
     }, []);
 
     function saveCartToLocalStorage(updatedCart) {
@@ -129,6 +153,7 @@ function ProductCheckout() {
          <PaymentInfo 
                 onDeliveryMethodChange={handleDeliveryMethodChange}
                 selectedDeliveryMethod={deliveryMethod}
+                user = {user}
               />
       </div>
       <div className='flex flex-col pt-30 '>

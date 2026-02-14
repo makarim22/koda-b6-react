@@ -3,18 +3,33 @@ import mailIcon from '../assets/icons/mail.svg'
 import Location from '../assets/icons/productPage/Location.svg'
 import Profile from '../assets/icons/productPage/Profile.svg'
 import { Input } from './input'
+import { useEffect } from 'react'
 
 function PaymentInfo({ 
   onDeliveryMethodChange, 
   onFormDataChange, 
-  selectedDeliveryMethod = 'dine-in' 
+  selectedDeliveryMethod = 'dine-in', 
+  user
 }) {
     const [deliveryMethod, setDeliveryMethod] = useState(selectedDeliveryMethod)
+    console.log('userpayment', user)
     const [formData, setFormData] = useState({
-        email: '',
-        fullName: '',
+        email:  '',
+        fullName:  '',
         address: ''
     })
+
+     useEffect(() => {
+        if (user) {
+            setFormData({
+                email: user.user.email || '',           
+                fullName: user.user.fullname || '',     
+                address: user.user.address || ''        
+            });
+            console.log('User payment info:', user);
+        }
+    }, [user]);
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
