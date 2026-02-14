@@ -75,21 +75,21 @@ export const OrderTable = ({
                   />
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm font-medium ">
-                  {order.orderNumber}
+                  {order.id}
                 </td>
                 <td className="px-4 py-3 text-gray-700 text-sm">
                   {order.date}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex flex-col gap-1">
-                    {order.items.map((item, idx) => (
+                    {order.cartHistory.map((item, idx) => (
                       <div
                         key={idx}
                         className="text-gray-700 text-sm flex items-center gap-1"
                       >
                         <span className="text-gray-400">•</span>
                         <span>
-                          {item.name} {item.quantity}x
+                          {item.title} {item.quantity}x
                         </span>
                       </div>
                     ))}
@@ -101,7 +101,7 @@ export const OrderTable = ({
                   </span>
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm font-medium">
-                  {order.total}
+                  {order.subtotal}
                 </td>
                 <td className="px-4 py-3 flex gap-2">
                   <button

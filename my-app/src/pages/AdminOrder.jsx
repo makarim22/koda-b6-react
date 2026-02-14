@@ -5,66 +5,98 @@ import { OrderTable } from '../component/OrderTable';
 import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
 import Dropdown from "../assets/admin/dropdown.svg";
+import { useState, useEffect } from 'react'
 
 function AdminOrder() {
-   const orders = [
-    {
-      id: '1',
-      orderNumber: '#12354-09893',
-      date: '2023-01-26',
-      items: [
-        { name: 'Hazelnut Latte', quantity: 1 },
-        { name: 'Mocha', quantity: 1 }
-      ],
-      status: 'Done',
-      total: '  IDR 40000'
-    },
-    {
-      id: '2',
-      orderNumber: '#12354-09893',
-      date: '2023-01-26',
-      items: [
-        { name: 'Hazelnut Latte', quantity: 1 },
-        { name: 'Mocha', quantity: 1 }
-      ],
-      status: 'Done',
-      total: '  IDR 40000'
-    },
-    {
-      id: '3',
-      orderNumber: '#12354-09893',
-      date: '2023-01-26',
-      items: [
-        { name: 'Hazelnut Latte', quantity: 1 },
-        { name: 'Mocha', quantity: 1 }
-      ],
-      status: 'Done',
-      total: '  IDR 40000'
-    },
-    {
-      id: '4',
-      orderNumber: '#12354-09893',
-      date: '2023-01-26',
-      items: [
-        { name: 'Hazelnut Latte', quantity: 1 },
-        { name: 'Mocha', quantity: 1 }
-      ],
-      status: 'Done',
-      total: '  IDR 40000'
-    },
-    {
-      id: '5',
-      orderNumber: '#12354-09893',
-      date: '2023-01-26',
-      items: [
-        { name: 'Hazelnut Latte', quantity: 1 },
-        { name: 'Mocha', quantity: 1 }
-      ],
-      status: 'Done',
-      total: '  IDR 40000'
-    },
+
+    const [orders, setOrders] = useState([])
+
+    useEffect(() => {
+    const fetchOrders = () => {
+      try {
+        const orderData = localStorage.getItem('order');
+        console.log("ordernya", orderData); 
+        if (orderData) {
+          const parsedOrder = JSON.parse(orderData);
+
+          if (Array.isArray(parsedOrder)) {
+            setOrders(parsedOrder);
+          } else {
+            console.warn("Data 'order' di localStorage bukan array:", parsedOrder);
+            setOrders([]); 
+          }
+        } else {
+          setOrders([]); 
+        }
+      } catch (error) {
+        console.error('Error parsing order data from localStorage:', error);
+        setOrders([]); 
+      }
+    };
+
+    fetchOrders(); 
+  }, []); 
+
+  console.log('orders', orders)
+
+  //  const orders = [
+  //   {
+  //     id: '1',
+  //     orderNumber: '#12354-09893',
+  //     date: '2023-01-26',
+  //     items: [
+  //       { name: 'Hazelnut Latte', quantity: 1 },
+  //       { name: 'Mocha', quantity: 1 }
+  //     ],
+  //     status: 'Done',
+  //     total: '  IDR 40000'
+  //   },
+  //   {
+  //     id: '2',
+  //     orderNumber: '#12354-09893',
+  //     date: '2023-01-26',
+  //     items: [
+  //       { name: 'Hazelnut Latte', quantity: 1 },
+  //       { name: 'Mocha', quantity: 1 }
+  //     ],
+  //     status: 'Done',
+  //     total: '  IDR 40000'
+  //   },
+  //   {
+  //     id: '3',
+  //     orderNumber: '#12354-09893',
+  //     date: '2023-01-26',
+  //     items: [
+  //       { name: 'Hazelnut Latte', quantity: 1 },
+  //       { name: 'Mocha', quantity: 1 }
+  //     ],
+  //     status: 'Done',
+  //     total: '  IDR 40000'
+  //   },
+  //   {
+  //     id: '4',
+  //     orderNumber: '#12354-09893',
+  //     date: '2023-01-26',
+  //     items: [
+  //       { name: 'Hazelnut Latte', quantity: 1 },
+  //       { name: 'Mocha', quantity: 1 }
+  //     ],
+  //     status: 'Done',
+  //     total: '  IDR 40000'
+  //   },
+  //   {
+  //     id: '5',
+  //     orderNumber: '#12354-09893',
+  //     date: '2023-01-26',
+  //     items: [
+  //       { name: 'Hazelnut Latte', quantity: 1 },
+  //       { name: 'Mocha', quantity: 1 }
+  //     ],
+  //     status: 'Done',
+  //     total: '  IDR 40000'
+  //   },
    
-  ];
+  // ];
   return (
     <div className="flex flex-col h-screen">
       <NavbarAdmin />

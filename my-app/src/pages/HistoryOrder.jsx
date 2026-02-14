@@ -36,6 +36,8 @@ export default function HistoryOrder() {
 
     fetchOrders(); 
   }, []); 
+
+  
   const getActiveUser = () => {
     try {
       const activeUser = JSON.parse(localStorage.getItem('currentUserSession'));

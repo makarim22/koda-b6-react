@@ -4,8 +4,12 @@ import Sidebar from "../layouts/Sidebar";
 import { ProductTable } from "../component/ProductTable";
 import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
+import { useState, useEffect } from 'react'
 
 export default function AdminProduct() {
+
+
+ 
   const Products = [
     {
       id: 1,
