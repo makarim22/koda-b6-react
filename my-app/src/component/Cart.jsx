@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-function Cart({ items, onRemoveItem }) {
+function Cart({ items, onRemoveItem, isRemoveShowed, showAddMenu }) {
     const navigate = useNavigate();
     const [arrayItems, setArrayItems] = useState([]);
 
@@ -44,12 +44,16 @@ function Cart({ items, onRemoveItem }) {
     return (
         <div className="bg-white rounded-lg p-6">
             <div className='flex flex-row justify-between items-center mb-6'> 
+                {showAddMenu ? (
                 <button
                     onClick={() => navigate('/product')} 
                     className="bg-orange-400 text-black px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors font-semibold"
                 >
                     + Add Menu
                 </button>
+                ) : (
+                 <div></div>
+                )}
             </div>
             
             {arrayItems.length > 0 ? (
@@ -73,13 +77,19 @@ function Cart({ items, onRemoveItem }) {
                                             {item.name}
                                         </h4>
                                     </div>
-                                    <button 
+                                    {isRemoveShowed ? (
+ <button 
                                          onClick={() => handleRemove(arrayIndex)}
                                         className="text-red-500 text-2xl font-bold hover:text-red-700 hover:scale-110 transition-all"
                                         title="Remove item"
                                     >
                                         ✕
                                     </button>
+                                    ): (
+                                        <div>
+                                            </div>
+                                    )}
+                                   
                                 </div>
 
                                 <p className="text-sm text-gray-600 mb-3">
