@@ -46,16 +46,16 @@ function App() {
         <Route path="/detail-order/:id" element={<DetailOrder />} />
         <Route path="/profile" element={<Profile />} />
 
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/admin-product" element={<AdminProduct />} />
-        <Route path="/admin-insert-product" element={<AdminInsertProduct />} />
-        <Route path="/admin-edit-product" element={<AdminEditProduct />} />
-        <Route path="/orders" element={<AdminOrder />} />
-        <Route path="/orders-detail" element={< AdminOrderDetail />} />
+        <Route path="/admin-dashboard" element={<Dashboard />} />
+        <Route path="/admin-products" element={<AdminProduct />} />
+        {/* <Route path="/admin-insert-product" element={<AdminInsertProduct />} />
+        <Route path="/admin-edit-product" element={<AdminEditProduct />} /> */}
+        <Route path="/admin-orders" element={<AdminOrder />} />
+        {/* <Route path="/orders-detail" element={< AdminOrderDetail />} /> */}
 
-        <Route path="/list-user" element={<ListUsers />} />
-        <Route path="/insert-user" element={<InsertUser />} />
-        <Route path="/edit-user" element={<EditUser />} />
+        <Route path="/admin-users" element={<ListUsers />} />
+        {/* <Route path="/insert-user" element={<InsertUser />} />
+        <Route path="/edit-user" element={<EditUser />} /> */}
 
       </Routes>
     </Router>

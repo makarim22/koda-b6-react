@@ -33,27 +33,27 @@ function Sidebar() {
       <aside className='flex flex-col'>
         <div className='flex items-center gap-3 p-3 mb-2 bg-orange-400 text-black rounded-lg cursor-pointer'>
             <img src={Option} alt="" ></img>
-            <Link to={'/dashboard'}>
+            <Link to={'/admin-dashboard'}>
             <span className='font-semibold'>Dashboard</span> 
             </Link>
             
         </div>
                 <div className='flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer'>
             <img src={GlassTea} alt="" ></img>
-            <Link to={'/admin-product'}>
+            <Link to={'/admin-products'}>
             <span className='font-semibold'>Product</span> 
             </Link>
             
         </div>
                 <div className='flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer'>
             <img src={Bag} alt="" ></img>
-            <Link to={'/orders'}>
+            <Link to={'/admin-orders'}>
             <span className='font-semibold'>Order</span> 
             </Link>
         </div>
                 <div className='flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer'>
             <img src={Users} alt="" ></img>
-            <Link to={'/list-user'}>
+            <Link to={'/admin-users'}>
             <span className='font-semibold'>User</span> 
             </Link>
         </div>
