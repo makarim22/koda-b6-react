@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function ProductOptions({ props }) {
+export default function ProductOptions({ props, user }) {
 
   const {
     id = 1,
@@ -20,6 +20,9 @@ export default function ProductOptions({ props }) {
   const [selectedSize, setSelectedSize] = useState(size);
   const [selectedTemp, setSelectedTemp] = useState(temperature);
   const [qty, setQty] = useState(quantity);
+  // const [user, setUser] = useState(user);
+
+  console.log('usernyaa', user)
   const Navigate = useNavigate();
 
   const handleQuantityChange = (delta) => {
@@ -27,7 +30,13 @@ export default function ProductOptions({ props }) {
   };
 
   const handleBuy = () => {
+    
+      if (!user) {
+      alert('ilakan Login terlebih dahulu');
+      return;
+    }
     const orderData = {
+      customer: user.user.fullname,
       id,
       title,
       price,
@@ -41,6 +50,8 @@ export default function ProductOptions({ props }) {
     };
 
     let currentCart = JSON.parse(localStorage.getItem('cart') || '[]' )
+
+    console.log('current cart', currentCart)
 
     currentCart.push(orderData)
 

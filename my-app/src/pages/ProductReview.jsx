@@ -15,6 +15,8 @@ function ProductReview() {
   const { productId } = useParams();
   console.log("idnyaa", productId);
 
+
+
   const thumbnails = [
    americano,
    espresso,
@@ -28,6 +30,14 @@ function ProductReview() {
   const productsData = useMemo(() => {
     return getRecommendedProducts(productId);
   }, [productId]);
+
+  const getActiveUser = () => {
+     const activeUser = JSON.parse(localStorage.getItem('currentUserSession'))
+     console.log('active user', activeUser)
+     return activeUser
+  }
+  
+  const user = getActiveUser()
 
   if (!selectedProduct) {
     return (
@@ -51,7 +61,7 @@ function ProductReview() {
           <ProductGallery images={images} thumbnails={thumbnails} />
         </div>
         <div>
-          <ProductOptions props={selectedProduct} />
+          <ProductOptions props={selectedProduct} user={user} />
         </div>
       </section>
       <section className="px-4">
