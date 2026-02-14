@@ -29,7 +29,7 @@ const Header = (props) => {
     const user = authState.fullname
 
     dispatch(logout(user))
-    navigate('login')
+    navigate('/login')
   
   };
 

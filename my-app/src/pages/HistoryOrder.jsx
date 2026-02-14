@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function HistoryOrder() {
   const [userOrders, setUserOrders] = useState([]);
+  const [user, setUser] = useState('')
   const navigate = useNavigate();
 
    useEffect(() => {
@@ -35,8 +36,38 @@ export default function HistoryOrder() {
 
     fetchOrders(); 
   }, []); 
+  const getActiveUser = () => {
+    try {
+      const activeUser = JSON.parse(localStorage.getItem('currentUserSession'));
+      console.log('Active user:', activeUser);
+      return activeUser;
+    } catch (error) {
+      console.warn("Tidak bisa mengambil data user", error);
+      return null;
+    }
+  };
 
-  
+  useEffect(() => {
+    const userData = getActiveUser();
+    if (userData) {
+      setUser(userData);
+    } else {
+      console.warn('tidak ada data user');
+    }
+  }, []);
+
+  const filteredOrders = user 
+    ? userOrders.filter((order) => {
+        if (order.cartHistory && Array.isArray(order.cartHistory) && order.cartHistory.length > 0) {
+          return order.cartHistory[0].customerId === user.user.id;
+        }
+        return false;
+      })
+    : [];
+
+
+
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pt-10">
       <Header bgColor="bg-black" />
@@ -48,7 +79,7 @@ export default function HistoryOrder() {
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-8">
               <h1 className="text-4xl font-bold">History Order</h1>
-              <span className="bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm">{userOrders.length}</span>
+              <span className="bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm">{filteredOrders.length}</span>
             </div>
 
             <div className="flex flex-row justify-between gap-4 mb-8">
@@ -68,7 +99,7 @@ export default function HistoryOrder() {
 
  
             <div className="space-y-4">
-              {userOrders.map((order, index) => (
+              {filteredOrders.map((order, index) => (
                 <div key={index} onClick={() => {navigate(`/detail-order/${order?.id}`);}} className="bg-white rounded-lg p-6 flex gap-6 hover:shadow-md transition">
                   <img 
                     src={order.image} 

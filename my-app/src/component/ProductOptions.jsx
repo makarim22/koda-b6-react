@@ -37,6 +37,7 @@ export default function ProductOptions({ props, user }) {
     }
     const orderData = {
       customer: user.user.fullname,
+      customerId: user.user.id,
       id,
       title,
       price,
