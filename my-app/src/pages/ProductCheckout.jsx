@@ -10,6 +10,9 @@ function ProductCheckout() {
   const {productId} = useParams();
   console.log("idnyaa", productId);
 
+  const [isRemoveShowed] = useState(true)
+  const [showAddMenu] = useState(true)
+
   const [deliveryMethod, setDeliveryMethod] = useState('dine-in');
 
     const [cartItems, setCartItems] = useState([]);
@@ -118,7 +121,11 @@ function ProductCheckout() {
       <div className='grid grid-cols-2 gap-4 pt-25'>
         <div className='flex flex-col'>
           <h1 className='p-6 text-3xl'>Payment Details</h1>
-        <Cart items={cartItems} onRemoveItem={handleRemoveItem}/>
+        <Cart 
+        items={cartItems}
+         onRemoveItem={handleRemoveItem}
+         isRemoveShowed={isRemoveShowed} 
+         showAddMenu={showAddMenu}/>
          <PaymentInfo 
                 onDeliveryMethodChange={handleDeliveryMethodChange}
                 selectedDeliveryMethod={deliveryMethod}
