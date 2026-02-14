@@ -82,20 +82,20 @@ export default function UserTable({ users = [] }) {
                 </td>
                 <td className="px-4 py-3">
                   <img
-                    src={user.image}
-                    alt={user.name}
+                    src={user.profileImage || ''} 
+                    alt={user.fullname}
                     className="w-12 h-12 rounded-lg object-cover"
                   />
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm font-medium">
-                  {user.name}
+                  {user.fullname}
                 </td>
-                <td className="px-4 py-3 text-gray-700 text-sm">
-                  {user.phone}
-                </td>
-                <td className="px-4 py-3 text-gray-700 text-sm max-w-xs">
+               <td className="px-4 py-3 text-gray-700 text-sm">
+                  {user.phone || ''}
+                </td> 
+               <td className="px-4 py-3 text-gray-700 text-sm max-w-xs">
                   <span className="inline-block overflow-hidden text-ellipsis whitespace-nowrap">
-                    {user.address}
+                    {user.address || ''}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-gray-700 text-sm">

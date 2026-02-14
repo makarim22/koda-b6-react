@@ -42,7 +42,18 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
-      localStorage.removeItem(CURRENT_USER_SESSION_KEY);
+      try{
+       const users = JSON.parse(localStorage.getItem('user-data')) || [];
+        const updatedUsers = users.map((user) => ({
+          ...user,
+          isLoggedIn: false,
+        }));
+        localStorage.setItem('user-data', JSON.stringify(updatedUsers));
+
+      } catch (error){
+        console.error("Error updating user data on logout:", error);
+      }
+       localStorage.removeItem(CURRENT_USER_SESSION_KEY);
     },
   },
 });

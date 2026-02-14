@@ -5,13 +5,12 @@ import americanoImage from '../assets/icons/productPage/americano.jfif';
 import flatWhiteImage from '../assets/icons/productPage/flat-white.jfif';  
 import affogatoImage from '../assets/icons/productPage/affogato.jfif';  
 
-// You might create a map for easier lookup if you have many images  
 const productImages = {  
     espresso: espressoImage,  
     latte: latteImage,  
     mocha: mochaImage,  
     americano: americanoImage,  
-    flatWhite: flatWhiteImage, // Use string keys for names with hyphens  
+    flatWhite: flatWhiteImage, 
     affogato: affogatoImage,  
     
 };  
