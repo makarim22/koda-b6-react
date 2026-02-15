@@ -6,10 +6,18 @@ import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
 import Dropdown from "../assets/admin/dropdown.svg";
 import { useState, useEffect } from 'react'
+import OrderSidebar from "../component/OrderSidebar";
+import AdminModal from "../component/AdminModal"
 
 function AdminOrder() {
 
     const [orders, setOrders] = useState([])
+      const [isModalOpen, setIsModalOpen] = useState(false);
+      const [modalConfig, setModalConfig] = useState({
+        title: "Add",
+        action: "Add",
+      });
+    
 
     useEffect(() => {
     const fetchOrders = () => {
@@ -97,6 +105,17 @@ function AdminOrder() {
   //   },
    
   // ];
+ 
+  const handleOpenAddModal = () => {
+    setModalConfig({ title: "Add", action: "Add" });
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+ 
   return (
     <div className="flex flex-col h-screen">
       <NavbarAdmin />
@@ -106,7 +125,9 @@ function AdminOrder() {
           <div className="flex flex-row justify-between pl-7 pr-7">
             <div className="flex flex-col">
               Order List
-              <button className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg">
+              <button 
+              onClick={handleOpenAddModal}
+              className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg">
                 {" "}
                 + Add Order
               </button>
@@ -150,6 +171,19 @@ function AdminOrder() {
           </div>
 
           <OrderTable orders={orders} itemsPerPage={5} />
+
+               <AdminModal
+                      isOpen={isModalOpen}
+                      onClose={handleCloseModal}
+                      title={modalConfig.title}
+                      action={modalConfig.action}
+                    >
+                      <OrderSidebar
+                        onClose={handleCloseModal}
+                        title={modalConfig.title}
+                        action={modalConfig.action}
+                      />
+                    </AdminModal>
         </main>
       </div>
     </div> 

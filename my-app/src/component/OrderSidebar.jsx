@@ -32,8 +32,9 @@ const OrderSidebar = ({
       image: product2Image
     },
   ],
-  onUpdate = () => {},
-  onClose = () => {},
+  onClose = () => {}, 
+  title='', 
+  action
 }) => {
   return (
     <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-y-auto max-h-screen">
@@ -90,7 +91,7 @@ const OrderSidebar = ({
 
       <div className="p-6 bg-white">
         <button
-          onClick={onUpdate}
+          // onClick={onUpdate}
           className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-semibold py-3 rounded-lg transition-colors duration-200 text-base"
         >
           Update

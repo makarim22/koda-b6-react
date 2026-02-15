@@ -9,6 +9,7 @@ export default function AdminModal({
   onClose = () => {},
   title = "",
   action = "",
+  children = null
 }) {
   const customStyles = {
      content: {
@@ -58,10 +59,11 @@ export default function AdminModal({
       }}
       closeTimeoutMS={300} 
     >
-      <ProductSidebar 
+      {/* <ProductSidebar 
       OnClose={onClose}
        title={title} 
-       action={action} />
+       action={action} /> */}
+       {children}
     </Modal>
   );
 }

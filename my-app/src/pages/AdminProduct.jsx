@@ -4,17 +4,17 @@ import Sidebar from "../layouts/Sidebar";
 import { ProductTable } from "../component/ProductTable";
 import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
-import { useState } from 'react'
-import AdminModal from '../component/AdminModal'
+import { useState } from "react";
+import AdminModal from "../component/AdminModal";
+import ProductSidebar from "../component/ProductSidebar";
 
 export default function AdminProduct() {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState({
-    title: 'Add',
-    action: 'Add'
+    title: "Add",
+    action: "Add",
   });
- 
+
   const Products = [
     {
       id: 1,
@@ -68,15 +68,14 @@ export default function AdminProduct() {
     },
   ];
 
-    const handleOpenAddModal = () => {
-    setModalConfig({ title: 'Add', action: 'Add' });
+  const handleOpenAddModal = () => {
+    setModalConfig({ title: "Add", action: "Add" });
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
 
   return (
     <div className="flex flex-col h-screen">
@@ -88,8 +87,9 @@ export default function AdminProduct() {
             <div className="flex flex-col">
               Product List
               <button
-               onClick={handleOpenAddModal}
-               className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg">
+                onClick={handleOpenAddModal}
+                className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg"
+              >
                 {" "}
                 + Add Product
               </button>
@@ -120,11 +120,17 @@ export default function AdminProduct() {
           <ProductTable products={Products} itemsPerPage={5} />
 
           <AdminModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        title={modalConfig.title}
-        action={modalConfig.action}
-      />
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            title={modalConfig.title}
+            action={modalConfig.action}
+          >
+            <ProductSidebar
+              onClose={handleCloseModal}
+              title={modalConfig.title}
+              action={modalConfig.action}
+            />
+          </AdminModal>
         </main>
       </div>
     </div>
