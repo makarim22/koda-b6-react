@@ -5,10 +5,17 @@ import Logout from '../assets/admin/logout.svg'
 import Option from '../assets/admin/option.svg'
 import Users from '../assets/admin/users.svg'
 import { Link } from 'react-router-dom' 
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 function Sidebar() {
   const navigate = useNavigate();
+
+  const location = useLocation();
+  console.log('locationnya', location);
+  const [activeSection, setActiveSection] = useState(''); 
+  console.log('active session', activeSection)
+
   const handleLogout = () => {
     const usersString = localStorage.getItem('user-data');
     if (usersString) {
@@ -28,30 +35,54 @@ function Sidebar() {
       navigate('/login');
     }
   };
+
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === '/admin-dashboard') {
+      setActiveSection('dashboard');
+    } else if (path === '/admin-products') {
+      setActiveSection('product');
+    } else if (path === '/admin-orders') {
+      setActiveSection('order');
+    } else if (path === '/admin-users') {
+      setActiveSection('user');
+    } else {
+      setActiveSection('');
+    }
+  }, [location.pathname]);
+
+   const getSectionClasses = (sectionName) => {
+    return `flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer ${
+      activeSection === sectionName ? 'bg-orange-400' : ''
+    }`;
+  };
   return (
     <div className='w-64 bg-white h-full shadow-lg p-4 pt-6'>
       <aside className='flex flex-col'>
-        <div className='flex items-center gap-3 p-3 mb-2 bg-orange-400 text-black rounded-lg cursor-pointer'>
+        <div className={getSectionClasses('dashboard')}>
             <img src={Option} alt="" ></img>
             <Link to={'/admin-dashboard'}>
             <span className='font-semibold'>Dashboard</span> 
             </Link>
             
         </div>
-                <div className='flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer'>
+                <div 
+                className={getSectionClasses('product')}>
             <img src={GlassTea} alt="" ></img>
             <Link to={'/admin-products'}>
             <span className='font-semibold'>Product</span> 
             </Link>
             
         </div>
-                <div className='flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer'>
+                <div 
+                className={getSectionClasses('order')}>
             <img src={Bag} alt="" ></img>
             <Link to={'/admin-orders'}>
             <span className='font-semibold'>Order</span> 
             </Link>
         </div>
-                <div className='flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer'>
+                <div 
+                className={getSectionClasses('user')}>
             <img src={Users} alt="" ></img>
             <Link to={'/admin-users'}>
             <span className='font-semibold'>User</span> 
