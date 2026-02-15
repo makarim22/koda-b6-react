@@ -4,11 +4,16 @@ import Sidebar from "../layouts/Sidebar";
 import { ProductTable } from "../component/ProductTable";
 import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import AdminModal from '../component/AdminModal'
 
 export default function AdminProduct() {
 
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: 'Add',
+    action: 'Add'
+  });
  
   const Products = [
     {
@@ -62,6 +67,17 @@ export default function AdminProduct() {
       stock: 10,
     },
   ];
+
+    const handleOpenAddModal = () => {
+    setModalConfig({ title: 'Add', action: 'Add' });
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+
   return (
     <div className="flex flex-col h-screen">
       <NavbarAdmin />
@@ -71,7 +87,9 @@ export default function AdminProduct() {
           <div className="flex flex-row justify-between pl-7 pr-7">
             <div className="flex flex-col">
               Product List
-              <button className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg">
+              <button
+               onClick={handleOpenAddModal}
+               className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg">
                 {" "}
                 + Add Product
               </button>
@@ -100,6 +118,13 @@ export default function AdminProduct() {
           </div>
 
           <ProductTable products={Products} itemsPerPage={5} />
+
+          <AdminModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title={modalConfig.title}
+        action={modalConfig.action}
+      />
         </main>
       </div>
     </div>
