@@ -1,13 +1,21 @@
-import React from 'react'
-import NavbarAdmin from '../layouts/NavbarAdmin'
-import { ProductTable } from '../component/ProductTable'
-import ProductSidebar from '../component/ProductSidebar'
-import Sidebar from '../layouts/Sidebar';
+import React from "react";
+import NavbarAdmin from "../layouts/NavbarAdmin";
+import Sidebar from "../layouts/Sidebar";
+import { ProductTable } from "../component/ProductTable";
 import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
+import { useState } from "react";
+import AdminModal from "../component/AdminModal";
+import ProductSidebar from "../component/ProductSidebar";
 
-function AdminEditProduct() {
-     const Products = [
+export default function ListProducts() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "Add",
+    action: "Add",
+  });
+
+  const Products = [
     {
       id: 1,
       image: "/src/assets/icons/productPage/espresso.jfif",
@@ -59,8 +67,18 @@ function AdminEditProduct() {
       stock: 10,
     },
   ];
+
+  const handleOpenAddModal = () => {
+    setModalConfig({ title: "Add", action: "Add" });
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-          <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen">
       <NavbarAdmin />
       <div className="flex flex-1">
         <Sidebar />
@@ -68,7 +86,10 @@ function AdminEditProduct() {
           <div className="flex flex-row justify-between pl-7 pr-7">
             <div className="flex flex-col">
               Product List
-              <button className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg">
+              <button
+                onClick={handleOpenAddModal}
+                className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg"
+              >
                 {" "}
                 + Add Product
               </button>
@@ -95,16 +116,23 @@ function AdminEditProduct() {
               </button>
             </div>
           </div>
-      <div className="flex flex-col">
-        <div className="fixed right-0 top-10 h-full w-full max-w-md bg-white shadow-xl overflow-y-auto z-50">
-          <ProductSidebar title="Edit" action="Edit" />
-        </div>
-        <ProductTable products={Products} />
-      </div>
+
+          <ProductTable products={Products} itemsPerPage={5} />
+
+          <AdminModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            title={modalConfig.title}
+            action={modalConfig.action}
+          >
+            <ProductSidebar
+              onClose={handleCloseModal}
+              title={modalConfig.title}
+              action={modalConfig.action}
+            />
+          </AdminModal>
         </main>
       </div>
     </div>
-  )
+  );
 }
-
-export default AdminEditProduct

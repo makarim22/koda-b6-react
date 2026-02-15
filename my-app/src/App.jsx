@@ -15,14 +15,9 @@ import DetailOrder from "./pages/DetailOrder";
 import ProductCheckout from "./pages/ProductCheckout";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
-import AdminProduct from "./pages/AdminProduct";
-import AdminInsertProduct from "./pages/AdminInsertProduct";
-import AdminEditProduct from "./pages/AdminEditProduct";
-import AdminOrder from "./pages/AdminOrder";
-import AdminOrderDetail from "./pages/AdminOrderDetail";
+import ListProducts from "./pages/ListProducts";
+import ListOrders from "./pages/ListOrders";
 import ListUsers from "./pages/ListUsers";
-import InsertUser from "./pages/InsertUser";
-import EditUser from "./pages/EditUser";
 import ScrollToTop from "./utils/scrollRestoration";
 
 
@@ -47,15 +42,10 @@ function App() {
         <Route path="/profile" element={<Profile />} />
 
         <Route path="/admin-dashboard" element={<Dashboard />} />
-        <Route path="/admin-products" element={<AdminProduct />} />
-        {/* <Route path="/admin-insert-product" element={<AdminInsertProduct />} />
-        <Route path="/admin-edit-product" element={<AdminEditProduct />} /> */}
-        <Route path="/admin-orders" element={<AdminOrder />} />
-        {/* <Route path="/orders-detail" element={< AdminOrderDetail />} /> */}
-
+        <Route path="/admin-products" element={<ListProducts />} />
+        <Route path="/admin-orders" element={<ListOrders />} />
         <Route path="/admin-users" element={<ListUsers />} />
-        {/* <Route path="/insert-user" element={<InsertUser />} />
-        <Route path="/edit-user" element={<EditUser />} /> */}
+
 
       </Routes>
     </Router>

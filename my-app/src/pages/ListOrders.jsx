@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react'
 import OrderSidebar from "../component/OrderSidebar";
 import AdminModal from "../component/AdminModal"
 
-function AdminOrder() {
+function ListOrders() {
 
     const [orders, setOrders] = useState([])
       const [isModalOpen, setIsModalOpen] = useState(false);
@@ -190,4 +190,4 @@ function AdminOrder() {
   )
 }
 
-export default AdminOrder
+export default ListOrders
