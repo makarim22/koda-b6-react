@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import { X, User, Mail, Phone, Lock, MapPin, Eye, EyeOff } from 'lucide-react';
+import { useEffect } from 'react'
 
-export default function UserSidebar({ onClose = () => {}, title, isInsert = false , action}) {
+export default function UserSidebar({ onClose = () => {},
+ title,
+ isInsert = true , 
+ action,
+ user = null,
+}) {
+
+    const ID_COUNTER_KEY = 'user-id-counter';
+
+
   const [formData, setFormData] = useState({
     image: null,
     fullName: '',
@@ -11,6 +21,27 @@ export default function UserSidebar({ onClose = () => {}, title, isInsert = fals
     address: '',
     userType: 'Normal User',
   });
+
+  useEffect(() => {
+    if (!isInsert && user) {
+      setFormData({
+        fullName: user.fullname || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        password : user.password || '',
+        address: user.address || '',
+        profileImage: user.profileImage || ''
+      });
+    } else {
+      setFormData({
+        fullname: '',
+        email: '',
+        phone: '',
+        address: '',
+        profileImage: ''
+      });
+    }
+  }, [isInsert, user]);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -43,15 +74,78 @@ export default function UserSidebar({ onClose = () => {}, title, isInsert = fals
     }));
   };
 
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setFormData(prev => ({
+  //         ...prev,
+  //         profileImage: reader.result
+  //       }));
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+
+  const getNextUserId = () => {
+  let currentId = localStorage.getItem(ID_COUNTER_KEY);
+  currentId = currentId ? parseInt(currentId) : 0;
+  const nextId = currentId + 1;
+  localStorage.setItem(ID_COUNTER_KEY, nextId.toString());
+  return nextId;
+};
+
   const handleSave = () => {
     console.log('User Data:', formData);
+
+     const userData = JSON.parse(localStorage.getItem('user-data') || '[]');
+
+    if(isInsert){
+      const newUser = {
+      id : getNextUserId(),
+      fullname : formData.fullName || '',
+      email : formData.email || '',
+      phone : formData.phone || '',
+      password : formData.password || '',
+      address : formData.address || '',
+      isAdmin : formData.userType === 'Admin' || false,
+      profileImage: formData.image 
+
+    }
+    
+     userData.push(newUser)
+    } else {
+      const updatedData = userData.map(u => {
+          if (u.id === user.id) {
+            return {
+              ...u,
+              fullname: formData.fullName,
+              email: formData.email,
+              phone: formData.phone,
+              password: formData.password || u.password, 
+              address: formData.address,
+              profileImage: formData.profileImage || u.profileImage, 
+              isAdmin: formData.userType === 'Admin'
+            };
+          }
+          return u;
+        });
+        userData.length = 0;
+        userData.push(...updatedData);
+        console.log('User updated:', user.id);
+    }
+    localStorage.setItem('user-data', JSON.stringify(userData));
+    onClose()
   };
 
 
   return (
-    <div >
+    <div className="flex flex-col h-full">
       <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-800">{title}</h2>
+        <h2 className="text-2xl font-bold mb-6">
+        {isInsert ? 'Add New User' : `${user?.fullname}`}
+      </h2>
         <button
           onClick={onClose}
           className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
@@ -59,6 +153,8 @@ export default function UserSidebar({ onClose = () => {}, title, isInsert = fals
           <X size={24} className="text-red-500" />
         </button>
       </div>
+
+      <div className="flex-1 overflow-y-auto">
 
       <div className="p-6 space-y-5">
 
@@ -233,6 +329,7 @@ export default function UserSidebar({ onClose = () => {}, title, isInsert = fals
 
         <div className="flex gap-3 pt-4">
           <button
+          
             onClick={handleSave}
             className="flex-1 px-4 py-3 bg-orange-400 hover:bg-orange-600 text-black font-semibold rounded-lg transition-colors"
           >
@@ -240,6 +337,7 @@ export default function UserSidebar({ onClose = () => {}, title, isInsert = fals
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

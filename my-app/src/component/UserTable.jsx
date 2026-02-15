@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Edit2, Trash2, Eye, NotebookText } from 'lucide-react';
 
-export default function UserTable({ users = [] }) {
+export default function UserTable({
+   users = [],
+   onEdit,
+   onDelete
+ }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedItems, setSelectedItems] = useState(new Set());
   
@@ -27,6 +31,18 @@ export default function UserTable({ users = [] }) {
     }
     setSelectedItems(newSelected);
   };
+  // const handleDelete = (id) => {
+
+  //   console.log('id', id)
+
+  //   const user = JSON.parse(localStorage.getItem('user-data'))
+
+  //   console.log('user', user)
+
+  //   const filteredUser = user.filter((user)=> user.id !== id)
+
+  //   localStorage.setItem('user-data', JSON.stringify(filteredUser))
+  // }
 
   const isAllSelected = paginatedUsers.length > 0 && 
     paginatedUsers.every(u => selectedItems.has(u.id));
@@ -105,10 +121,15 @@ export default function UserTable({ users = [] }) {
                   <button className="p-1.5 hover:bg-blue-100 rounded-lg transition-colors">
                     <NotebookText size={16} className="text-amber-500" />
                   </button>
-                  <button className="p-1.5 hover:bg-orange-100 rounded-lg transition-colors">
+                  <button 
+                   onClick={() => onEdit?.(user)}
+                   className="p-1.5 hover:bg-orange-100 rounded-lg transition-colors">
                     <Edit2 size={16} className="text-orange-500" />
                   </button>
-                  <button className="p-1.5 hover:bg-red-100 rounded-lg transition-colors">
+                  <button 
+                  // onClick={handleDelete(user.id)}
+                  onClick={() => onDelete?.(user.id)}
+                  className="p-1.5 hover:bg-red-100 rounded-lg transition-colors">
                     <Trash2 size={16} className="text-red-500" />
                   </button>
                 </td>

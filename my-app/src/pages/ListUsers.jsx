@@ -12,6 +12,8 @@ import AdminModal from "../component/AdminModal";
 function ListUsers() {
   const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  console.log("selected user", selectedUser);
   const [modalConfig, setModalConfig] = useState({
     title: "Add",
     action: "Add",
@@ -96,8 +98,30 @@ function ListUsers() {
     setIsModalOpen(true);
   };
 
+  const handleOpenViewModal = (user) => {
+    setSelectedUser(user);
+    setModalConfig({ title: "View User Details", action: "View" });
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (user) => {
+    setSelectedUser(user);
+    setModalConfig({ title: "Edit User", action: "Edit" });
+    setIsModalOpen(true);
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleDeleteUser = (id) => {
+    try {
+      const userData = JSON.parse(localStorage.getItem("user-data") || "[]");
+      const filteredUsers = userData.filter((user) => user.id !== id);
+      localStorage.setItem("user-data", JSON.stringify(filteredUsers));
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
   };
 
   return (
@@ -140,7 +164,12 @@ function ListUsers() {
             </div>
           </div>
 
-          <UserTable users={users} />
+          <UserTable
+            users={users}
+            onEdit={handleOpenEditModal}
+            onView={handleOpenViewModal}
+            onDelete={handleDeleteUser}
+          />
 
           <AdminModal
             isOpen={isModalOpen}
@@ -152,6 +181,8 @@ function ListUsers() {
               onClose={handleCloseModal}
               title={modalConfig.title}
               action={modalConfig.action}
+              user={selectedUser}
+              isInsert={modalConfig.action === "Add"}
             />
           </AdminModal>
         </main>
