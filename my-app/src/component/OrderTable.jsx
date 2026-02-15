@@ -21,6 +21,8 @@ const getStatusStyles = (status) => {
 export const OrderTable = ({
   orders,
   itemsPerPage = 5,
+  onEdit,
+  onDelete
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -111,12 +113,14 @@ export const OrderTable = ({
                     <NotebookText size={16} className="text-amber-600" />
                   </button>
                   <button
+                   onClick={() => onEdit?.(order)}
                     className="p-1.5 hover:bg-orange-100 rounded-lg transition-colors"
                     title="Edit"
                   >
                     <Edit2 size={16} className="text-orange-500" />
                   </button>
                   <button
+                  onClick={() => onDelete?.(order.id)}
                     className="p-1.5 hover:bg-red-100 rounded-lg transition-colors"
                     title="Delete"
                   >

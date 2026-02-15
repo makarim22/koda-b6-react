@@ -9,10 +9,13 @@ import { useState, useEffect } from 'react'
 import OrderSidebar from "../component/OrderSidebar";
 import AdminModal from "../component/AdminModal"
 
+
 function ListOrders() {
 
     const [orders, setOrders] = useState([])
       const [isModalOpen, setIsModalOpen] = useState(false);
+      const [selectedOrder, setSelectedOrder] = useState(null);
+
       const [modalConfig, setModalConfig] = useState({
         title: "Add",
         action: "Add",
@@ -47,65 +50,6 @@ function ListOrders() {
 
   console.log('orders', orders)
 
-  //  const orders = [
-  //   {
-  //     id: '1',
-  //     orderNumber: '#12354-09893',
-  //     date: '2023-01-26',
-  //     items: [
-  //       { name: 'Hazelnut Latte', quantity: 1 },
-  //       { name: 'Mocha', quantity: 1 }
-  //     ],
-  //     status: 'Done',
-  //     total: '  IDR 40000'
-  //   },
-  //   {
-  //     id: '2',
-  //     orderNumber: '#12354-09893',
-  //     date: '2023-01-26',
-  //     items: [
-  //       { name: 'Hazelnut Latte', quantity: 1 },
-  //       { name: 'Mocha', quantity: 1 }
-  //     ],
-  //     status: 'Done',
-  //     total: '  IDR 40000'
-  //   },
-  //   {
-  //     id: '3',
-  //     orderNumber: '#12354-09893',
-  //     date: '2023-01-26',
-  //     items: [
-  //       { name: 'Hazelnut Latte', quantity: 1 },
-  //       { name: 'Mocha', quantity: 1 }
-  //     ],
-  //     status: 'Done',
-  //     total: '  IDR 40000'
-  //   },
-  //   {
-  //     id: '4',
-  //     orderNumber: '#12354-09893',
-  //     date: '2023-01-26',
-  //     items: [
-  //       { name: 'Hazelnut Latte', quantity: 1 },
-  //       { name: 'Mocha', quantity: 1 }
-  //     ],
-  //     status: 'Done',
-  //     total: '  IDR 40000'
-  //   },
-  //   {
-  //     id: '5',
-  //     orderNumber: '#12354-09893',
-  //     date: '2023-01-26',
-  //     items: [
-  //       { name: 'Hazelnut Latte', quantity: 1 },
-  //       { name: 'Mocha', quantity: 1 }
-  //     ],
-  //     status: 'Done',
-  //     total: '  IDR 40000'
-  //   },
-   
-  // ];
- 
   const handleOpenAddModal = () => {
     setModalConfig({ title: "Add", action: "Add" });
     setIsModalOpen(true);
@@ -115,6 +59,29 @@ function ListOrders() {
     setIsModalOpen(false);
   };
 
+
+
+  const handleOpenViewModal = (order) => {
+    setSelectedOrder(order);
+    setModalConfig({ title: "View Order Details", action: "View" });
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (order) => {
+    setSelectedOrder(order);
+    setModalConfig({ title: "Edit Order", action: "Edit" });
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteUser = (id) => {
+    try {
+      const userData = JSON.parse(localStorage.getItem("user-data") || "[]");
+      const filteredUsers = userData.filter((user) => user.id !== id);
+      localStorage.setItem("user-data", JSON.stringify(filteredUsers));
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
  
   return (
     <div className="flex flex-col h-screen">
@@ -170,7 +137,12 @@ function ListOrders() {
             </div>
           </div>
 
-          <OrderTable orders={orders} itemsPerPage={5} />
+          <OrderTable 
+          orders={orders} 
+          itemsPerPage={5}
+            onEdit={handleOpenEditModal}
+            onView={handleOpenViewModal}
+            onDelete={handleDeleteUser} />
 
                <AdminModal
                       isOpen={isModalOpen}
@@ -182,6 +154,7 @@ function ListOrders() {
                         onClose={handleCloseModal}
                         title={modalConfig.title}
                         action={modalConfig.action}
+                        order={selectedOrder}
                       />
                     </AdminModal>
         </main>

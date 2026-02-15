@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { X, User, Mail, Phone, Lock, MapPin, Eye, EyeOff } from 'lucide-react';
 import { useEffect } from 'react'
 
-export default function UserSidebar({ onClose = () => {},
- title,
+export default function UserSidebar({
+ onClose = () => {},
  isInsert = true , 
  action,
  user = null,
@@ -74,19 +74,6 @@ export default function UserSidebar({ onClose = () => {},
     }));
   };
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setFormData(prev => ({
-  //         ...prev,
-  //         profileImage: reader.result
-  //       }));
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
 
   const getNextUserId = () => {
   let currentId = localStorage.getItem(ID_COUNTER_KEY);

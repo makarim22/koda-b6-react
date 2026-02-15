@@ -1,41 +1,29 @@
 import React from 'react';
 import { ChevronDown, X } from 'lucide-react';
 
-import product1Image from '../assets/user/product1.png';
-import product2Image from '../assets/user/product2.png';
-
 
 const OrderSidebar = ({
-  orderNumber = '#12354-09893',
-  customerName = 'Ghaluh Wizard Anggoro',
-  address = 'Griya bandung indah',
-  phone = '082116304338', 
-  paymentMethod = 'Cash',
-  shipping = 'Dine In',
-  status = 'On progress',
-  totalTransaction = 'Idr 40.000',
-  items = [
-    {
-      name: 'Hazelnut Latte',
-      quantity: 2,
-      details: 'Regular | Ice | Dine In',
-      originalPrice: 'IDR40.000',
-      price: 'IDR 20.000',
-      image: product1Image
-    },
-    {
-      name: 'Caramel Machiato',
-      quantity: 2,
-      details: 'Regular | Ice | Dine In',
-      originalPrice: 'IDR40.000',
-      price: 'IDR 20.000',
-      image: product2Image
-    },
-  ],
   onClose = () => {}, 
-  title='', 
-  action
+  order= null
 }) => {
+
+  console.log('order',order)
+  const {
+    orderNumber = 'N/A',
+    // totalTransaction = 'IDR 0',
+    status,
+    subtotal = "",
+    cartHistory = [] 
+  } = order || {};
+
+  const cart = cartHistory[0] || {};
+  
+  const customerName = cart.customer || '';
+  const address = cart.address || '';
+  const phone = cart.phone || '';
+  const paymentMethod = cart.paymentMethod || '';
+  const shipping = cart.shipping || '';
+
   return (
     <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-y-auto max-h-screen">
       <div className="flex justify-between items-center p-6 pb-4 border-b border-gray-100">
@@ -72,15 +60,15 @@ const OrderSidebar = ({
 
       <div className="px-6 py-4 bg-gray-50">
         <p className="text-sm text-gray-600 font-medium">Total Transaksi</p>
-        <p className="text-3xl font-bold text-orange-500 mt-2">{totalTransaction}</p>
+        <p className="text-3xl font-bold text-orange-500 mt-2">{subtotal}</p>
       </div>
 
       <div className="p-6 border-b border-gray-100">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Order</h3>
 
-        {items.length > 0 ? (
+        {cartHistory.length > 0 ? (
           <div className="space-y-3">
-            {items.map((item, index) => (
+            {cartHistory.map((item, index) => (
               <OrderItem key={index} item={item} />
             ))}
           </div>

@@ -38,6 +38,8 @@ export default function ProductOptions({ props, user }) {
     const orderData = {
       customer: user.user.fullname,
       customerId: user.user.id,
+      address : user.user.address,
+      phone: user.user.phone,
       id,
       title,
       price,
