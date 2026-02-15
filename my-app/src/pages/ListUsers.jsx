@@ -5,39 +5,48 @@ import UserTable from "../component/userTable";
 import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
 import Dropdown from "../assets/admin/dropdown.svg";
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
+import UserSidebar from "../component/UserSidebar";
+import AdminModal from "../component/AdminModal";
 
 function ListUsers() {
+  const [users, setUsers] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "Add",
+    action: "Add",
+  });
 
-      const [users, setUsers] = useState([])
-  
-      useEffect(() => {
-      const fetchUsers = () => {
-        try {
-          const usersData = localStorage.getItem('user-data');
-          console.log("usernya", usersData); 
-          if (usersData) {
-            const parsedUser = JSON.parse(usersData);
-  
-            if (Array.isArray(parsedUser)) {
-              setUsers(parsedUser);
-            } else {
-              console.warn("Data 'order' di localStorage bukan array:", parsedUser);
-              setUsers([]); 
-            }
+  useEffect(() => {
+    const fetchUsers = () => {
+      try {
+        const usersData = localStorage.getItem("user-data");
+        console.log("usernya", usersData);
+        if (usersData) {
+          const parsedUser = JSON.parse(usersData);
+
+          if (Array.isArray(parsedUser)) {
+            setUsers(parsedUser);
           } else {
-            setUsers([]); 
+            console.warn(
+              "Data 'order' di localStorage bukan array:",
+              parsedUser,
+            );
+            setUsers([]);
           }
-        } catch (error) {
-          console.error('Error parsing order data from localStorage:', error);
-          setUsers([]); 
+        } else {
+          setUsers([]);
         }
-      };
-  
-      fetchUsers(); 
-    }, []); 
+      } catch (error) {
+        console.error("Error parsing order data from localStorage:", error);
+        setUsers([]);
+      }
+    };
 
-    console.log('userss', users)
+    fetchUsers();
+  }, []);
+
+  console.log("userss", users);
 
   // const users = [
   //   {
@@ -81,6 +90,16 @@ function ListUsers() {
   //     email: "cikaracak@gmail.com",
   //   },
   // ];
+
+  const handleOpenAddModal = () => {
+    setModalConfig({ title: "Add", action: "Add" });
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <NavbarAdmin />
@@ -90,7 +109,10 @@ function ListUsers() {
           <div className="flex flex-row justify-between pl-7 pr-7">
             <div className="flex flex-col">
               User List
-              <button className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg">
+              <button
+                onClick={handleOpenAddModal}
+                className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg"
+              >
                 {" "}
                 + Add User
               </button>
@@ -119,6 +141,19 @@ function ListUsers() {
           </div>
 
           <UserTable users={users} />
+
+          <AdminModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            title={modalConfig.title}
+            action={modalConfig.action}
+          >
+            <UserSidebar
+              onClose={handleCloseModal}
+              title={modalConfig.title}
+              action={modalConfig.action}
+            />
+          </AdminModal>
         </main>
       </div>
     </div>
