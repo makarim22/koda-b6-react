@@ -7,11 +7,7 @@ import mailIcon from "../assets/icons/mail.svg";
 import ProfileIcon from "../assets/icons/productPage/Profile.svg";
 import passwordIcon from "../assets/icons/Password.svg";
 
-import {
-
-  Phone
-
-} from "lucide-react";
+import { Phone } from "lucide-react";
 
 function Profile() {
   const fileInputRef = useRef(null);
@@ -22,14 +18,32 @@ function Profile() {
       const parsedData = JSON.parse(userData);
       const activeUser = parsedData.find((u) => u.isLoggedIn === true);
       if (activeUser) {
-        const { fullname, email, phone, address, id, profileImage } = activeUser;
-        return { fullname, email, phone, address, id, profileImage: profileImage || null };
+        const { fullname, email, phone, address, id, profileImage } =
+          activeUser;
+        return {
+          fullname,
+          email,
+          phone,
+          address,
+          id,
+          profileImage: profileImage || null,
+        };
       }
     }
-    return { fullname: "Guest", email: "", phone: "", address: "", profileImage: null };
+    return {
+      fullname: "Guest",
+      email: "",
+      phone: "",
+      address: "",
+      profileImage: null,
+    };
   });
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       fullName: user.fullname || "",
       email: user.email || "",
@@ -50,15 +64,17 @@ function Profile() {
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result;
-        
+
         try {
           const users = JSON.parse(localStorage.getItem("user-data")) || [];
-          const userLoggedInIndex = users.findIndex((u) => u.isLoggedIn === true);
+          const userLoggedInIndex = users.findIndex(
+            (u) => u.isLoggedIn === true,
+          );
 
           if (userLoggedInIndex !== -1) {
             users[userLoggedInIndex].profileImage = base64String;
             localStorage.setItem("user-data", JSON.stringify(users));
-            
+
             setUser({
               ...user,
               profileImage: base64String,
@@ -122,15 +138,18 @@ function Profile() {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header bgColor="bg-black" />
 
-      <main className="flex-1 pt-10 px-6 md:px-12">
-        <h1 className="text-4xl font-bold mb-12">Profile</h1>
+      <main className="flex-1 pt-25 px-6 md:px-12">
+        <h1 className="text-4xl mb-12">Profile</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl">
           <div className="md:col-span-1">
             <div className="bg-white rounded-lg shadow-md p-8 flex flex-col items-center">
               <div className="mb-6 relative">
                 <img
-                  src={user.profileImage || "https://via.placeholder.com/150?text=No+Photo"}
+                  src={
+                    user.profileImage ||
+                    "https://via.placeholder.com/150?text=No+Photo"
+                  }
                   alt="Profile"
                   className="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
                 />
@@ -159,7 +178,8 @@ function Profile() {
               />
 
               <p className="text-sm text-gray-600 text-center">
-                Since {new Date().toLocaleDateString("en-id", {
+                Since{" "}
+                {new Date().toLocaleDateString("en-id", {
                   day: "numeric",
                   month: "long",
                   year: "numeric",
@@ -232,11 +252,10 @@ function Profile() {
                     Phone
                   </label>
                   <div className="relative">
-                    <img
-                      src={Phone}
-                      alt="Phone"
-                      className="absolute left-4 top-3 w-5 h-5"
-                    />
+                    <div className="absolute left-4 top-4 w-5 h-5">
+                      <Phone size={16} />
+                    </div>
+
                     <input
                       type="tel"
                       {...register("phone")}
@@ -252,7 +271,7 @@ function Profile() {
                       Password
                     </label>
                     <a
-                      href="/forgot-password"
+                      // href="/forgot-password"
                       className="text-orange-500 text-sm font-medium hover:underline"
                     >
                       Set New Password
@@ -268,7 +287,7 @@ function Profile() {
                       type="password"
                       {...register("password")}
                       className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      placeholder="Leave blank to keep current password"
+                      placeholder="Biarkan kosong jika ingin menggunakan password lama"
                     />
                   </div>
                 </div>
