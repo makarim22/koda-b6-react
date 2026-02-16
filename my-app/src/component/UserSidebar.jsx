@@ -9,8 +9,7 @@ export default function UserSidebar({
  user = null,
 }) {
 
-    const ID_COUNTER_KEY = 'user-id-counter';
-
+  const ID_COUNTER_KEY = 'user-id-counter';
 
   const [formData, setFormData] = useState({
     image: null,

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 
 export default function ProductSidebar({ onClose = () => {}, title='', action }) {
+
+  const ID_COUNTER_KEY = 'product-id-counter';
   
   const [formData, setFormData] = useState({
     photo: null,
@@ -46,8 +48,37 @@ export default function ProductSidebar({ onClose = () => {}, title='', action })
     }));
   };
 
+    const getNextProductId = () => {
+  let currentId = localStorage.getItem(ID_COUNTER_KEY);
+  currentId = currentId ? parseInt(currentId) : 0;
+  const nextId = currentId + 1;
+  localStorage.setItem(ID_COUNTER_KEY, nextId.toString());
+  return nextId;
+};
+
   const handleSave = () => {
-    console.log('Product Data:', formData);
+
+    const products = JSON.parse(localStorage.getItem('products') || '[]');
+
+    const newProduct = {
+      id : getNextProductId(),
+      name: formData.productName,
+      image: formData.photo,
+      price: formData.price,
+      description : formData.description,
+      sizeOptions : formData.selectedSizes.join(', '),
+      size: formData.stock
+
+    }
+    
+     products.push(newProduct)
+
+     localStorage.setItem('products', JSON.stringify(products))
+    
+    console.log('Product Datanya:', formData);
+    alert(`berhasil menambahkan ${newProduct.name}`)
+    onClose()
+
   };
 
   const handleReset = () => {
@@ -62,7 +93,7 @@ export default function ProductSidebar({ onClose = () => {}, title='', action })
   };
 
   return (
-    <div >
+    <div className="flex flex-col h-screen">
       <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
         <h2 className="text-xl font-bold text-gray-800">{title} Product</h2>
         <button
@@ -72,6 +103,8 @@ export default function ProductSidebar({ onClose = () => {}, title='', action })
           <X size={24} className="text-gray-600" />
         </button>
       </div>
+
+      <div className="flex-1 overflow-y-auto">
 
       <div className="p-6 space-y-6">
         
@@ -204,6 +237,7 @@ export default function ProductSidebar({ onClose = () => {}, title='', action })
             {action} Product
           </button>
         </div>
+      </div>
       </div>
     </div>
   );
