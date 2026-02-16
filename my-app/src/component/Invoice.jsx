@@ -11,7 +11,7 @@ function Invoice(props) {
   const { paymentDetails, cartItems } = props;
   console.log("cart itemsnya", cartItems);
   console.log("cartttt", cartItems);
-  const { order, delivery, tax, subtotal, image } = paymentDetails;
+  const { order, delivery, tax, subtotal, image, payment, shipping } = paymentDetails;
   const navigate = useNavigate();
 
   const generateOrderId = () => {
@@ -32,7 +32,11 @@ function Invoice(props) {
         status: "On Progress",
         image: image,
         cartHistory: cartItems,
+        payment,
+        shipping
       };
+
+      console.log('newOrderr', newOrder)
 
       const existingOrdersString = localStorage.getItem("order");
       let existingOrders = [];

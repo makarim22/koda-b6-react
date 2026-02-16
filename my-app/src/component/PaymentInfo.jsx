@@ -12,6 +12,7 @@ function PaymentInfo({
   user
 }) {
     const [deliveryMethod, setDeliveryMethod] = useState(selectedDeliveryMethod)
+    console.log('delivery method', deliveryMethod)
     console.log('userpayment', user)
     const [formData, setFormData] = useState({
         email:  '',

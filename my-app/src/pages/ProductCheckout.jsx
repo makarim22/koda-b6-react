@@ -127,6 +127,8 @@ function ProductCheckout() {
       tax: `IDR ${tax.toLocaleString('id-ID')}`,
       subtotal: `IDR ${subtotal.toLocaleString('id-ID')}`,
       image: cartItems.image,
+      shipping: deliveryMethod,
+      payment: 'cash',
       cartHistory : cartItems
     };
   };
@@ -153,7 +155,7 @@ function ProductCheckout() {
          <PaymentInfo 
                 onDeliveryMethodChange={handleDeliveryMethodChange}
                 selectedDeliveryMethod={deliveryMethod}
-                user = {user}
+                user= {user}
               />
       </div>
       <div className='flex flex-col pt-30 '>

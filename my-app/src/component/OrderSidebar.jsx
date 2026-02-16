@@ -9,10 +9,12 @@ const OrderSidebar = ({
 
   console.log('order',order)
   const {
-    orderNumber = 'N/A',
+    id,
     // totalTransaction = 'IDR 0',
     status,
     subtotal = "",
+    payment,
+    shipping,
     cartHistory = [] 
   } = order || {};
 
@@ -21,13 +23,14 @@ const OrderSidebar = ({
   const customerName = cart.customer || '';
   const address = cart.address || '';
   const phone = cart.phone || '';
-  const paymentMethod = cart.paymentMethod || '';
-  const shipping = cart.shipping || '';
+  // const payment = cart.payment || '';
+  // const shipping = cart.shipping || '';
+  console.log('shipping', shipping)
 
   return (
     <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-y-auto max-h-screen">
       <div className="flex justify-between items-center p-6 pb-4 border-b border-gray-100">
-        <h2 className="text-xl font-bold text-gray-900">Order {orderNumber}</h2>
+        <h2 className="text-xl font-bold text-gray-900">Order #{id}</h2>
         <button
           onClick={onClose}
           className="text-red-500 hover:text-red-700 transition-colors p-1"
@@ -44,7 +47,7 @@ const OrderSidebar = ({
           <InformationField label="Full Name" value={customerName} />
           <InformationField label="Address" value={address} />
           <InformationField label="Phone" value={phone} />
-          <InformationField label="Payment Method" value={paymentMethod} />
+          <InformationField label="Payment Method" value={payment} />
           <InformationField label="Shipping" value={shipping} />
           <div className="pt-2">
             <div className="flex items-center justify-between">

@@ -77,7 +77,7 @@ export const OrderTable = ({
                   />
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm font-medium ">
-                  {order.id}
+                  #{order.id}
                 </td>
                 <td className="px-4 py-3 text-gray-700 text-sm">
                   {order.date}
