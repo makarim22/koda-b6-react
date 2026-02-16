@@ -4,69 +4,100 @@ import Sidebar from "../layouts/Sidebar";
 import { ProductTable } from "../component/ProductTable";
 import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
-import { useState } from "react";
 import AdminModal from "../component/AdminModal";
 import ProductSidebar from "../component/ProductSidebar";
+import { useEffect, useState } from 'react';
 
 export default function ListProducts() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [products, setProducts] = useState([]);
   const [modalConfig, setModalConfig] = useState({
     title: "Add",
     action: "Add",
   });
 
-  const Products = [
-    {
-      id: 1,
-      image: "/src/assets/icons/productPage/espresso.jfif",
-      name: "Hazelnut Latte",
-      price: "IDR 15.000",
-      desc: "Cold brewing is a method of brewing that",
-      size: ["R", "L", "XL", "250 gr", "500gr"],
-      method: ["deliver", "dine in"],
-      stock: 10,
-    },
-    {
-      id: 2,
-      image: "/src/assets/icons/productPage/latte.jpg",
-      name: "Latte",
-      price: "IDR 19.000",
-      desc: "Cold brewing is a method of brewing that",
-      size: ["R", "L", "XL", "250 gr", "500gr"],
-      method: ["deliver", "dine in"],
-      stock: 10,
-    },
-    {
-      id: 3,
-      image: "/src/assets/icons/productPage/affogato.jfif",
-      name: "Affogato",
-      price: "IDR 15.000",
-      desc: "Cold brewing is a method of brewing that",
-      size: ["R", "L", "XL", "250 gr", "500gr"],
-      method: ["deliver", "dine in"],
-      stock: 10,
-    },
-    {
-      id: 4,
-      image: "/src/assets/icons/productPage/affogato.jfif",
-      name: "Affogato",
-      price: "IDR 15.000",
-      desc: "Cold brewing is a method of brewing that",
-      size: ["R", "L", "XL", "250 gr", "500gr"],
-      method: ["deliver", "dine in"],
-      stock: 10,
-    },
-    {
-      id: 5,
-      image: "/src/assets/icons/productPage/affogato.jfif",
-      name: "Affogato",
-      price: "IDR 15.000",
-      desc: "Cold brewing is a method of brewing that",
-      size: ["R", "L", "XL", "250 gr", "500gr"],
-      method: ["deliver", "dine in"],
-      stock: 10,
-    },
-  ];
+  // const Products = [
+  //   {
+  //     id: 1,
+  //     image: "/src/assets/icons/productPage/espresso.jfif",
+  //     name: "Hazelnut Latte",
+  //     price: "IDR 15.000",
+  //     desc: "Cold brewing is a method of brewing that",
+  //     size: ["R", "L", "XL", "250 gr", "500gr"],
+  //     method: ["deliver", "dine in"],
+  //     stock: 10,
+  //   },
+  //   {
+  //     id: 2,
+  //     image: "/src/assets/icons/productPage/latte.jpg",
+  //     name: "Latte",
+  //     price: "IDR 19.000",
+  //     desc: "Cold brewing is a method of brewing that",
+  //     size: ["R", "L", "XL", "250 gr", "500gr"],
+  //     method: ["deliver", "dine in"],
+  //     stock: 10,
+  //   },
+  //   {
+  //     id: 3,
+  //     image: "/src/assets/icons/productPage/affogato.jfif",
+  //     name: "Affogato",
+  //     price: "IDR 15.000",
+  //     desc: "Cold brewing is a method of brewing that",
+  //     size: ["R", "L", "XL", "250 gr", "500gr"],
+  //     method: ["deliver", "dine in"],
+  //     stock: 10,
+  //   },
+  //   {
+  //     id: 4,
+  //     image: "/src/assets/icons/productPage/affogato.jfif",
+  //     name: "Affogato",
+  //     price: "IDR 15.000",
+  //     desc: "Cold brewing is a method of brewing that",
+  //     size: ["R", "L", "XL", "250 gr", "500gr"],
+  //     method: ["deliver", "dine in"],
+  //     stock: 10,
+  //   },
+  //   {
+  //     id: 5,
+  //     image: "/src/assets/icons/productPage/affogato.jfif",
+  //     name: "Affogato",
+  //     price: "IDR 15.000",
+  //     desc: "Cold brewing is a method of brewing that",
+  //     size: ["R", "L", "XL", "250 gr", "500gr"],
+  //     method: ["deliver", "dine in"],
+  //     stock: 10,
+  //   },
+  // ];
+
+    useEffect(() => {
+      const fetchProducts = () => {
+        try {
+          const products = localStorage.getItem("products");
+          console.log("usernya", products);
+          if (products) {
+            const parsedProducts = JSON.parse(products);
+  
+            if (Array.isArray(parsedProducts)) {
+              setProducts(parsedProducts);
+            } else {
+              console.warn(
+                "Data 'product' di localStorage bukan array:",
+                parsedProducts,
+              );
+              setProducts([]);
+            }
+          } else {
+            setProducts([]);
+          }
+        } catch (error) {
+          console.error("Error parsing order data from localStorage:", error);
+          setProducts([]);
+        }
+      };
+  
+      fetchProducts();
+    }, []);
+  
 
   const handleOpenAddModal = () => {
     setModalConfig({ title: "Add", action: "Add" });
@@ -117,7 +148,7 @@ export default function ListProducts() {
             </div>
           </div>
 
-          <ProductTable products={Products} itemsPerPage={5} />
+          <ProductTable products={products} itemsPerPage={5} />
 
           <AdminModal
             isOpen={isModalOpen}

@@ -75,21 +75,21 @@ export const ProductTable = ({
                   {product.name}
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm font-medium">
-                  {product.price}
+                  Rp{product.price}
                 </td>
                 <td className="px-4 py-3">
                   <span className="inline-block max-w-xs overflow-hidden text-ellipsis whitespace-nowrap text-gray-500 text-xs">
-                    {product.desc}
+                    {product.description}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm">
-                  {product.size.join(', ') || '-'}
+                  {product.sizeOptions || '-'}
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm">
-                  {product.method.join(', ') || '-'}
+                  {product.payment || 'Dine In, Deliver'}
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm font-medium">
-                  {product.stock}
+                  {product.size}
                 </td>
                 <td className="px-4 py-3 flex gap-2">
                   <button
