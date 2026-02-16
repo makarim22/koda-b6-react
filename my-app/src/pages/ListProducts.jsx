@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 export default function ListProducts() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
   const [modalConfig, setModalConfig] = useState({
     title: "Add",
     action: "Add",
@@ -108,6 +110,19 @@ export default function ListProducts() {
     setIsModalOpen(false);
   };
 
+    const handleOpenViewModal = (product) => {
+    setSelectedProduct(product);
+    setModalConfig({ title: "View Product Details", action: "View" });
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (product) => {
+    setSelectedProduct(product);
+    setModalConfig({ title: "Edit Product", action: "Edit" });
+    setIsModalOpen(true);
+  };
+
+
   return (
     <div className="flex flex-col h-screen">
       <NavbarAdmin />
@@ -148,7 +163,11 @@ export default function ListProducts() {
             </div>
           </div>
 
-          <ProductTable products={products} itemsPerPage={5} />
+          <ProductTable 
+          products={products} 
+          itemsPerPage={5}
+          onEdit ={handleOpenEditModal}
+          onView={handleOpenViewModal} />
 
           <AdminModal
             isOpen={isModalOpen}
@@ -160,6 +179,8 @@ export default function ListProducts() {
               onClose={handleCloseModal}
               title={modalConfig.title}
               action={modalConfig.action}
+              product={selectedProduct}
+              isInsert={modalConfig.action === "Add"}
             />
           </AdminModal>
         </main>

@@ -4,7 +4,8 @@ import { Edit2, Trash2 } from 'lucide-react';
 export const ProductTable = ({
   products,
   onEdit, 
-  onDelete, 
+  onDelete,
+  // onView, 
   itemsPerPage = 5,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -93,7 +94,8 @@ export const ProductTable = ({
                 </td>
                 <td className="px-4 py-3 flex gap-2">
                   <button
-                    onClick={() => onEdit && onEdit(product)} 
+                    
+                    onClick={() => onEdit?.(product)}
                     className="p-1.5 hover:bg-orange-100 rounded-lg transition-colors"
                     title="Edit"
                     disabled={!onEdit} 
@@ -101,7 +103,7 @@ export const ProductTable = ({
                     <Edit2 size={16} className={`${onEdit ? 'text-orange-500' : 'text-gray-400'}`} />
                   </button>
                   <button
-                    onClick={() => onDelete && onDelete(product.id)} 
+                    onClick={() => onDelete?.(product.id)}
                     className="p-1.5 hover:bg-red-100 rounded-lg transition-colors"
                     title="Delete"
                     disabled={!onDelete} 
