@@ -3,7 +3,7 @@ import { ChevronRight, MessageSquare} from 'lucide-react';
 import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 import { useEffect, useState } from 'react';
-import Calendar from '../assets/user/calendar.svg'
+import Calendar from '../assets/user/Calendar.svg'
 import { useNavigate } from 'react-router-dom';
 
 export default function HistoryOrder() {
