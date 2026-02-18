@@ -18,6 +18,7 @@ import Dashboard from "./pages/Dashboard";
 import ListProducts from "./pages/ListProducts";
 import ListOrders from "./pages/ListOrders";
 import ListUsers from "./pages/ListUsers";
+import NotFoundPage from "./pages/NotFoundPage";
 import ScrollToTop from "./utils/scrollRestoration";
 
 
@@ -45,6 +46,8 @@ function App() {
         <Route path="/admin-products" element={<ListProducts />} />
         <Route path="/admin-orders" element={<ListOrders />} />
         <Route path="/admin-users" element={<ListUsers />} />
+
+        <Route path="/*" element={<NotFoundPage />} />
 
 
       </Routes>
