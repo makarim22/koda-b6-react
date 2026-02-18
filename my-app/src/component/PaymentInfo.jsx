@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import mailIcon from '../assets/icons/mail.svg'
 import Location from '../assets/icons/productPage/Location.svg'
 import Profile from '../assets/icons/productPage/Profile.svg'
-import { Input } from './input'
+import { Input } from './Input'
 import { useEffect } from 'react'
 
 function PaymentInfo({ 
