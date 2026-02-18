@@ -53,7 +53,7 @@ jobs:
             
             # Pull the latest image
             echo "Pulling latest image..."
-            docker pull ghcr.io/makarim22/frontend-coffee-shop:2.0
+            docker pull ghcr.io/makarim22/frontend-coffee-shop:latest
             
             # Stop and remove old container
             echo "Stopping old container..."
@@ -67,7 +67,7 @@ jobs:
               -p 20000:80 \
               --restart=unless-stopped \
               -e NODE_ENV=production \
-              ghcr.io/makarim22/frontend-coffee-shop:2.0
+              ghcr.io/makarim22/frontend-coffee-shop:latest
             
             # Verify container is running
             if docker ps | grep -q web-jaka; then
