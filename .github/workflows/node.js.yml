@@ -64,7 +64,7 @@ jobs:
             echo "Starting new container..."
             docker run -d \
               --name web-jaka \
-              -p 20000:80 \
+              -p 20102:80 \
               --restart=unless-stopped \
               -e NODE_ENV=production \
               ghcr.io/makarim22/frontend-coffee-shop:latest
