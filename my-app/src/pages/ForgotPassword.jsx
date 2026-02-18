@@ -1,4 +1,4 @@
-import { Input } from '../component/input';
+import { Input } from '../component/Input';
 import { Button } from '/src/component/Button';
 import ForgotPasswordImg from '../assets/icons/forgot-password.svg';
 
