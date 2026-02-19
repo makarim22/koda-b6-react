@@ -12,6 +12,7 @@ import mocha from "../assets/icons/productPage/mocha.jfif"
 import americano from "../assets/icons/productPage/americano.jfif"
 import flatWhite from '../assets/icons/productPage/flat-white.jfif'
 import affogato from '../assets/icons/productPage/affogato.jfif'
+import glasses from '../assets/icons/glasses.png'
 
 
  const ProductPage = () => {
@@ -219,7 +220,7 @@ import affogato from '../assets/icons/productPage/affogato.jfif'
     <Header bgColor="bg-black"/>
     <div className="min-h-screen bg-gray-50">
       <div className="bg-cover bg-center h-64 flex items-center justify-center"
-        style={{ backgroundImage: 'url(./src/assets/icons/glasses.png)' }}>
+        style={{ backgroundImage:  `url(${glasses})` }}>
         <h1 className="text-4xl font-bold text-white text-center">
           We Provide Good Coffee and Healthy Meals
         </h1>
