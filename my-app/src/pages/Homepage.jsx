@@ -8,12 +8,16 @@ import Footer from "../layouts/Footer";
 import { Link } from "react-router-dom";
 import { ProductGrid } from "../component/ProductGrid";
 import TestimonyCard from "../component/TestimonyCard";
+import espresso from "./src/assets/icons/productPage/espresso.jfif"
+import latte from "./src/assets/icons/productPage/latte.jpg"
+import mocha from "./src/assets/icons/productPage/mocha.jfif"
+import americano from "./src/assets/icons/productPage/americano.jfif"
 
 const HomePage = () => {
   const products = [
     {
       id: 1,
-      image: "./src/assets/icons/productPage/espresso.jfif",
+      image: {espresso},
       title: "Espresso",
       price: "IDR 15.000",
       originalPrice: "IDR 18.000",
@@ -24,7 +28,7 @@ const HomePage = () => {
     },
     {
       id: 2,
-      image: "./src/assets/icons/productPage/latte.jpg",
+      image: {latte},
       title: "Latte",
       price: "IDR 19.000",
       originalPrice: "IDR 22.000",
@@ -35,7 +39,7 @@ const HomePage = () => {
     },
     {
       id: 3,
-      image: "./src/assets/icons/productPage/mocha.jfif",
+      image: {mocha},
       title: "Mocha",
       price: "IDR 21.000",
       originalPrice: "IDR 24.000",
@@ -46,7 +50,7 @@ const HomePage = () => {
     },
     {
       id: 4,
-      image: "./src/assets/icons/productPage/americano.jfif",
+      image: {americano},
       title: "Americano",
       price: "IDR 12.000",
       originalPrice: "IDR 15.000",
