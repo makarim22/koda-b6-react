@@ -6,13 +6,20 @@ import Footer from '../layouts/Footer';
 import Woman from '../assets/icons/productPage/coupon1.png';
 import Man from '../assets/icons/productPage/coupon2.png';
 import { useState } from 'react'
+import espresso from "../assets/icons/productPage/espresso.jfif"
+import latte from "../assets/icons/productPage/latte.jpg"
+import mocha from "../assets/icons/productPage/mocha.jfif"
+import americano from "../assets/icons/productPage/americano.jfif"
+import flatWhite from '../assets/icons/productPage/flat-white.jfif'
+import affogato from '../assets/icons/productPage/affogato.jfif'
+
 
  const ProductPage = () => {
 
    const productsData = [
   {
     id: 1,
-    image: './src/assets/icons/productPage/espresso.jfif',
+    image: espresso,
     title: 'Espresso', 
     price: 'IDR 15.000', 
     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
@@ -23,7 +30,7 @@ import { useState } from 'react'
   },
   {
     id: 2,
-    image: './src/assets/icons/productPage/latte.jpg',
+    image: latte,
     title: 'Latte',
     price: 'IDR 19.000',
     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
@@ -34,7 +41,7 @@ import { useState } from 'react'
   },
   {
     id: 3,
-    image: './src/assets/icons/productPage/mocha.jfif',
+    image:  mocha,
     title: 'Mocha',
     price: 'IDR 21.000',
     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
@@ -45,7 +52,7 @@ import { useState } from 'react'
   },
   {
     id: 4,
-    image: './src/assets/icons/productPage/americano.jfif',
+    image: americano,
     title: 'Americano',
     price: 'IDR 12.000', 
     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
@@ -56,7 +63,7 @@ import { useState } from 'react'
   },
   {
     id: 5,
-    image: './src/assets/icons/productPage/flat-white.jfif',
+    image: flatWhite,
     title: 'Flat White',
     price: 'IDR 20.000',
     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
@@ -67,7 +74,7 @@ import { useState } from 'react'
   },
   {
     id: 6,
-    image: './src/assets/icons/productPage/affogato.jfif',
+    image: affogato,
     title: 'Affogato',
     price: 'IDR 25.000',
     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
