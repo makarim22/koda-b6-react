@@ -66,6 +66,7 @@ jobs:
               --name web-jaka \
               -p 20102:80 \
               --restart=unless-stopped \
+              --network pman_web \
               -e NODE_ENV=production \
               ghcr.io/makarim22/frontend-coffee-shop:latest
             
