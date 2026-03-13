@@ -5,6 +5,7 @@ import Cart from '../component/Cart';
 import Invoice from '../component/Invoice';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import CartCtx from '/src/context/CartContext'
 
 function ProductCheckout() {
   const {productId} = useParams();
@@ -16,8 +17,8 @@ function ProductCheckout() {
 
   const [deliveryMethod, setDeliveryMethod] = useState('dine-in');
 
-    const [cartItems, setCartItems] = useState([]);
-    console.log('cartItems', cartItems)
+    const [items, set] = useState([]);
+    console.log('items', items)
 
     function getCartFromLocalStorage() {
         try {
@@ -58,7 +59,7 @@ function ProductCheckout() {
         console.log("data Cart:", cartLoad);
         
         
-        setCartItems(cartLoad);
+        set(cartLoad);
         
     }, []);
 
@@ -72,17 +73,17 @@ function ProductCheckout() {
     }
 
 
-        function handleRemoveItem(arrayIndex) {
+        function onRemoveItem(arrayIndex) {
       
-        const updatedCart = cartItems.filter((item, idx) => idx !== arrayIndex);
+        const updatedCart = items.filter((item, idx) => idx !== arrayIndex);
         
-        setCartItems(updatedCart);
+        set(updatedCart);
         
         saveCartToLocalStorage(updatedCart);
     }
 
     const calculatePayment = () => {
-    if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
+    if (!items || !Array.isArray(items) || items.length === 0) {
       return {
         order: 'IDR 0',
         delivery: 'IDR 0',
@@ -93,7 +94,7 @@ function ProductCheckout() {
     }
 
     let totalItemPrice = 0
-    cartItems.forEach(cart => {
+    items.forEach(cart => {
       const price = parseInt(cart.price?.replace(/\D/g, '') || 0)
       const quantity = cart.quantity || 1
       totalItemPrice += price * quantity
@@ -102,7 +103,7 @@ function ProductCheckout() {
     console.log("total item price", totalItemPrice)
 
     let delivery = 0;
-    if (deliveryMethod === 'door-delivery' && cartItems.length > 0) {
+    if (deliveryMethod === 'door-delivery' && items.length > 0) {
       delivery = 5000;
     } else if (deliveryMethod === 'dine-in' || deliveryMethod === 'pick-up') {
       delivery = 0;
@@ -115,8 +116,8 @@ function ProductCheckout() {
     console.log('tax', tax)
 
     let subtotal = 0
-    if (cartItems.length > 0){
-      console.log("panjangnyaa", cartItems.length)
+    if (items.length > 0){
+      console.log("panjangnyaa", items.length)
       subtotal = totalItemPrice + delivery + tax;
     }
 
@@ -126,10 +127,10 @@ function ProductCheckout() {
       delivery: `IDR ${delivery.toLocaleString('id-ID')}`,
       tax: `IDR ${tax.toLocaleString('id-ID')}`,
       subtotal: `IDR ${subtotal.toLocaleString('id-ID')}`,
-      image: cartItems.image,
+      image: items.image,
       shipping: deliveryMethod,
       payment: 'cash',
-      cartHistory : cartItems
+      cartHistory : items
     };
   };
 
@@ -147,11 +148,13 @@ function ProductCheckout() {
       <div className='grid grid-cols-2 gap-4 pt-25'>
         <div className='flex flex-col'>
           <h1 className='p-6 text-3xl'>Payment Details</h1>
-        <Cart 
-        items={cartItems}
-         onRemoveItem={handleRemoveItem}
-         isRemoveShowed={isRemoveShowed} 
-         showAddMenu={showAddMenu}/>
+         <CartCtx value={{items, onRemoveItem, isRemoveShowed, showAddMenu}}>
+          <Cart/>
+        {/* //  items={items}
+        //  onRemoveItem={handleRemoveItem}
+        //  isRemoveShowed={isRemoveShowed} 
+        //  showAddMenu={showAddMenu}/> */}
+         </CartCtx> 
          <PaymentInfo 
                 onDeliveryMethodChange={handleDeliveryMethodChange}
                 selectedDeliveryMethod={deliveryMethod}
@@ -159,7 +162,7 @@ function ProductCheckout() {
               />
       </div>
       <div className='flex flex-col pt-30 '>
-        <Invoice paymentDetails={payment} cartItems={cartItems}/>
+        <Invoice paymentDetails={payment} items={items}/>
       </div>
 
       </div>

@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
+import CartCtx from '/src/context/CartContext';
 
-function Cart({ items, onRemoveItem, isRemoveShowed, showAddMenu }) {
+function Cart() {
     const navigate = useNavigate();
     const [arrayItems, setArrayItems] = useState([]);
+
+    const {items, onRemoveItem, isRemoveShowed, showAddMenu} = useContext(CartCtx)
 
     useEffect(() => {
         let processedItems = [];
