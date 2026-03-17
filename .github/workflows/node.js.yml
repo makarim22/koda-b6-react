@@ -7,17 +7,8 @@ jobs:
     permissions:
       packages: write
     steps:
-      - name: Setup nodejs v24.13.0
-        uses: actions/setup-node@v6
-        with:
-          node-version: '24.13.0'
-      - name: Check nodejs version
-        run: node -v
       - name: Gathering source code
         uses: actions/checkout@v6
-      - name: Build app
-        working-directory: ./my-app
-        run: npm install && npm run build
       - name: "[DOCKER] Setup metadata"
         id: meta
         uses: docker/metadata-action@v5
@@ -49,31 +40,6 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            set -e  # Exit on any error
-            
-            # Pull the latest image
-            echo "Pulling latest image..."
-            docker pull ghcr.io/makarim22/frontend-coffee-shop:latest
-            
-            # Stop and remove old container
-            echo "Stopping old container..."
-            docker stop web-jaka || true
-            docker rm -f web-jaka || true
-            
-            # Run new container
-            echo "Starting new container..."
-            docker run -d \
-              --name web-jaka \
-              -p 20102:80 \
-              --restart=unless-stopped \
-              --network pman_web \
-              -e NODE_ENV=production \
-              ghcr.io/makarim22/frontend-coffee-shop:latest
-            
-            # Verify container is running
-            if docker ps | grep -q web-jaka; then
-              echo "✓ Deployment successful"
-            else
-              echo "✗ Deployment failed"
-              exit 1
-            fi
+            cd server-jaka
+            docker compose pull frontend
+            docker compose up frontend -d
