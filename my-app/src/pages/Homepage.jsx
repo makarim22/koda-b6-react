@@ -8,10 +8,10 @@ import Footer from "../layouts/Footer";
 import { Link } from "react-router-dom";
 import { ProductGrid } from "../component/ProductGrid";
 import TestimonyCard from "../component/TestimonyCard";
-// import espresso from "../assets/icons/productPage/espresso.jfif"
-// import latte from "../assets/icons/productPage/latte.jpg"
-// import mocha from "../assets/icons/productPage/mocha.jfif"
-// import americano from "../assets/icons/productPage/americano.jfif"
+import espresso from "../assets/icons/productPage/espresso.jfif"
+import latte from "../assets/icons/productPage/latte.jpg"
+import mocha from "../assets/icons/productPage/mocha.jfif"
+import americano from "../assets/icons/productPage/americano.jfif"
 import { useState, useEffect } from 'react' 
 import http from '../lib/http'
 
@@ -65,18 +65,42 @@ const HomePage = () => {
   // ];
 
   const [products, setProducts] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-   const getProducts = async() => {
-    const req = await http("/admin/products/recommended-products")
-    const data = await req.json()
-    console.log('data', data)
-    setProducts(data)
-    
+ const getProducts = async() => {
+    setLoading(true);
+    setError(null);
+    try {
+      const req = await http("/admin/products");
+      const data = await req.json();
+      console.log('data', data);
+      
+      const images = [espresso, latte, mocha, americano];
+      const mappedProducts = data.map((product, index) => ({
+        id: product.id,
+        image: images[index % images.length],
+        title: product.product_name,
+        price: `IDR ${product.base_price.toLocaleString('id-ID')}`,
+        originalPrice: `IDR ${Math.ceil(product.base_price * 1.15).toLocaleString('id-ID')}`,
+        description: product.description,
+        rating: Math.floor(Math.random() * 2) + 4,
+        reviews: 0,
+        isFlashSale: Math.random() > 0.3,
+      }));
+      
+      setProducts(mappedProducts);
+    } catch (err) {
+      setError('Failed to fetch products');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   }
-  useEffect(()=>{
-    getProducts()
-  },[])
 
+  useEffect(() => {
+    getProducts();
+  }, []);
   const testimonials = [
     {
       id: 1,
@@ -230,13 +254,18 @@ const HomePage = () => {
             Let's choose and have a bit of taste of people's favorite. It might
             be yours too!
           </p>
-        </div>
-        <ProductGrid 
-        products={products}
-         columns={4}
-         qty={4}
-         showOriginalPrice= {false}
-         showRating= {false}/>
+        </div>  
+        {loading && <p className="text-xl">Loading products...</p>}
+        {error && <p className="text-xl text-red-500">{error}</p>}
+         {!loading && !error && products.length > 0 && (
+          <ProductGrid 
+            products={products.slice(0, 4)}
+            columns={4}
+            qty={4}
+            showOriginalPrice={false}
+            showRating={false}
+          />
+        )}
       </section>
 
       <section className="py-16 md:py-24 bg-white text-gray-800 px-8 md:px-32 text-center">
