@@ -72,7 +72,7 @@ const HomePage = () => {
     setLoading(true);
     setError(null);
     try {
-      const req = await http("/admin/products");
+      const req = await http("/admin/recommended-products");
       const {data} = await req.json();
       console.log('data', data);
       
