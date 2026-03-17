@@ -69,6 +69,7 @@ const HomePage = () => {
    const getProducts = async() => {
     const req = await http("/admin/products/recommended-products")
     const data = await req.json()
+    console.log('data', data)
     setProducts(data)
     
   }
