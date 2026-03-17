@@ -73,7 +73,7 @@ const HomePage = () => {
     setError(null);
     try {
       const req = await http("/admin/products");
-      const data = await req.json();
+      const {data} = await req.json();
       console.log('data', data);
       
       const images = [espresso, latte, mocha, americano];
