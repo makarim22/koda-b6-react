@@ -21,10 +21,12 @@ import ListOrders from "./pages/ListOrders";
 import ListUsers from "./pages/ListUsers";
 import NotFoundPage from "./pages/NotFoundPage";
 import ScrollToTop from "./utils/scrollRestoration";
+import {CartProvider} from "./context/CartContext"
 
 
 function App() {
   return (
+    <CartProvider>
     <Router>
       <ScrollToTop />
       <Routes>
@@ -54,6 +56,7 @@ function App() {
 
       </Routes>
     </Router>
+    </CartProvider>
   );
 }
 
