@@ -7,15 +7,17 @@ import coffeeCupLogo from '../assets/icons/logo-coffee.svg';
 import coffeeShopLogo from '../assets/icons/cup.svg';
 import mailIcon from '../assets/icons/mail.svg';
 import {useNavigate} from 'react-router-dom';
+import http from '../lib/http'
 
 
 const STORAGE_KEY = 'user-data';
-const API_BASE_URL = 'http://localhost:8888';
+// const API_BASE_URL = 'http://localhost:8888';
 
 function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -24,46 +26,44 @@ function ForgotPasswordPage() {
 
     const trimmedEmail = email.trim();
 
-    // Basic validation
+    // Frontend validation
     if (!trimmedEmail) {
-      setError('Email tidak boleh kosong');
+      setError('Email is required.');
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/auth/forgot-password`, {
+      const response = await http('/admin/auth/forgot-password', JSON.stringify({
+        email: trimmedEmail,
+      }), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: trimmedEmail }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || 'Gagal mengirim OTP. Silakan coba lagi.');
-        setLoading(false);
+        setError(data.error || data.message || 'Failed to send OTP. Please try again.');
         return;
       }
 
-      // Store OTP data for reset password page
+      // Store email and OTP in localStorage for reset page
       localStorage.setItem('forgotPasswordData', JSON.stringify({
-        email: data.data.email,
-        otp: data.data.code_otp,
+        email: trimmedEmail,
+        code_otp: data.data?.code_otp,
       }));
 
+      // Clear form
       setEmail('');
-      setLoading(false);
 
-      // Redirect to reset password page
+      alert('OTP sent successfully! Check your email.');
       navigate('/reset-password');
     } catch (err) {
-      setError('Terjadi kesalahan. Silakan coba lagi.');
-      setLoading(false);
+      setError('Network error. Please check your connection and try again.');
       console.error('Forgot password error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
