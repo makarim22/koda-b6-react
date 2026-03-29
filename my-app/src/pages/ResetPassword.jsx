@@ -6,10 +6,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import coffeeCupLogo from '../assets/icons/logo-coffee.svg';
 import coffeeShopLogo from '../assets/icons/cup.svg';
-// import lockIcon from '../assets/icons/lock.svg';
 import { Lock } from 'lucide-react';
-
-const API_BASE_URL = 'http://localhost:8888';
+ import http from '../lib/http'
 
 function ResetPasswordPage() {
   const navigate = useNavigate();
@@ -20,7 +18,6 @@ function ResetPasswordPage() {
   const [error, setError] = useState('');
   const [email, setEmail] = useState('');
 
-  // Retrieve data from localStorage on component mount
   useEffect(() => {
     const storedData = localStorage.getItem('forgotPasswordData');
     
@@ -33,9 +30,9 @@ function ResetPasswordPage() {
     try {
       const parsedData = JSON.parse(storedData);
       setEmail(parsedData.email);
-      // Pre-fill OTP if available
-      if (parsedData.otp) {
-        setOtp(parsedData.otp.toString());
+   
+      if (parsedData.code_otp) {
+        setOtp(parsedData.code_otp.toString());
       }
     } catch (err) {
       setError('Invalid session data. Please try again.');
@@ -47,7 +44,6 @@ function ResetPasswordPage() {
     e.preventDefault();
     setError('');
 
-    // Frontend validation
     if (!otp.trim()) {
       setError('OTP is required');
       return;
@@ -71,18 +67,13 @@ function ResetPasswordPage() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/auth/reset-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email.trim(),
-          code_otp: otp.trim(),
-          new_password: newPassword,
-        }),
+      const body = JSON.stringify({
+        email: email.trim(),
+        code_otp: otp.trim(),
+        new_password: newPassword,
       });
 
+      const response = await http('/admin/auth/reset-password', body, { method: 'POST' });
       const data = await response.json();
 
       if (!response.ok) {
@@ -91,15 +82,16 @@ function ResetPasswordPage() {
         return;
       }
 
-      // Clear localStorage and redirect to login
       localStorage.removeItem('forgotPasswordData');
       alert('Password reset successful! Please login with your new password.');
       navigate('/login');
     } catch (err) {
       setError('An error occurred. Please check your connection and try again.');
+      console.error('Reset password error:', err);
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row font-sans">

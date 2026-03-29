@@ -15,8 +15,8 @@ import passwordIcon from '../assets/icons/Password.svg';
 import facebookIcon from '../assets/icons/facebook.svg';
 import googleIcon from '../assets/icons/google.svg';
 import { useNavigate } from 'react-router-dom';
- import {useSelector} from 'react-redux'
- import http from '../lib/http'
+import {useSelector} from 'react-redux'
+import http from '../lib/http'
 
 
 // const STORAGE_KEY = 'user-data';
