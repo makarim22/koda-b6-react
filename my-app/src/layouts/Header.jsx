@@ -22,11 +22,11 @@ const Header = (props) => {
  const authState = useSelector((state) => state.auth.user);
  console.log('auth state', authState)
 
- const loggedInUser = authState?.fullname 
+ const loggedInUser = authState?.email
  console.log ("logged in user", loggedInUser)
 
   const handleLogout = () => {
-    const user = authState.fullname
+    const user = authState.email
 
     dispatch(logout(user))
     navigate('/login')
