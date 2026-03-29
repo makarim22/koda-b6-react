@@ -21,79 +21,80 @@ import {loginSuccess} from '../features/user/authSlice'
 const STORAGE_KEY = 'user-data';
 
 
-
-const getStoredCredentials = () => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored ? JSON.parse(stored) : [];
-};
-
-const saveCredentials = (credentialsArray) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(credentialsArray));
-};
-
+const API_BASE_URL = import.meta.env.REACT_APP_API_URL || 'http://localhost:8888';
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const authState = useSelector((state) => state.auth);
-  console.log("Current Auth State:", authState);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   // Effect to redirect if already authenticated via Redux
   useEffect(() => {
     if (isAuthenticated) {
-      alert("You are already logged in! Redirecting to home.");
+      alert('You are already logged in! Redirecting to home.');
       navigate('/');
     }
   }, [isAuthenticated, navigate]);
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
     const trimmedEmail = email.trim();
 
+    // Frontend validation
+    if (!trimmedEmail || !password) {
+      setError('Email and password are required.');
+      return;
+    }
+
     if (password.length < 8) {
-      alert("Password must be at least 8 characters long.");
+      setError('Password must be at least 8 characters long.');
       return;
     }
 
-    let allCredentials = getStoredCredentials();
-    console.log('Stored Credentials:', allCredentials);
+    setLoading(true);
 
-    const wrongPassword = allCredentials.some(
-      user => user.email === trimmedEmail && user.password !== password
-    );
-    if (wrongPassword) {
-      alert('Email atau password yang dimasukkan salah');
-      return;
-    }
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: trimmedEmail,
+          password: password,
+        }),
+      });
 
-    if (!allCredentials.some(user => user.email === trimmedEmail)) {
-      alert('Email tersebut belum terdaftar di sistem kami');
-      return;
-    }
+      const data = await response.json();
 
-    const userIndex = allCredentials.findIndex(user => user.email === trimmedEmail);
+      if (!response.ok) {
+        // Backend returns error message in response
+        setError(data.error || data.message || 'Login failed. Please try again.');
+        return;
+      }
 
-    if (userIndex !== -1) {
-      allCredentials[userIndex] = { ...allCredentials[userIndex], isLoggedIn: true };
-      const loggedInUser = { ...allCredentials[userIndex], isLoggedIn: true };
-      
-      allCredentials[userIndex] = loggedInUser;
-      saveCredentials(allCredentials);
-       
-      dispatch(loginSuccess(loggedInUser));
+      // Success - dispatch Redux action with user data
+      const user = data.data || data;
+      dispatch(loginSuccess(user));
 
+      // Clear form
       setEmail('');
       setPassword('');
 
-      alert("Berhasil masuk! mengarahkan ke halaman utama");
+      alert('Login successful! Redirecting to home.');
       navigate('/');
-    } else {
-      alert("An unexpected error occurred. Please try again.");
+    } catch (err) {
+      setError('Network error. Please check your connection and try again.');
+      console.error('Login error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
