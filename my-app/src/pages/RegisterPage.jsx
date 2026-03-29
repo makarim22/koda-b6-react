@@ -16,88 +16,91 @@ import facebookIcon from '../assets/icons/facebook.svg';
 import googleIcon from '../assets/icons/google.svg';
 import { useNavigate } from 'react-router-dom';
 
-const STORAGE_KEY = 'user-data';
+// const STORAGE_KEY = 'user-data';
 
-const getStoredCredentials = () => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored ? JSON.parse(stored) : [];
-};
+const API_BASE_URL = import.meta.env.REACT_APP_API_URL || 'http://localhost:8888';
 
-const saveCredentials = (credentialsArray) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(credentialsArray));
-};
+// const getStoredCredentials = () => {
+//   const stored = localStorage.getItem(STORAGE_KEY);
+//   return stored ? JSON.parse(stored) : [];
+// };
+
+// const saveCredentials = (credentialsArray) => {
+//   localStorage.setItem(STORAGE_KEY, JSON.stringify(credentialsArray));
+// };
 
 function RegisterPage() {
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
 
     const trimmedEmail = email.trim();
+    
+    // Frontend validation
     if (!fullname || !trimmedEmail || !password || !confirmPassword) {
-      alert("All fields are required.");
+      setError("All fields are required.");
       return;
     }
 
     if (password.length < 8) {
-      alert("Password must be at least 8 characters long.");
+      setError("Password must be at least 8 characters long.");
       return;
     }
 
     if (password !== confirmPassword) {
-      alert("Password and Confirm Password do not match.");
+      setError("Password and Confirm Password do not match.");
       return;
     }
 
-    let allCredentials = getStoredCredentials();
-    console.log('Current stored credentials before new registration:', allCredentials);
+    setLoading(true);
 
-    if (allCredentials.some(user => user.email === trimmedEmail)) {
-      alert('Email already registered. Please use a different email or proceed to login.');
-      return;
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: fullname,
+          email: trimmedEmail,
+          password: password
+          // phone: null,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Backend returns error message in response
+        setError(data.error || 'Registration failed. Please try again.');
+        return;
+      }
+
+      // Success
+      alert("Registration successful! You can now log in.");
+      navigate('/login');
+
+      // Clear form
+      setFullname('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+    } catch (err) {
+      setError('Network error. Please check your connection and try again.');
+      console.error('Registration error:', err);
+    } finally {
+      setLoading(false);
     }
-
-    // helper function
-
-    const ID_COUNTER_KEY = 'user-id-counter';
-
-const getNextUserId = () => {
-  let currentId = localStorage.getItem(ID_COUNTER_KEY);
-  currentId = currentId ? parseInt(currentId) : 0;
-  const nextId = currentId + 1;
-  localStorage.setItem(ID_COUNTER_KEY, nextId.toString());
-  return nextId;
-};
-
-    const newUser = {
-      id : getNextUserId(),
-      fullname: fullname,
-      email: trimmedEmail,
-      password: password, 
-      isLoggedIn: false, 
-    };
-
-
-    const updatedCredentials = [...allCredentials, newUser]; 
-
-    saveCredentials(updatedCredentials);
-    console.log('Updated stored credentials after new registration:', updatedCredentials);
-
-
-    alert("Registration successful! You can now log in.");
-    navigate('/login');
-
-    setFullname('');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
   };
-
   return (
     <div className="min-h-screen flex flex-col md:flex-row font-sans bg-white">
 
