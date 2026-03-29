@@ -162,7 +162,7 @@ function ProductCheckout() {
               />
       </div>
       <div className='flex flex-col pt-30 '>
-        <Invoice paymentDetails={payment} items={items}/>
+        <Invoice paymentDetails={payment} cartItems={items}/>
       </div>
 
       </div>
