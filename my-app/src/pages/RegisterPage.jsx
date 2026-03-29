@@ -19,19 +19,6 @@ import {useSelector} from 'react-redux'
 import http from '../lib/http'
 
 
-// const STORAGE_KEY = 'user-data';
-
-// const API_BASE_URL = import.meta.env.REACT_APP_API_URL || 'http://localhost:8888';
-
-// const getStoredCredentials = () => {
-//   const stored = localStorage.getItem(STORAGE_KEY);
-//   return stored ? JSON.parse(stored) : [];
-// };
-
-// const saveCredentials = (credentialsArray) => {
-//   localStorage.setItem(STORAGE_KEY, JSON.stringify(credentialsArray));
-// };
-
 function RegisterPage() {
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
@@ -133,6 +120,13 @@ function RegisterPage() {
     <span className="block text-left text-gray-600 mb-8 text-sm">
       Fill out the form correctly
     </span>
+
+     {error && (
+            <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
        <div className="mb-2">
       <Input
         label="Fullname"
