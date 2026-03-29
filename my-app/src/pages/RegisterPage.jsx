@@ -5,7 +5,7 @@ import { Button } from '/src/component/Button';
 import AuthLayout from '/src/layouts/AuthLayout';
 import RegisterImg from '../assets/coffee-cup.svg';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import coffeeCupLogo from '../assets/icons/logo-coffee.svg';
 import coffeeShopLogo from '../assets/icons/cup.svg';
@@ -15,10 +15,13 @@ import passwordIcon from '../assets/icons/Password.svg';
 import facebookIcon from '../assets/icons/facebook.svg';
 import googleIcon from '../assets/icons/google.svg';
 import { useNavigate } from 'react-router-dom';
+ import {useSelector} from 'react-redux'
+ import http from '../lib/http'
+
 
 // const STORAGE_KEY = 'user-data';
 
-const API_BASE_URL = import.meta.env.REACT_APP_API_URL || 'http://localhost:8888';
+// const API_BASE_URL = import.meta.env.REACT_APP_API_URL || 'http://localhost:8888';
 
 // const getStoredCredentials = () => {
 //   const stored = localStorage.getItem(STORAGE_KEY);
@@ -38,62 +41,65 @@ function RegisterPage() {
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      alert('You are already logged in! Redirecting to home.');
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
+    const trimmedFullname = fullname.trim();
     const trimmedEmail = email.trim();
-    
+
     // Frontend validation
-    if (!fullname || !trimmedEmail || !password || !confirmPassword) {
-      setError("All fields are required.");
+    if (!trimmedFullname || !trimmedEmail || !password || !confirmPassword) {
+      setError('All fields are required.');
       return;
     }
 
     if (password.length < 8) {
-      setError("Password must be at least 8 characters long.");
+      setError('Password must be at least 8 characters long.');
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Password and Confirm Password do not match.");
+      setError('Passwords do not match.');
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/auth/register`, {
+      const response = await http('/admin/auth/register', JSON.stringify({
+        name: trimmedFullname,
+        email: trimmedEmail,
+        password: password,
+      }), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: fullname,
-          email: trimmedEmail,
-          password: password
-          // phone: null,
-        }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        // Backend returns error message in response
-        setError(data.error || 'Registration failed. Please try again.');
+        setError(data.error || data.message || 'Registration failed. Please try again.');
         return;
       }
-
-      // Success
-      alert("Registration successful! You can now log in.");
-      navigate('/login');
 
       // Clear form
       setFullname('');
       setEmail('');
       setPassword('');
       setConfirmPassword('');
+
+      alert('Registration successful! Redirecting to login.');
+      navigate('/login');
     } catch (err) {
       setError('Network error. Please check your connection and try again.');
       console.error('Registration error:', err);
@@ -101,6 +107,7 @@ function RegisterPage() {
       setLoading(false);
     }
   };
+
   return (
     <div className="min-h-screen flex flex-col md:flex-row font-sans bg-white">
 
