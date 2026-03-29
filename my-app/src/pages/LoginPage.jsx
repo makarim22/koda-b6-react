@@ -4,6 +4,7 @@ import { Input } from '../component/Input';
 import { Button } from '/src/component/Button';
 import AuthLayout from '/src/layouts/AuthLayout';
 import loginImg from '../assets/icons/barista-girl.svg';
+import http from '../lib/http'
 
 import { useState, useEffect } from 'react';
 import { Link, useNavigate} from 'react-router-dom';
@@ -20,8 +21,8 @@ import {loginSuccess} from '../features/user/authSlice'
 
 const STORAGE_KEY = 'user-data';
 
+// const API_BASE_URL = import.meta.env.VITE_ || 'http://localhost:8888';
 
-const API_BASE_URL = import.meta.env.REACT_APP_API_URL || 'http://localhost:8888';
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,7 +48,6 @@ function LoginPage() {
 
     const trimmedEmail = email.trim();
 
-    // Frontend validation
     if (!trimmedEmail || !password) {
       setError('Email and password are required.');
       return;
@@ -61,30 +61,24 @@ function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/auth/login`, {
+      const response = await http('/admin/auth/login', JSON.stringify({
+        email: trimmedEmail,
+        password: password,
+      }), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: trimmedEmail,
-          password: password,
-        }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        // Backend returns error message in response
         setError(data.error || data.message || 'Login failed. Please try again.');
+        setLoading(false);
         return;
       }
 
-      // Success - dispatch Redux action with user data
       const user = data.data || data;
       dispatch(loginSuccess(user));
 
-      // Clear form
       setEmail('');
       setPassword('');
 
@@ -97,7 +91,6 @@ function LoginPage() {
       setLoading(false);
     }
   };
-
   return (
     <div className="min-h-screen flex flex-col md:flex-row font-sans bg-white">
       <div className="hidden md:flex md:w-3/10 bg-linear-to-br from-orange-50 to-orange-100 items-center justify-center overflow-hidden">
