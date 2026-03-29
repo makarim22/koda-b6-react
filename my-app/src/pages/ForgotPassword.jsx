@@ -2,52 +2,68 @@ import { Input } from '../component/Input';
 import { Button } from '/src/component/Button';
 import ForgotPasswordImg from '../assets/icons/forgot-password.svg';
 
-import { useState } from 'react';
+import { useState} from 'react';
 import coffeeCupLogo from '../assets/icons/logo-coffee.svg';
 import coffeeShopLogo from '../assets/icons/cup.svg';
 import mailIcon from '../assets/icons/mail.svg';
+import {useNavigate} from 'react-router-dom';
+
 
 const STORAGE_KEY = 'user-data';
-
-const getStoredCredentials = () => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored ? JSON.parse(stored) : [];
-};
-
-const saveCredentials = (credentialsArray) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(credentialsArray));
-};
+const API_BASE_URL = 'http://localhost:8888';
 
 function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
     const trimmedEmail = email.trim();
 
-    let allCredentials = getStoredCredentials();
-    console.log('Stored Credentials:', allCredentials);
-
-
-    if (!allCredentials.some(user => user.email === trimmedEmail)) {
-      alert('Email tersebut belum terdaftar di sistem kami');
+    // Basic validation
+    if (!trimmedEmail) {
+      setError('Email tidak boleh kosong');
       return;
     }
 
-    const userIndex = allCredentials.findIndex(user => user.email === trimmedEmail);
+    setLoading(true);
 
-    if (userIndex !== -1) {
-      allCredentials[userIndex] = { ...allCredentials[userIndex], isLoggedIn: true };
-      saveCredentials(allCredentials);
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/auth/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: trimmedEmail }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || 'Gagal mengirim OTP. Silakan coba lagi.');
+        setLoading(false);
+        return;
+      }
+
+      // Store OTP data for reset password page
+      localStorage.setItem('forgotPasswordData', JSON.stringify({
+        email: data.data.email,
+        otp: data.data.code_otp,
+      }));
 
       setEmail('');
+      setLoading(false);
 
-      alert("Berhasil masuk! mengarahkan ke halaman utama");
-      window.location.href = "home.html";
-    } else {
-      alert("An unexpected error occurred. Please try again.");
+      // Redirect to reset password page
+      navigate('/reset-password');
+    } catch (err) {
+      setError('Terjadi kesalahan. Silakan coba lagi.');
+      setLoading(false);
+      console.error('Forgot password error:', err);
     }
   };
 
