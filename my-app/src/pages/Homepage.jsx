@@ -8,85 +8,38 @@ import Footer from "../layouts/Footer";
 import { Link } from "react-router-dom";
 import { ProductGrid } from "../component/ProductGrid";
 import TestimonyCard from "../component/TestimonyCard";
-import espresso from "../assets/icons/productPage/espresso.jfif"
-import latte from "../assets/icons/productPage/latte.jpg"
-import mocha from "../assets/icons/productPage/mocha.jfif"
-import americano from "../assets/icons/productPage/americano.jfif"
+// import espresso from "../assets/icons/productPage/espresso.jfif"
+// import latte from "../assets/icons/productPage/latte.jpg"
+// import mocha from "../assets/icons/productPage/mocha.jfif"
+// import americano from "../assets/icons/productPage/americano.jfif"
 import { useState, useEffect } from 'react' 
-import http from '../lib/http'
+import http, { BASE_URL } from '../lib/http'
 
 
 const HomePage = () => {
-  // const products = [
-  //   {
-  //     id: 1,
-  //     image: espresso,
-  //     title: "Espresso",
-  //     price: "IDR 15.000",
-  //     originalPrice: "IDR 18.000",
-  //     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
-  //     rating: 5,
-  //     reviews: 0,
-  //     isFlashSale: true,
-  //   },
-  //   {
-  //     id: 2,
-  //     image: latte,
-  //     title: "Latte",
-  //     price: "IDR 19.000",
-  //     originalPrice: "IDR 22.000",
-  //     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
-  //     rating: 5,
-  //     reviews: 0,
-  //     isFlashSale: true,
-  //   },
-  //   {
-  //     id: 3,
-  //     image: mocha,
-  //     title: "Mocha",
-  //     price: "IDR 21.000",
-  //     originalPrice: "IDR 24.000",
-  //     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
-  //     rating: 4,
-  //     reviews: 0,
-  //     isFlashSale: true,
-  //   },
-  //   {
-  //     id: 4,
-  //     image: americano,
-  //     title: "Americano",
-  //     price: "IDR 12.000",
-  //     originalPrice: "IDR 15.000",
-  //     description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
-  //     rating: 4,
-  //     reviews: 0,
-  //     isFlashSale: false,
-  //   },
-  // ];
-
   const [products, setProducts] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
- const getProducts = async() => {
+ const getProducts = async () => {
     setLoading(true);
     setError(null);
     try {
-      const req = await http("/admin/products/recommended-products");
-      const {data} = await req.json();
-      console.log('data', data);
+      const res = await http("/admin/products/recommended-products");
+      const { data } = await res.json();
+
+      console.log("datanya", data);
       
-      const images = [espresso, latte, mocha, americano];
-      const mappedProducts = data.map((product, index) => ({
-        id: product.id,
-        image: images[index % images.length],
-        title: product.product_name,
-        price: `IDR ${product.base_price.toLocaleString('id-ID')}`,
-        originalPrice: `IDR ${Math.ceil(product.base_price * 1.15).toLocaleString('id-ID')}`,
-        description: product.description,
-        rating: Math.floor(Math.random() * 2) + 4,
-        reviews: 0,
-        isFlashSale: Math.random() > 0.3,
+      const mappedProducts = data.map((product) => ({
+        id: product.ID,
+        image: product.Images && product.Images.length > 0 ? product.Images[0].path : null,
+        title: product.ProductName,
+        price: `IDR ${product.BasePrice.toLocaleString('id-ID')}`,
+        originalPrice: `IDR ${Math.ceil(product.BasePrice * 1.15).toLocaleString('id-ID')}`,
+        description: product.Description,
+        rating: Math.floor(Math.random() * 2) + 4, // adjusted later
+        reviews: 0, // adjusted later
+        isFlashSale: Math.random() > 0.3, // adjusted later
       }));
       
       setProducts(mappedProducts);
@@ -96,11 +49,14 @@ const HomePage = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     getProducts();
   }, []);
+
+  console.log("products", products);
+
   const testimonials = [
     {
       id: 1,
