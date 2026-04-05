@@ -5,94 +5,58 @@ import Header from '../layouts/Header';
 import Footer from '../layouts/Footer';
 import Woman from '../assets/icons/productPage/coupon1.png';
 import Man from '../assets/icons/productPage/coupon2.png';
-import { useState } from 'react'
-import espresso from "../assets/icons/productPage/espresso.jfif"
-import latte from "../assets/icons/productPage/latte.jpg"
-import mocha from "../assets/icons/productPage/mocha.jfif"
-import americano from "../assets/icons/productPage/americano.jfif"
-import flatWhite from '../assets/icons/productPage/flat-white.jfif'
-import affogato from '../assets/icons/productPage/affogato.jfif'
+import { useState, useEffect } from 'react'
 import glasses from '../assets/icons/glasses.png'
+import http from '../lib/http'
 
 
  const ProductPage = () => {
-
-   const productsData = [
-  {
-    id: 1,
-    image: espresso,
-    title: 'Espresso', 
-    price: 'IDR 15.000', 
-    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
-    originalPrice: 'IDR 18.000', 
-    rating: 5,
-    reviews: 0, 
-    isFlashSale: true,
-  },
-  {
-    id: 2,
-    image: latte,
-    title: 'Latte',
-    price: 'IDR 19.000',
-    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
-    originalPrice: 'IDR 22.000',
-    rating: 5,
-    reviews: 0,
-    isFlashSale: true,
-  },
-  {
-    id: 3,
-    image:  mocha,
-    title: 'Mocha',
-    price: 'IDR 21.000',
-    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
-    originalPrice: 'IDR 24.000',
-    rating: 4,
-    reviews: 0,
-    isFlashSale: true,
-  },
-  {
-    id: 4,
-    image: americano,
-    title: 'Americano',
-    price: 'IDR 12.000', 
-    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
-    originalPrice: 'IDR 15.000', 
-    rating: 4,
-    reviews: 0,
-    isFlashSale: false,
-  },
-  {
-    id: 5,
-    image: flatWhite,
-    title: 'Flat White',
-    price: 'IDR 20.000',
-    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
-    originalPrice: 'IDR 23.000',
-    rating: 4,
-    reviews: 0,
-    isFlashSale: true,
-  },
-  {
-    id: 6,
-    image: affogato,
-    title: 'Affogato',
-    price: 'IDR 25.000',
-    description: 'You can explore the menu that we provide with fun and have their own taste and make your day better.',
-    originalPrice: 'IDR 30.000',
-    rating: 5,
-    reviews: 0,
-    isFlashSale: false,
-  },
-];
-
-    const [appliedFilters, setAppliedFilters] = useState({
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [appliedFilters, setAppliedFilters] = useState({
     categories: [],
     sort: null,
     priceRange: [0, 100000],
     searchQuery: '',
   });
 
+  // Fetch all products from API
+  const fetchProducts = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await http('/admin/products');
+      const { data } = await res.json();
+
+      console.log("data", data);
+
+      const mappedProducts = data
+        .filter(product => product.images && product.images.length > 0)
+        .map((product) => ({
+          id: product.id,
+          image: product.images[0].path,
+          title: product.product_name, 
+          price: `IDR ${product.base_price.toLocaleString('id-ID')}`,
+          originalPrice: `IDR ${Math.ceil(product.base_price * 1.15).toLocaleString('id-ID')}`,
+          description: product.description,
+          rating: Math.floor(Math.random() * 2) + 4, // adjusted later
+          reviews: 0, //adjusted later
+          isFlashSale: Math.random() > 0.3, //adjusted later
+        }));
+
+      setAllProducts(mappedProducts);
+    } catch (err) {
+      setError('Failed to fetch products');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   function handleApplyFilters(filters) {
     setAppliedFilters(filters);
@@ -107,9 +71,10 @@ import glasses from '../assets/icons/glasses.png'
     });
   }
 
-    function getFilteredProducts() {
-    let currentProducts = [...productsData];
+  function getFilteredProducts() {
+    let currentProducts = [...allProducts];
 
+    // Search filter
     if (appliedFilters.searchQuery) {
       const lowerCaseSearch = appliedFilters.searchQuery.toLowerCase();
       currentProducts = currentProducts.filter(product =>
@@ -118,38 +83,41 @@ import glasses from '../assets/icons/glasses.png'
       );
     }
 
+    // Category filter
     if (appliedFilters.categories && appliedFilters.categories.length > 0) {
       currentProducts = currentProducts.filter(product =>
         appliedFilters.categories.includes(product.categoryId)
       );
     }
 
+    // Price range filter
     currentProducts = currentProducts.filter(product => {
       const price = parseInt(product.price.replace(/[^\d]/g, ''));
       return price >= appliedFilters.priceRange[0] && price <= appliedFilters.priceRange[1];
     });
 
+    // Sorting
     if (appliedFilters.sort) {
       switch (appliedFilters.sort) {
-        case 1: 
+        case 1:
           currentProducts.sort((a, b) => {
             if (a.isBuy1Get1 === b.isBuy1Get1) return 0;
             return a.isBuy1Get1 ? -1 : 1;
           });
           break;
-        case 2: 
+        case 2:
           currentProducts.sort((a, b) => {
             if (a.isFlashSale === b.isFlashSale) return 0;
             return a.isFlashSale ? -1 : 1;
           });
           break;
-        case 3: 
+        case 3:
           currentProducts.sort((a, b) => {
             if (a.isBirthdayPackage === b.isBirthdayPackage) return 0;
             return a.isBirthdayPackage ? -1 : 1;
           });
           break;
-        case 4: 
+        case 4:
           currentProducts.sort((a, b) => {
             const priceA = parseInt(a.price.replace(/[^\d]/g, ''));
             const priceB = parseInt(b.price.replace(/[^\d]/g, ''));
@@ -163,9 +131,8 @@ import glasses from '../assets/icons/glasses.png'
 
     return currentProducts;
   }
-  
-   const filteredProducts = getFilteredProducts();
-   console.log("filtered products", filteredProducts)
+
+  const filteredProducts = getFilteredProducts();
 
   const promoData = [
     {
