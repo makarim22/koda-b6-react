@@ -26,7 +26,7 @@ import http from '../lib/http'
     setLoading(true);
     setError(null);
     try {
-      const res = await http('/admin/products');
+      const res = await http('/api/products');
       const { data } = await res.json();
 
       console.log("data", data);

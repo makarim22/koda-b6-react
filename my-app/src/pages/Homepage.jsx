@@ -25,7 +25,7 @@ const HomePage = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await http("/admin/products/recommended-products");
+      const res = await http("/api/products/recommended-products");
       const { data } = await res.json();
 
       console.log("datanya", data);

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import http from "../lib/http";
+import SuccessModal from "../component/SuccessModal.jsx"
 
 export default function ProductOptions({
   props,
@@ -50,6 +51,8 @@ export default function ProductOptions({
   const [fetchedVariants, setFetchedVariants] = useState([]);
   const [loadingSizes, setLoadingSizes] = useState(true);
   const [loadingVariants, setLoadingVariants] = useState(true);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const Navigate = useNavigate();
 
@@ -58,7 +61,7 @@ export default function ProductOptions({
     const fetchSizes = async () => {
       try {
         setLoadingSizes(true);
-        const response = await http(`admin/products/${id}/sizes`);
+        const response = await http(`api/products/${id}/sizes`);
         console.log("response", response);
         if (!response.ok) throw new Error("Failed to fetch sizes");
         const data = await response.json();
@@ -82,7 +85,7 @@ export default function ProductOptions({
     const fetchVariants = async () => {
       try {
         setLoadingVariants(true);
-        const response = await http(`admin/products/${id}/variants`);
+        const response = await http(`api/products/${id}/variants`);
         console.log("response", response);
         if (!response.ok) throw new Error("Failed to fetch variants");
         const data = await response.json();
@@ -187,12 +190,32 @@ export default function ProductOptions({
 
     localStorage.setItem("cart", JSON.stringify(currentCart));
     console.log("Order data tersimpan:", orderData);
-    alert(
-      `Order dibuat! ${qty}x ${title} - Total: ${formatPrice(totalCheckoutPrice)}`,
+
+    // alert(
+    //   `Order dibuat! ${qty}x ${title} - Total: ${formatPrice(totalCheckoutPrice)}`,
+    // );
+    // Navigate(`/product-checkout/${id}`);
+
+        // Show success modal instead of alert
+    setModalMessage(
+      `${qty}x ${title} - Total: ${formatPrice(totalCheckoutPrice)}`
     );
+    setShowSuccessModal(true);
+  };
+
+   const handleCloseModal = () => {
+    setShowSuccessModal(false);
+  };
+
+  const handleNavigateToCheckout = () => {
+    setShowSuccessModal(false);
     Navigate(`/product-checkout/${id}`);
   };
 
+  const handleNavigateToMenu = () => {
+    setShowSuccessModal(false);
+    Navigate(`/product`)
+  }
   return (
     <div className="w-full max-w-2xl mx-auto p-8 bg-white">
       {isFlashSale && (
@@ -338,25 +361,6 @@ export default function ProductOptions({
         </div>
       )}
 
-      {/* <div className="mb-8">
-        <h3 className="font-bold text-gray-900 mb-3">Hot/Ice?</h3>
-        <div className="grid grid-cols-2 gap-3">
-          {["Ice", "Hot"].map((tempOption) => (
-            <button
-              key={tempOption}
-              onClick={() => setSelectedTemp(tempOption)}
-              className={`py-3 px-4 rounded border-2 font-semibold transition ${
-                selectedTemp === tempOption
-                  ? "border-orange-500 text-orange-500 bg-orange-50"
-                  : "border-gray-300 text-gray-700 hover:border-gray-400"
-              }`}
-            >
-              {tempOption}
-            </button>
-          ))}
-        </div>
-      </div> */}
-
       <div className="text-2xl font-bold text-orange-600 mb-4 pb-3 border-b-2 border-orange-200">
         Total: {formatPrice(totalCheckoutPrice)}
       </div>
@@ -371,6 +375,14 @@ export default function ProductOptions({
         <button className="flex-1 border-2 border-orange-500 text-orange-500 font-bold py-3 px-6 rounded hover:bg-orange-50 transition flex items-center justify-center gap-2">
           <span></span> add to cart
         </button>
+
+        <SuccessModal
+        isOpen={showSuccessModal}
+        onClose={handleCloseModal}
+        message={modalMessage}
+        onNavigate={handleNavigateToCheckout}
+        onChoose={handleNavigateToMenu}
+      />
       </div>
     </div>
   );

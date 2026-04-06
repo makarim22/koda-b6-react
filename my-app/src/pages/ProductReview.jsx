@@ -22,7 +22,7 @@ function ProductReview() {
 
   const fetchProducts = async () => {
     try {
-      const res = await http(`/admin/products/${productId}`);
+      const res = await http(`/api/products/${productId}`);
       const { data } = await res.json();
       console.log("data", data);
       setProducts(data);
@@ -33,7 +33,7 @@ function ProductReview() {
 
   const fetchProductVariants = async () => {
     try {
-      const res = await http(`/admin/products/${productId}/variants`);
+      const res = await http(`/api/products/${productId}/variants`);
       const { data } = await res.json();
       console.log("variant", data);
       setProductVariants(data);
@@ -44,7 +44,7 @@ function ProductReview() {
 
   const fetchProductSizes = async () => {
     try {
-      const res = await http(`/admin/products/${productId}/sizes`);
+      const res = await http(`/api/products/${productId}/sizes`);
       const { data } = await res.json();
       console.log("sizes", data);
       setProductSizes(data);
