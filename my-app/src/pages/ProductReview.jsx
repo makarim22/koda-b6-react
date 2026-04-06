@@ -1,11 +1,11 @@
-import React, { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import ProductGallery from "../component/ProductGallery";
 import ProductOptions from "../component/ProductOptions";
 import { ProductGrid } from "../component/ProductGrid";
-import { findProductById, getRecommendedProducts } from "../utils/product";
+import { getRecommendedProducts } from "../utils/product";
 
 import americano from "./../assets/icons/productPage/americano.jfif";
 import espresso from "./../assets/icons/productPage/espresso.jfif";
@@ -16,9 +16,10 @@ function ProductReview() {
   const { productId } = useParams();
   console.log("product id nyaa", productId);
   const [products, setProducts] = useState([]);
-  const [ productVariants, setProductVariants] = useState([]);
-  const [ productSizes, setProductSizes] = useState([]);
+  const [productVariants, setProductVariants] = useState([]);
+  const [productSizes, setProductSizes] = useState([]);
   console.log("idnyaa", productId);
+
   const fetchProducts = async () => {
     try {
       const res = await http(`/admin/products/${productId}`);
@@ -29,24 +30,17 @@ function ProductReview() {
       console.error(err);
     }
   };
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   const fetchProductVariants = async () => {
     try {
       const res = await http(`/admin/products/${productId}/variants`);
       const { data } = await res.json();
-      console.log(" variant", data);
+      console.log("variant", data);
       setProductVariants(data);
     } catch (err) {
       console.error(err);
     }
   };
-  
-  useEffect(() => {
-    fetchProductVariants();
-  }, []);
 
   const fetchProductSizes = async () => {
     try {
@@ -59,15 +53,20 @@ function ProductReview() {
     }
   };
 
-    useEffect(() => {
+  useEffect(() => {
+    if (!productId) return; 
+
+    fetchProducts();
+    fetchProductVariants();
     fetchProductSizes();
-  }, []);
+  }, [productId]); 
 
   const thumbnails = [americano, espresso, flatWhite];
 
   const selectedProduct = useMemo(() => {
-    return findProductById(productId);
-  }, [productId]);
+    return products; 
+  }, [products]);
+
 
   const productsData = useMemo(() => {
     return getRecommendedProducts(productId);
@@ -95,6 +94,7 @@ function ProductReview() {
 
   const images = [selectedProduct.image];
 
+  console.log("selectedProducts", selectedProduct);
   return (
     <div>
       <Header bgColor="bg-black" />
@@ -103,7 +103,11 @@ function ProductReview() {
           <ProductGallery images={images} thumbnails={thumbnails} />
         </div>
         <div>
-          <ProductOptions props={selectedProduct} user={user} />
+          <ProductOptions 
+           props={selectedProduct}
+           user={user}
+           productSizes={productSizes}
+           productVariants={productVariants} />
         </div>
       </section>
       <section className="px-4">
