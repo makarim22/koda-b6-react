@@ -62,7 +62,7 @@ function LoginPage() {
 
     try {
       const response = await http(
-        "/admin/auth/login",
+        "/api/auth/login",
         JSON.stringify({
           email: trimmedEmail,
           password: password,
