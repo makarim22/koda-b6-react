@@ -80,6 +80,8 @@ function ProductReview() {
 
   const user = getActiveUser();
 
+  console.log("user", user);
+
   if (!selectedProduct) {
     return (
       <div className="flex flex-col min-h-screen">

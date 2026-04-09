@@ -113,7 +113,7 @@ export default function ProductOptions({
 
   // Handle size selection with additional price
   const handleSizeSelect = (sizeOption) => {
-    setSelectedSize(sizeOption.name);
+    setSelectedSize(sizeOption.id);
     setSizeAdditionalPrice(sizeOption.additional_price || 0);
     console.log(
       "Size selected:",
@@ -123,24 +123,26 @@ export default function ProductOptions({
     );
   };
 
-  // Handle variant selection with additional price
+ 
   const handleVariantSelect = (variantOption) => {
-    if (selectedVariant === variantOption.name) {
-      // Toggle off if clicking same variant
-      setSelectedVariant(null);
-      setVariantAdditionalPrice(0);
-      console.log("Variant deselected");
-    } else {
-      setSelectedVariant(variantOption.name);
-      setVariantAdditionalPrice(variantOption.additional_price || 0);
-      console.log(
-        "Variant selected:",
-        variantOption.name,
-        "Additional price:",
-        variantOption.additional_price,
-      );
-    }
-  };
+  if (selectedVariant === variantOption.id) {
+    // Toggle off if clicking same variant
+    setSelectedVariant(null);
+    setVariantAdditionalPrice(0);
+    console.log("Variant deselected");
+  } else {
+    setSelectedVariant(variantOption.id); // Store ID for API
+    setVariantAdditionalPrice(variantOption.additional_price || 0);
+    console.log(
+      "Variant selected:",
+      variantOption.name,
+      "ID:",
+      variantOption.id,
+      "Additional price:",
+      variantOption.additional_price,
+    );
+  }
+};
 
   // Calculate total price including additional charges
   const basePrice = apiProduct.base_price || 0;
@@ -157,51 +159,98 @@ export default function ProductOptions({
     setQty(Math.max(1, qty + delta));
   };
 
-  const handleBuy = () => {
-    if (!user) {
-      alert("Silakan Login terlebih dahulu");
-      return;
+  // const handleBuy = () => {
+  //   if (!user) {
+  //     alert("Silakan Login terlebih dahulu");
+  //     return;
+  //   }
+  //   const orderData = {
+  //     customer: user.user.fullname,
+  //     customerId: user.user.id,
+  //     address: user.user.address,
+  //     phone: user.user.phone,
+  //     id,
+  //     title,
+  //     price,
+  //     originalPrice,
+  //     quantity: qty,
+  //     size: selectedSize,
+  //     variant: selectedVariant,
+  //     temperature: selectedTemp,
+  //     image: apiProduct.images || apiProduct.image || "",
+  //     totalPrice: totalCheckoutPrice,
+  //     sizeAdditionalPrice,
+  //     variantAdditionalPrice,
+  //     timestamp: new Date().toISOString(),
+  //   };
+
+  //   let currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+  //   console.log("current cart", currentCart);
+
+  //   currentCart.push(orderData);
+
+  //   localStorage.setItem("cart", JSON.stringify(currentCart));
+  //   console.log("Order data tersimpan:", orderData);
+
+  //   // alert(
+  //   //   `Order dibuat! ${qty}x ${title} - Total: ${formatPrice(totalCheckoutPrice)}`,
+  //   // );
+  //   // Navigate(`/product-checkout/${id}`);
+
+  //       // Show success modal instead of alert
+  //   setModalMessage(
+  //     `${qty}x ${title} - Total: ${formatPrice(totalCheckoutPrice)}`
+  //   );
+  //   setShowSuccessModal(true);
+  // };
+
+const handleBuy = async () => {
+  if (!user) {
+    alert("Silakan Login terlebih dahulu");
+    return;
+  }
+
+  console.log('user', user.token)
+
+    const { token } = user.user;
+
+    console.log("token", token);
+
+   const cartPayload = {
+    product_id: id,
+    size_id: selectedSize,
+    variant_id: selectedVariant,
+    quantity: qty,
+  };
+
+  console.log("cart payload", cartPayload);
+
+  try {
+     console.log("token", user);
+    const response = await http("/cart", cartPayload, {
+      method: "POST",
+      token 
+     
+    });
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`);
     }
-    const orderData = {
-      customer: user.user.fullname,
-      customerId: user.user.id,
-      address: user.user.address,
-      phone: user.user.phone,
-      id,
-      title,
-      price,
-      originalPrice,
-      quantity: qty,
-      size: selectedSize,
-      variant: selectedVariant,
-      temperature: selectedTemp,
-      image: apiProduct.images || apiProduct.image || "",
-      totalPrice: totalCheckoutPrice,
-      sizeAdditionalPrice,
-      variantAdditionalPrice,
-      timestamp: new Date().toISOString(),
-    };
 
-    let currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const result = await response.json();
+    console.log("Order data saved to cart:", result);
 
-    console.log("current cart", currentCart);
-
-    currentCart.push(orderData);
-
-    localStorage.setItem("cart", JSON.stringify(currentCart));
-    console.log("Order data tersimpan:", orderData);
-
-    // alert(
-    //   `Order dibuat! ${qty}x ${title} - Total: ${formatPrice(totalCheckoutPrice)}`,
-    // );
-    // Navigate(`/product-checkout/${id}`);
-
-        // Show success modal instead of alert
+    // Show success modal
     setModalMessage(
       `${qty}x ${title} - Total: ${formatPrice(totalCheckoutPrice)}`
     );
     setShowSuccessModal(true);
-  };
+  } catch (error) {
+    console.error("Failed to add to cart:", error);
+    alert(`Gagal menambahkan ke keranjang: ${error.message}`);
+  }
+};
 
    const handleCloseModal = () => {
     setShowSuccessModal(false);
@@ -302,7 +351,7 @@ export default function ProductOptions({
                     key={sizeOption.id}
                     onClick={() => handleSizeSelect(sizeOption)}
                     className={`py-3 px-4 rounded border-2 font-semibold transition ${
-                      selectedSize === sizeOption.name
+                      selectedSize === sizeOption.id
                         ? "border-orange-500 text-orange-500 bg-orange-50"
                         : "border-gray-300 text-gray-700 hover:border-gray-400"
                     }`}
@@ -317,10 +366,10 @@ export default function ProductOptions({
                 ))
               : ["Regular", "Medium", "Large"].map((sizeOption) => (
                   <button
-                    key={sizeOption}
+                    key={sizeOption.id}
                     onClick={() => setSelectedSize(sizeOption)}
                     className={`py-3 px-4 rounded border-2 font-semibold transition ${
-                      selectedSize === sizeOption
+                      selectedSize === sizeOption.id
                         ? "border-orange-500 text-orange-500 bg-orange-50"
                         : "border-gray-300 text-gray-700 hover:border-gray-400"
                     }`}
