@@ -4,46 +4,33 @@ import PaymentInfo from '../component/PaymentInfo';
 import Cart from '../component/Cart';
 import Invoice from '../component/Invoice';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import CartCtx from '/src/context/CartContext'
+import { useState, useEffect, useContext } from 'react';
+import CartCtx from '../context/CartContext'
+
 
 function ProductCheckout() {
-  const {productId} = useParams();
-  console.log("idnyaa", productId);
 
-  const [isRemoveShowed] = useState(true)
-  const [showAddMenu] = useState(true)
-  const [user, setUser]= useState('')
+  const [user, setUser] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   const [deliveryMethod, setDeliveryMethod] = useState('dine-in');
-
-    const [items, set] = useState([]);
-    console.log('items', items)
-
-    function getCartFromLocalStorage() {
-        try {
-            const cart = localStorage.getItem('cart');
-            return cart ? JSON.parse(cart) : [];
-        } catch (error) {
-            console.error('Error reading cart from localStorage:', error);
-            return [];
-        }
-    }
-
-     const getActiveUser = () => {
-      try{
-     const activeUser = JSON.parse(localStorage.getItem('currentUserSession'))
-     console.log('active user', activeUser)
-     return activeUser
-      } catch (error){
-        console.warn("tidak bisa mengabil data user", error)
-        return null
-      }
-     
-  }
   
+  const { items, fetchCartFromAPI } = useContext(CartCtx);
+  console.log('items from context', items)
 
-    useEffect(() => {
+  const getActiveUser = () => {
+    try {
+      const activeUser = JSON.parse(localStorage.getItem('currentUserSession'))
+      console.log('active user', activeUser)
+      return activeUser
+    } catch (error) {
+      console.warn("tidak bisa mengambil data user", error)
+      return null
+    }
+  }
+
+  useEffect(() => {
     const userData = getActiveUser();
     if (userData) {
       setUser(userData);
@@ -52,37 +39,16 @@ function ProductCheckout() {
     }
   }, []);
 
-   
-
-    useEffect(() => {
-        const cartLoad = getCartFromLocalStorage();
-        console.log("data Cart:", cartLoad);
-        
-        
-        set(cartLoad);
-        
-    }, []);
-
-    function saveCartToLocalStorage(updatedCart) {
-        try {
-            localStorage.setItem('cart', JSON.stringify(updatedCart));
-            console.log('Tidak dapat menyimpan ke localstorage:', updatedCart);
-        } catch (error) {
-            console.error('Error menyimpan keranjang ke localstorage:', error);
-        }
+  useEffect(() => {
+    if (user?.user?.token) {
+      setLoading(true);
+      fetchCartFromAPI(user.user.token).then(() => {
+        setLoading(false);
+      });
     }
+  }, [user?.user?.token, fetchCartFromAPI]);
 
-
-        function onRemoveItem(arrayIndex) {
-      
-        const updatedCart = items.filter((item, idx) => idx !== arrayIndex);
-        
-        set(updatedCart);
-        
-        saveCartToLocalStorage(updatedCart);
-    }
-
-    const calculatePayment = () => {
+  const calculatePayment = () => {
     if (!items || !Array.isArray(items) || items.length === 0) {
       return {
         order: 'IDR 0',
@@ -95,7 +61,7 @@ function ProductCheckout() {
 
     let totalItemPrice = 0
     items.forEach(cart => {
-      const price = parseInt(cart.price?.replace(/\D/g, '') || 0)
+      const price = parseInt(cart.price || 0)
       const quantity = cart.quantity || 1
       totalItemPrice += price * quantity
     });
@@ -111,7 +77,7 @@ function ProductCheckout() {
 
     console.log('delivery', delivery)
 
-    const tax = Math.round(totalItemPrice * 0.1); 
+    const tax = Math.round(totalItemPrice * 0.1);
 
     console.log('tax', tax)
 
@@ -120,7 +86,6 @@ function ProductCheckout() {
       console.log("panjangnyaa", items.length)
       subtotal = totalItemPrice + delivery + tax;
     }
-
 
     return {
       order: `IDR ${totalItemPrice.toLocaleString('id-ID')}`,
@@ -136,39 +101,48 @@ function ProductCheckout() {
 
   const payment = calculatePayment();
 
-  console.log('paymentnya', payment)
-
   const handleDeliveryMethodChange = (method) => {
     setDeliveryMethod(method);
   };
 
+  if (loading) {
+    return (
+      <div className='flex flex-col h-screen'>
+        <Header bgColor="bg-black" />
+        <div className='flex items-center justify-center flex-1'>
+          <p className='text-lg'>Loading cart...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
-    <div className='flex flex-col h-screen '>
-      <Header bgColor="bg-black" /> 
+    <div className='flex flex-col h-screen'>
+      <Header bgColor="bg-black" />
+      
+      {error && (
+        <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 m-4 rounded'>
+          {error}
+        </div>
+      )}
+
       <div className='grid grid-cols-2 gap-4 pt-25'>
         <div className='flex flex-col'>
           <h1 className='p-6 text-3xl'>Payment Details</h1>
-         <CartCtx value={{items, onRemoveItem, isRemoveShowed, showAddMenu}}>
-          <Cart/>
-        {/* //  items={items}
-        //  onRemoveItem={handleRemoveItem}
-        //  isRemoveShowed={isRemoveShowed} 
-        //  showAddMenu={showAddMenu}/> */}
-         </CartCtx> 
-         <PaymentInfo 
-                onDeliveryMethodChange={handleDeliveryMethodChange}
-                selectedDeliveryMethod={deliveryMethod}
-                user= {user}
-              />
-      </div>
-      <div className='flex flex-col pt-30 '>
-        <Invoice paymentDetails={payment} cartItems={items}/>
+          <Cart />
+          <PaymentInfo 
+            onDeliveryMethodChange={handleDeliveryMethodChange}
+            selectedDeliveryMethod={deliveryMethod}
+            user={user}
+          />
+        </div>
+        <div className='flex flex-col pt-30'>
+          <Invoice paymentDetails={payment} cartItems={items}/>
+        </div> 
       </div>
 
-      </div>
-    
       <Footer />
-      
     </div>
   )
 }

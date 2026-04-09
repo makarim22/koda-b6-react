@@ -1,69 +1,71 @@
-import React, { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
-import CartCtx from '/src/context/CartContext';
+import CartCtx from '../context/CartContext';
 
 function Cart() {
     const navigate = useNavigate();
     const [arrayItems, setArrayItems] = useState([]);
+    const [removingId, setRemovingId] = useState(null);
 
-    const {items, onRemoveItem, isRemoveShowed, showAddMenu} = useContext(CartCtx)
+    const { items, removeFromCart, isRemoveShowed, showAddMenu } = useContext(CartCtx)
 
     useEffect(() => {
         let processedItems = [];
 
-        if (items) {
-            if (Array.isArray(items)) {
-                processedItems = items;
-            } else if (typeof items === "object") {
-                const singleItem = {
-                    id: items.id || `item-${Date.now()}`,
-                    name: items.title || "Produk Pesanan", 
-                    quantity: items.quantity || 1, 
-                    originalPrice: items.originalPrice || "IDR 20.000", 
-                    temperature: items.temperature || "Normal", 
-                    size: items.size || "Reguler", 
-                    price: items.price || "IDR 20.000", 
-                    image: items.image 
-                }
-                processedItems = [singleItem];
-            }
+        if (items && Array.isArray(items)) {
+            processedItems = items.map(item => ({
+                id: item.id,
+                name: item.product_name || "Produk Pesanan", 
+                quantity: item.quantity || 1, 
+                originalPrice: item.price ? `IDR ${item.price.toLocaleString('id-ID')}` : "IDR 0", 
+                temperature: item.variant_name || "Normal", 
+                size: item.size_name || "Reguler", 
+                price: item.price ? `IDR ${item.price.toLocaleString('id-ID')}` : "IDR 0", 
+                image: item.image || "/api/placeholder/96/96",
+                subtotal: item.subtotal || item.price
+            }));
         }
 
         setArrayItems(processedItems);
-        console.log("arrayItems updated:", processedItems);
     }, [items]); 
 
-     function handleRemove(arrayIndex) {
-        console.log("yg mau di remove pada index:", arrayIndex);
-        
-        const updatedCart = arrayItems.filter((item, idx) => idx !== arrayIndex);
-        setArrayItems(updatedCart);
-        
-        if (onRemoveItem) {
-            onRemoveItem(arrayIndex);
+    const handleRemoveItem = async (itemId) => {
+        setRemovingId(itemId);
+        try {
+            await removeFromCart(itemId);
+            console.log('Item removed successfully');
+        } catch (error) {
+            console.error('Error removing item:', error);
+        } finally {
+            setRemovingId(null);
         }
-    
-    }
+    };
+
     return (
         <div className="bg-white rounded-lg p-6">
             <div className='flex flex-row justify-between items-center mb-6'> 
                 {showAddMenu ? (
-                <button
-                    onClick={() => navigate('/product')} 
-                    className="bg-orange-400 text-black px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors font-semibold"
-                >
-                    + Add Menu
-                </button>
+                    <button
+                        onClick={() => navigate('/product')} 
+                        className="bg-orange-400 text-black px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors font-semibold"
+                    >
+                        + Add Menu
+                    </button>
                 ) : (
-                 <div></div>
+                    <div></div>
                 )}
             </div>
             
             {arrayItems.length > 0 ? (
                 <div className="space-y-4 mb-6">
-                    {arrayItems.map((item, arrayIndex) => (
-                        <div key={item.id} className="border border-gray-200 rounded-lg p-4 flex gap-4">
-                            <div className="flex-shrink-0">
+                    {arrayItems.map((item) => (
+                        <div 
+                            key={item.id} 
+                            className={`border border-gray-200 rounded-lg p-4 flex gap-4 transition-opacity ${
+                                removingId === item.id ? 'opacity-50' : 'opacity-100'
+                            }`}
+                        >
+                            <div className="shrink-0">
                                 <img 
                                     src={item.image} 
                                     alt={item.name}
@@ -81,18 +83,17 @@ function Cart() {
                                         </h4>
                                     </div>
                                     {isRemoveShowed ? (
- <button 
-                                         onClick={() => handleRemove(arrayIndex)}
-                                        className="text-red-500 text-2xl font-bold hover:text-red-700 hover:scale-110 transition-all"
-                                        title="Remove item"
-                                    >
-                                        ✕
-                                    </button>
-                                    ): (
-                                        <div>
-                                            </div>
+                                        <button 
+                                            onClick={() => handleRemoveItem(item.id)}
+                                            disabled={removingId === item.id}
+                                            className="text-red-500 text-2xl font-bold hover:text-red-700 hover:scale-110 transition-all disabled:opacity-50"
+                                            title="Remove item"
+                                        >
+                                            {removingId === item.id ? '...' : '✕'}
+                                        </button>
+                                    ) : (
+                                        <div></div>
                                     )}
-                                   
                                 </div>
 
                                 <p className="text-sm text-gray-600 mb-3">
@@ -113,6 +114,7 @@ function Cart() {
                 </div>
             ) : (
                 <div className="text-center py-8 bg-gray-50 rounded-lg">
+                    <p className="text-gray-500">Your cart is empty</p>
                 </div>
             )}
         </div>
