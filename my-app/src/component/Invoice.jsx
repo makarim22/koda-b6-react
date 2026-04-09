@@ -6,65 +6,38 @@ import Gopay from "../assets/icons/productPage/gopay.svg";
 import OVO from "../assets/icons/productPage/Ovo.svg";
 import Paypal from "../assets/icons/productPage/Paypal.svg";
 import { useNavigate } from "react-router-dom";
+import http from "../lib/http";
 
 function Invoice(props) {
-  const { paymentDetails, cartItems } = props;
+  const { paymentDetails, cartItems, user } = props;
+  console.log("user", user);
   console.log("cart itemsnya", cartItems);
   console.log("cartttt", cartItems);
-  const { order, delivery, tax, subtotal, image, payment, shipping } = paymentDetails;
+  const { order, delivery, tax, subtotal} = paymentDetails;
   const navigate = useNavigate();
 
-  const generateOrderId = () => {
-    const timestampPart = Date.now().toString().slice(-7);
-    return timestampPart;
-  };
+ 
+  const handleCheckout = async () => {
+    const token = user.token || user.user.token;
+    console.log("token", token);
 
-  const handleCheckout = () => {
-    const newOrderId = generateOrderId();
-    if (cartItems.length > 0) {
-      const newOrder = {
-        id: newOrderId,
-        date: new Date().toLocaleDateString("en-ID"),
-        order: order,
-        delivery: delivery,
-        tax: tax,
-        subtotal: subtotal,
-        status: "On Progress",
-        image: image,
-        cartHistory: cartItems,
-        payment,
-        shipping
-      };
+    try {
+      const response = await http(
+        `/api/orders`,
+        {},
+        {
+          method: "POST",
+          token,
+        },
+      );
 
-      console.log('newOrderr', newOrder)
-
-      const existingOrdersString = localStorage.getItem("order");
-      let existingOrders = [];
-
-      if (existingOrdersString) {
-        try {
-          const parsed = JSON.parse(existingOrdersString);
-          if (Array.isArray(parsed)) {
-            existingOrders = parsed;
-          } else {
-            console.warn(
-              "Data 'order' di localStorage bukan array. Menginisialisasi ulang.",
-            );
-          }
-        } catch (error) {
-          console.error(
-            "Gagal parse riwayat pesanan dari localStorage:",
-            error,
-          );
-        }
-      }
-
-      const updatedOrders = [...existingOrders, newOrder];
-      localStorage.setItem("order", JSON.stringify(updatedOrders));
-      localStorage.removeItem("cart");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    } catch (err) {
+      console.warn("error", err);
+    }
       alert("Pesanan berhasil dibuat!");
       navigate("/order-history");
-    }
+    
   };
   return (
     <div className="bg-white rounded-lg p-6 w-full md:w-80">
