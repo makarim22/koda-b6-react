@@ -32,7 +32,7 @@ function ForgotPasswordPage() {
 
     try {
       const response = await http(
-        "/admin/auth/forgot-password",
+        "/api/auth/forgot-password",
         JSON.stringify({
           email: trimmedEmail,
         }),

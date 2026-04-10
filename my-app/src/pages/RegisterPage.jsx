@@ -64,7 +64,7 @@ function RegisterPage() {
     setLoading(true);
 
     try {
-      const response = await http('/admin/auth/register', JSON.stringify({
+      const response = await http('/api/auth/register', JSON.stringify({
         name: trimmedFullname,
         email: trimmedEmail,
         password: password,

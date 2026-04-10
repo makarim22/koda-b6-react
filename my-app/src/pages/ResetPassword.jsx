@@ -73,7 +73,7 @@ function ResetPasswordPage() {
         new_password: newPassword,
       });
 
-      const response = await http('/admin/auth/reset-password', body, { method: 'POST' });
+      const response = await http('/api/auth/reset-password', body, { method: 'POST' });
       const data = await response.json();
 
       if (!response.ok) {
