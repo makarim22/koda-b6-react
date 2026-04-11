@@ -5,39 +5,13 @@ import Footer from '../layouts/Footer';
 import { useEffect, useState } from 'react';
 import Calendar from '../assets/user/Calendar.svg'
 import { useNavigate } from 'react-router-dom';
+import http from '../lib/http'
 
 export default function HistoryOrder() {
-  const [userOrders, setUserOrders] = useState([]);
-  const [user, setUser] = useState('')
   const navigate = useNavigate();
-
-   useEffect(() => {
-    const fetchOrders = () => {
-      try {
-        const orderData = localStorage.getItem('order');
-        console.log("ordernya", orderData); 
-        if (orderData) {
-          const parsedOrder = JSON.parse(orderData);
-
-          if (Array.isArray(parsedOrder)) {
-            setUserOrders(parsedOrder);
-          } else {
-            console.warn("Data 'order' di localStorage bukan array:", parsedOrder);
-            setUserOrders([]); 
-          }
-        } else {
-          setUserOrders([]); 
-        }
-      } catch (error) {
-        console.error('Error parsing order data from localStorage:', error);
-        setUserOrders([]); 
-      }
-    };
-
-    fetchOrders(); 
-  }, []); 
-
+  const [orders, setOrders] = useState([]);
   
+
   const getActiveUser = () => {
     try {
       const activeUser = JSON.parse(localStorage.getItem('currentUserSession'));
@@ -49,25 +23,55 @@ export default function HistoryOrder() {
     }
   };
 
-  useEffect(() => {
-    const userData = getActiveUser();
-    if (userData) {
-      setUser(userData);
-    } else {
-      console.warn('tidak ada data user');
+
+  const user = getActiveUser();
+
+  const token = user?.user?.token || user?.token
+  console.log('token', token);
+
+  const fetchOrders = async () => {
+  try {
+    const response = await http(`/api/orders`, null, { method: 'GET', token });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
     }
-  }, []);
+    
+    const data = await response.json();
+    console.log('data', data);
+    setOrders(data.data || []);
+  } catch (error) {
+    console.error('Gagal mengambil data pesanan:', error);
+    setOrders([]);
+  }
+};
 
-  const filteredOrders = user 
-    ? userOrders.filter((order) => {
-        if (order.cartHistory && Array.isArray(order.cartHistory) && order.cartHistory.length > 0) {
-          return order.cartHistory[0].customerId === user.user.id;
-        }
-        return false;
-      })
-    : [];
+useEffect(() => {
+  if (token) {
+    fetchOrders();
+  }
+}, [token]);
+
+  console.log('orders', orders);
 
 
+   function convertISOToReadable(isoString) {
+    if (!isoString) return "—";
+    try {
+      return new Intl.DateTimeFormat("id-ID", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZone: "Asia/Jakarta",
+      }).format(new Date(isoString));
+    } catch {
+      return isoString;
+    }
+  }
 
 
   return (
@@ -81,7 +85,7 @@ export default function HistoryOrder() {
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-8">
               <h1 className="text-4xl font-bold">History Order</h1>
-              <span className="bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm">{filteredOrders.length}</span>
+              <span className="bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm">{orders.length}</span>
             </div>
 
             <div className="flex flex-row justify-between gap-4 mb-8">
@@ -101,7 +105,7 @@ export default function HistoryOrder() {
 
  
             <div className="space-y-4">
-              {filteredOrders.map((order, index) => (
+              {orders.map((order, index) => (
                 <div key={index} onClick={() => {navigate(`/detail-order/${order?.id}`);}} className="bg-white rounded-lg p-6 flex gap-6 hover:shadow-md transition">
                   <img 
                     src={order.image} 
@@ -118,12 +122,12 @@ export default function HistoryOrder() {
 
                     <div>
                       <div className="text-sm text-gray-600 mb-1">Date</div>
-                      <div className="font-semibold text-gray-900">{order.date}</div>
+                      <div className="font-semibold text-gray-900">({convertISOToReadable(order.created_at)})</div>
                     </div>
 
                     <div>
                       <div className="text-sm text-gray-600 mb-1">Total</div>
-                      <div className="font-semibold text-gray-900">{order.subTotal}</div>
+                      <div className="font-semibold text-gray-900">Rp{order.subtotal}</div>
                     </div>
 
                     <div>

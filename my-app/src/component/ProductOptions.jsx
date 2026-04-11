@@ -15,14 +15,12 @@ export default function ProductOptions({
     id = 1,
     title = "Hazelnut Latte",
     originalPrice = "IDR 20.000",
-    price = "IDR 10.000",
     description = "Cold brewing is a method of brewing that combines ground coffee and cool water and uses time instead of heat to extract the flavor. It is brewed in small batches and steeped for as long as 48 hours.",
     rating = 5.0,
     reviews = "200+",
     isFlashSale = false,
     stock = 0,
     quantity = 1,
-    size = "Regular",
     temperature = "Ice",
   } = {
     id: apiProduct.id || 1,
@@ -159,52 +157,6 @@ export default function ProductOptions({
     setQty(Math.max(1, qty + delta));
   };
 
-  // const handleBuy = () => {
-  //   if (!user) {
-  //     alert("Silakan Login terlebih dahulu");
-  //     return;
-  //   }
-  //   const orderData = {
-  //     customer: user.user.fullname,
-  //     customerId: user.user.id,
-  //     address: user.user.address,
-  //     phone: user.user.phone,
-  //     id,
-  //     title,
-  //     price,
-  //     originalPrice,
-  //     quantity: qty,
-  //     size: selectedSize,
-  //     variant: selectedVariant,
-  //     temperature: selectedTemp,
-  //     image: apiProduct.images || apiProduct.image || "",
-  //     totalPrice: totalCheckoutPrice,
-  //     sizeAdditionalPrice,
-  //     variantAdditionalPrice,
-  //     timestamp: new Date().toISOString(),
-  //   };
-
-  //   let currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-  //   console.log("current cart", currentCart);
-
-  //   currentCart.push(orderData);
-
-  //   localStorage.setItem("cart", JSON.stringify(currentCart));
-  //   console.log("Order data tersimpan:", orderData);
-
-  //   // alert(
-  //   //   `Order dibuat! ${qty}x ${title} - Total: ${formatPrice(totalCheckoutPrice)}`,
-  //   // );
-  //   // Navigate(`/product-checkout/${id}`);
-
-  //       // Show success modal instead of alert
-  //   setModalMessage(
-  //     `${qty}x ${title} - Total: ${formatPrice(totalCheckoutPrice)}`
-  //   );
-  //   setShowSuccessModal(true);
-  // };
-
 const handleBuy = async () => {
   if (!user) {
     alert("Silakan Login terlebih dahulu");
@@ -285,13 +237,6 @@ const handleBuy = async () => {
           <span className="text-3xl font-bold text-orange-500">
             {formatPrice(totalItemPrice)}
           </span>
-          {/* {(sizeAdditionalPrice > 0 || variantAdditionalPrice > 0) && (
-            <span className="text-sm text-gray-600">
-              (Base: {formatPrice(basePrice)}
-              {sizeAdditionalPrice > 0 && ` + Size: ${formatPrice(sizeAdditionalPrice)}`}
-              {variantAdditionalPrice > 0 && ` + Variant: ${formatPrice(variantAdditionalPrice)}`})
-            </span>
-          )} */}
         </div>
 
         <div className="flex items-center gap-2 mb-2">
@@ -309,7 +254,6 @@ const handleBuy = async () => {
           <span>{reviews} Review</span>
           <span className="mx-2">|</span>
           <span>Stock: {stock}</span>
-          {/* <span className="ml-2 text-orange-500">📦</span> */}
         </div>
       </div>
 
@@ -392,7 +336,7 @@ const handleBuy = async () => {
                   key={variantOption.id}
                   onClick={() => handleVariantSelect(variantOption)}
                   className={`py-3 px-4 rounded border-2 font-semibold transition ${
-                    selectedVariant === variantOption.name
+                    selectedVariant === variantOption.id
                       ? "border-orange-500 text-orange-500 bg-orange-50"
                       : "border-gray-300 text-gray-700 hover:border-gray-400"
                   }`}
