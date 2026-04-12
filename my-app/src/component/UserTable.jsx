@@ -8,11 +8,14 @@ export default function UserTable({
  }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedItems, setSelectedItems] = useState(new Set());
+  console.log('users')
   
   const itemsPerPage = 5;
   const totalPages = Math.ceil(users.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedUsers = users.slice(startIndex, startIndex + itemsPerPage);
+
+  console.log('users', users);
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {

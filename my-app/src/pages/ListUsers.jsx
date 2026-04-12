@@ -8,6 +8,7 @@ import Dropdown from "../assets/admin/dropdown.svg";
 import { useState, useEffect } from "react";
 import UserSidebar from "../component/UserSidebar";
 import AdminModal from "../component/AdminModal";
+import http from "../lib/http";
 
 function ListUsers() {
   const [users, setUsers] = useState([]);
@@ -19,33 +20,74 @@ function ListUsers() {
     action: "Add",
   });
 
-  useEffect(() => {
-    const fetchUsers = () => {
-      try {
-        const usersData = localStorage.getItem("user-data");
-        console.log("usernya", usersData);
-        if (usersData) {
-          const parsedUser = JSON.parse(usersData);
+  // useEffect(() => {
+  //   const fetchUsers = () => {
+  //     try {
+  //       const usersData = localStorage.getItem("user-data");
+  //       console.log("usernya", usersData);
+  //       if (usersData) {
+  //         const parsedUser = JSON.parse(usersData);
 
-          if (Array.isArray(parsedUser)) {
-            setUsers(parsedUser);
-          } else {
-            console.warn(
-              "Data 'order' di localStorage bukan array:",
-              parsedUser,
-            );
-            setUsers([]);
-          }
-        } else {
-          setUsers([]);
+  //         if (Array.isArray(parsedUser)) {
+  //           setUsers(parsedUser);
+  //         } else {
+  //           console.warn(
+  //             "Data 'order' di localStorage bukan array:",
+  //             parsedUser,
+  //           );
+  //           setUsers([]);
+  //         }
+  //       } else {
+  //         setUsers([]);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error parsing order data from localStorage:", error);
+  //       setUsers([]);
+  //     }
+  //   };
+
+  //   fetchUsers();
+  // }, []);
+
+  const getActiveUser = () => {
+    try {
+      const activeUser = JSON.parse(localStorage.getItem("currentUserSession"));
+      console.log("active user", activeUser);
+      return activeUser;
+    } catch (error) {
+      console.warn("tidak bisa mengambil data user", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const user = getActiveUser();
+    const token = user?.token || user?.user?.token;
+    console.log("token", token);
+    const fetchUsersFromAPI = async () => {
+      try {
+        const response = await http(`/api/users`, {}, { method: "GET", token });
+        if (!response) {
+          throw new Error("gagal mengambil user");
         }
-      } catch (error) {
-        console.error("Error parsing order data from localStorage:", error);
+        const result = await response.json();
+
+        const mapped = (result.data || []).map((user) => ({
+          id: user.id,
+          fullname: user.name,
+          email: user.email,
+          phone: user.phone || "",
+          address: user.address || "",
+          profileImage: user.profile_image || "",
+        }));
+
+        setUsers(mapped);
+      } catch (err) {
+        console.error("Error parsing order data from localStorage:", err);
         setUsers([]);
       }
     };
-
-    fetchUsers();
+    fetchUsersFromAPI();
   }, []);
 
   console.log("userss", users);
