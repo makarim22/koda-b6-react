@@ -1,54 +1,90 @@
-import React from 'react'
-import NavbarAdmin from '../layouts/NavbarAdmin'
-import Sidebar from '../layouts/Sidebar';
-import { OrderTable } from '../component/OrderTable';
+import React from "react";
+import NavbarAdmin from "../layouts/NavbarAdmin";
+import Sidebar from "../layouts/Sidebar";
+import { OrderTable } from "../component/OrderTable";
 import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
 import Dropdown from "../assets/admin/dropdown.svg";
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 import OrderSidebar from "../component/OrderSidebar";
-import AdminModal from "../component/AdminModal"
-
+import AdminModal from "../component/AdminModal";
+import http from "../lib/http";
 
 function ListOrders() {
+  const [orders, setOrders] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
-    const [orders, setOrders] = useState([])
-      const [isModalOpen, setIsModalOpen] = useState(false);
-      const [selectedOrder, setSelectedOrder] = useState(null);
+  const [modalConfig, setModalConfig] = useState({
+    title: "Add",
+    action: "Add",
+  });
 
-      const [modalConfig, setModalConfig] = useState({
-        title: "Add",
-        action: "Add",
-      });
-    
+  //   useEffect(() => {
+  //   const fetchOrders = () => {
+  //     try {
+  //       const orderData = localStorage.getItem('order');
+  //       console.log("ordernya", orderData);
+  //       if (orderData) {
+  //         const parsedOrder = JSON.parse(orderData);
 
-    useEffect(() => {
-    const fetchOrders = () => {
-      try {
-        const orderData = localStorage.getItem('order');
-        console.log("ordernya", orderData); 
-        if (orderData) {
-          const parsedOrder = JSON.parse(orderData);
+  //         if (Array.isArray(parsedOrder)) {
+  //           setOrders(parsedOrder);
+  //         } else {
+  //           console.warn("Data 'order' di localStorage bukan array:", parsedOrder);
+  //           setOrders([]);
+  //         }
+  //       } else {
+  //         setOrders([]);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error parsing order data from localStorage:', error);
+  //       setOrders([]);
+  //     }
+  //   };
 
-          if (Array.isArray(parsedOrder)) {
-            setOrders(parsedOrder);
-          } else {
-            console.warn("Data 'order' di localStorage bukan array:", parsedOrder);
-            setOrders([]); 
-          }
-        } else {
-          setOrders([]); 
-        }
-      } catch (error) {
-        console.error('Error parsing order data from localStorage:', error);
-        setOrders([]); 
+  //   fetchOrders();
+  // }, []);
+
+  console.log("orders", orders);
+
+  const getActiveUser = () => {
+    try {
+      const activeUser = JSON.parse(localStorage.getItem("currentUserSession"));
+      console.log("active user", activeUser);
+      return activeUser;
+    } catch (error) {
+      console.warn("tidak bisa mengambil data user", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const user = getActiveUser();
+    const token = user?.token || user?.user?.token;
+    const fetchOrdersFromAPI = async () => {
+      const response = await http(`/api/orders`, {}, { method: "GET", token });
+      if (!response) {
+        throw new Error("gagal mengambil data produk");
       }
+      const result = await response.json();
+      const mapped = (result.data || []).map((order) => ({
+  id: order.id,
+  date: order.order_date,
+  status: order.status || 'Pending',
+  subtotal: `Rp${order.subtotal.toLocaleString('id-ID')}`,
+  cartHistory: (order.items || []).map((item) => ({
+    title: item.product_name,
+    quantity: item.quantity,
+    size: item.size_name,
+    variant: item.variant_name,
+    price: item.price,
+  })),
+}))
+      setOrders(mapped);
     };
-
-    fetchOrders(); 
-  }, []); 
-
-  console.log('orders', orders)
+    fetchOrdersFromAPI();
+  }, []);
 
   const handleOpenAddModal = () => {
     setModalConfig({ title: "Add", action: "Add" });
@@ -58,8 +94,6 @@ function ListOrders() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
-
 
   const handleOpenViewModal = (order) => {
     setSelectedOrder(order);
@@ -82,7 +116,7 @@ function ListOrders() {
       console.error("Error deleting user:", error);
     }
   };
- 
+
   return (
     <div className="flex flex-col h-screen">
       <NavbarAdmin />
@@ -92,9 +126,10 @@ function ListOrders() {
           <div className="flex flex-row justify-between pl-7 pr-7">
             <div className="flex flex-col">
               Order List
-              <button 
-              onClick={handleOpenAddModal}
-              className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg">
+              <button
+                onClick={handleOpenAddModal}
+                className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg"
+              >
                 {" "}
                 + Add Order
               </button>
@@ -137,30 +172,31 @@ function ListOrders() {
             </div>
           </div>
 
-          <OrderTable 
-          orders={orders} 
-          itemsPerPage={5}
+          <OrderTable
+            orders={orders}
+            itemsPerPage={5}
             onEdit={handleOpenEditModal}
             onView={handleOpenViewModal}
-            onDelete={handleDeleteUser} />
+            onDelete={handleDeleteUser}
+          />
 
-               <AdminModal
-                      isOpen={isModalOpen}
-                      onClose={handleCloseModal}
-                      title={modalConfig.title}
-                      action={modalConfig.action}
-                    >
-                      <OrderSidebar
-                        onClose={handleCloseModal}
-                        title={modalConfig.title}
-                        action={modalConfig.action}
-                        order={selectedOrder}
-                      />
-                    </AdminModal>
+          <AdminModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            title={modalConfig.title}
+            action={modalConfig.action}
+          >
+            <OrderSidebar
+              onClose={handleCloseModal}
+              title={modalConfig.title}
+              action={modalConfig.action}
+              order={selectedOrder}
+            />
+          </AdminModal>
         </main>
       </div>
-    </div> 
-  )
+    </div>
+  );
 }
 
-export default ListOrders
+export default ListOrders;

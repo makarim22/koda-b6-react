@@ -20,35 +20,6 @@ function ListUsers() {
     action: "Add",
   });
 
-  // useEffect(() => {
-  //   const fetchUsers = () => {
-  //     try {
-  //       const usersData = localStorage.getItem("user-data");
-  //       console.log("usernya", usersData);
-  //       if (usersData) {
-  //         const parsedUser = JSON.parse(usersData);
-
-  //         if (Array.isArray(parsedUser)) {
-  //           setUsers(parsedUser);
-  //         } else {
-  //           console.warn(
-  //             "Data 'order' di localStorage bukan array:",
-  //             parsedUser,
-  //           );
-  //           setUsers([]);
-  //         }
-  //       } else {
-  //         setUsers([]);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error parsing order data from localStorage:", error);
-  //       setUsers([]);
-  //     }
-  //   };
-
-  //   fetchUsers();
-  // }, []);
-
   const getActiveUser = () => {
     try {
       const activeUser = JSON.parse(localStorage.getItem("currentUserSession"));

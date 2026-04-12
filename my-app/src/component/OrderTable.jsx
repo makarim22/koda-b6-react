@@ -30,6 +30,24 @@ export const OrderTable = ({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedOrders = orders.slice(startIndex, startIndex + itemsPerPage);
 
+   function convertISOToReadable(isoString) {
+    if (!isoString) return "—";
+    try {
+      return new Intl.DateTimeFormat("id-ID", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZone: "Asia/Jakarta",
+      }).format(new Date(isoString));
+    } catch {
+      return isoString;
+    }
+  }
+
 
   return (
     <div className="flex flex-col gap-6 bg-white p-8 pt-20 rounded-lg flex-1 overflow-y-auto">
@@ -80,7 +98,7 @@ export const OrderTable = ({
                   #{order.id}
                 </td>
                 <td className="px-4 py-3 text-gray-700 text-sm">
-                  {order.date}
+                  {convertISOToReadable(order.date)}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex flex-col gap-1">
@@ -91,7 +109,10 @@ export const OrderTable = ({
                       >
                         <span className="text-gray-400">•</span>
                         <span>
-                          {item.title} {item.quantity}x
+                           {item.title} {item.quantity}x
+          {item.size && <span className="text-gray-400 text-xs"> · {item.size}</span>}
+          {item.variant && <span className="text-gray-400 text-xs"> · {item.variant}</span>}
+                          
                         </span>
                       </div>
                     ))}
