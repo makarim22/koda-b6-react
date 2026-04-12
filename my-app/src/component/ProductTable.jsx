@@ -90,7 +90,7 @@ export const ProductTable = ({
                   {product.payment || 'Dine In, Deliver'}
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm font-medium">
-                  {product.size}
+                  {product.stock}
                 </td>
                 <td className="px-4 py-3 flex gap-2">
                   <button

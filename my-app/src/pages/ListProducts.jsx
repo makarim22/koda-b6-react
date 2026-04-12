@@ -6,7 +6,8 @@ import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
 import AdminModal from "../component/AdminModal";
 import ProductSidebar from "../component/ProductSidebar";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import http from "../lib/http";
 
 export default function ListProducts() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,89 +19,31 @@ export default function ListProducts() {
     action: "Add",
   });
 
-  // const Products = [
-  //   {
-  //     id: 1,
-  //     image: "/src/assets/icons/productPage/espresso.jfif",
-  //     name: "Hazelnut Latte",
-  //     price: "IDR 15.000",
-  //     desc: "Cold brewing is a method of brewing that",
-  //     size: ["R", "L", "XL", "250 gr", "500gr"],
-  //     method: ["deliver", "dine in"],
-  //     stock: 10,
-  //   },
-  //   {
-  //     id: 2,
-  //     image: "/src/assets/icons/productPage/latte.jpg",
-  //     name: "Latte",
-  //     price: "IDR 19.000",
-  //     desc: "Cold brewing is a method of brewing that",
-  //     size: ["R", "L", "XL", "250 gr", "500gr"],
-  //     method: ["deliver", "dine in"],
-  //     stock: 10,
-  //   },
-  //   {
-  //     id: 3,
-  //     image: "/src/assets/icons/productPage/affogato.jfif",
-  //     name: "Affogato",
-  //     price: "IDR 15.000",
-  //     desc: "Cold brewing is a method of brewing that",
-  //     size: ["R", "L", "XL", "250 gr", "500gr"],
-  //     method: ["deliver", "dine in"],
-  //     stock: 10,
-  //   },
-  //   {
-  //     id: 4,
-  //     image: "/src/assets/icons/productPage/affogato.jfif",
-  //     name: "Affogato",
-  //     price: "IDR 15.000",
-  //     desc: "Cold brewing is a method of brewing that",
-  //     size: ["R", "L", "XL", "250 gr", "500gr"],
-  //     method: ["deliver", "dine in"],
-  //     stock: 10,
-  //   },
-  //   {
-  //     id: 5,
-  //     image: "/src/assets/icons/productPage/affogato.jfif",
-  //     name: "Affogato",
-  //     price: "IDR 15.000",
-  //     desc: "Cold brewing is a method of brewing that",
-  //     size: ["R", "L", "XL", "250 gr", "500gr"],
-  //     method: ["deliver", "dine in"],
-  //     stock: 10,
-  //   },
-  // ];
-
-    useEffect(() => {
-      const fetchProducts = () => {
-        try {
-          const products = localStorage.getItem("products");
-          console.log("usernya", products);
-          if (products) {
-            const parsedProducts = JSON.parse(products);
-  
-            if (Array.isArray(parsedProducts)) {
-              setProducts(parsedProducts);
-            } else {
-              console.warn(
-                "Data 'product' di localStorage bukan array:",
-                parsedProducts,
-              );
-              setProducts([]);
-            }
-          } else {
-            setProducts([]);
-          }
-        } catch (error) {
-          console.error("Error parsing order data from localStorage:", error);
-          setProducts([]);
-        }
-      };
-  
-      fetchProducts();
-    }, []);
-  
-
+  useEffect(() => {
+    const fetchProductsFromAPI = async () => {
+      const response = await http(`/api/products`, {}, { method: "GET" });
+      if (!response) {
+        throw new Error("gagal mengambil data produk");
+      }
+      const result = await response.json();
+      const mapped = (result.data || []).map((product) => {
+        const primaryImage =
+          product.images?.find((img) => img.is_primary) || product.images?.[0];
+        return {
+          id: product.id,
+          name: product.product_name,
+          price: product.base_price.toLocaleString("id-ID"),
+          description: product.description,
+          stock: product.stock,
+          image: primaryImage?.path || "",
+          sizeOptions: "-",
+          payment: "Dine In, Deliver",
+        };
+      });
+      setProducts(mapped);
+    };
+    fetchProductsFromAPI();
+  }, []);
   const handleOpenAddModal = () => {
     setModalConfig({ title: "Add", action: "Add" });
     setIsModalOpen(true);
@@ -110,7 +53,7 @@ export default function ListProducts() {
     setIsModalOpen(false);
   };
 
-    const handleOpenViewModal = (product) => {
+  const handleOpenViewModal = (product) => {
     setSelectedProduct(product);
     setModalConfig({ title: "View Product Details", action: "View" });
     setIsModalOpen(true);
@@ -121,7 +64,6 @@ export default function ListProducts() {
     setModalConfig({ title: "Edit Product", action: "Edit" });
     setIsModalOpen(true);
   };
-
 
   return (
     <div className="flex flex-col h-screen">
@@ -163,11 +105,12 @@ export default function ListProducts() {
             </div>
           </div>
 
-          <ProductTable 
-          products={products} 
-          itemsPerPage={5}
-          onEdit ={handleOpenEditModal}
-          onView={handleOpenViewModal} />
+          <ProductTable
+            products={products}
+            itemsPerPage={5}
+            onEdit={handleOpenEditModal}
+            onView={handleOpenViewModal}
+          />
 
           <AdminModal
             isOpen={isModalOpen}
