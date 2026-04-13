@@ -39,10 +39,10 @@ export const ProductTable = ({
                 Desc
               </th>
               <th className="px-4 py-3 text-left font-semibold text-gray-600 text-xs uppercase whitespace-nowrap">
-                Product Size
+                Size
               </th>
                <th className="px-4 py-3 text-left font-semibold text-gray-600 text-xs uppercase whitespace-nowrap">
-                Product Variant
+                Variant
               </th>
               <th className="px-4 py-3 text-left font-semibold text-gray-600 text-xs uppercase whitespace-nowrap">
                 Method

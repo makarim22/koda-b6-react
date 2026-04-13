@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { useState } from "react";
+import http from "../lib/http";
 
 export default function VariantSidebar({
   onClose = () => {},
@@ -40,19 +41,25 @@ export default function VariantSidebar({
     setLoading(true);
     try {
       const payload = {
-        type: isSize ? "size" : "variant",
+        // type: isSize ? "size" : "variant",
         name: formData.name,
         additionalPrice: formData.additionalPrice ? parseFloat(formData.additionalPrice) : 0,
       };
 
-
-      const response = await fetch("/api/variants", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+      let response = ""
+      if (payload.type === "size" ){
+        response = await http(`/api/variants`, payload, {
+        method: "POST"
       });
+      } else {
+         response = await http(`/api/sizes`, payload, {
+         method: "POST"
+      });
+    }
+
+     const result = await response.json()
+     console.log("result", result);
+     
 
       if (!response.ok) {
         throw new Error("Failed to create variant");
