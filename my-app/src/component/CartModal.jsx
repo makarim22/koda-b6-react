@@ -112,16 +112,16 @@ export const CartModal = ({ product, isOpen, onClose, onAddToCart }) => {
   };
 
   const handleSizeSelect = (sizeOption) => {
-    setSelectedSize(sizeOption.name);
+    setSelectedSize(sizeOption.id);
     setSizeAdditionalPrice(sizeOption.additional_price || 0);
   };
 
   const handleVariantSelect = (variantOption) => {
-    if (selectedVariant === variantOption.name) {
+    if (selectedVariant === variantOption.id) {
       setSelectedVariant(null);
       setVariantAdditionalPrice(0);
     } else {
-      setSelectedVariant(variantOption.name);
+      setSelectedVariant(variantOption.id);
       setVariantAdditionalPrice(variantOption.additional_price || 0);
     }
   };
@@ -138,28 +138,33 @@ export const CartModal = ({ product, isOpen, onClose, onAddToCart }) => {
 
     try {
       setIsLoading(true);
-      const token = localStorage.getItem("token");
+
+       const getActiveUser = () => {
+    try {
+      const activeUser = JSON.parse(localStorage.getItem('currentUserSession'));
+      console.log('Active user:', activeUser);
+      return activeUser;
+    } catch (error) {
+      console.warn("Tidak bisa mengambil data user", error);
+      return null;
+    }
+  };
+  
+      const user = getActiveUser();
+      const token = user?.user?.token || user?.token;
       if (!token) {
         alert("Silakan login terlebih dahulu");
         return;
       }
 
       const cartData = {
-        productId: product?.id,
-        size: selectedSize,
-        variant: selectedVariant,
-        quantity: quantity,
-        price: totalItemPrice,
+        product_id: product?.id,
+        variant_id: selectedVariant,
+        size_id: selectedSize,
+        quantity: quantity
       };
 
-      const response = await http("/api/cart", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(cartData),
-      });
+      const response = await http("/cart", cartData, {method: "POST", token});
 
       if (response.ok) {
         setModalMessage(
@@ -226,7 +231,7 @@ export const CartModal = ({ product, isOpen, onClose, onAddToCart }) => {
                     key={size.id}
                     onClick={() => handleSizeSelect(size)}
                     className={`py-2 px-2 rounded border-2 font-semibold text-xs transition text-center ${
-                      selectedSize === size.name
+                      selectedSize === size.id
                         ? "border-orange-500 text-orange-500 bg-orange-50"
                         : "border-gray-300 text-gray-700 hover:border-gray-400"
                     }`}
@@ -254,7 +259,7 @@ export const CartModal = ({ product, isOpen, onClose, onAddToCart }) => {
                       key={variant.id}
                       onClick={() => handleVariantSelect(variant)}
                       className={`py-2 px-2 rounded border-2 font-semibold text-xs transition ${
-                        selectedVariant === variant.name
+                        selectedVariant === variant.id
                           ? "border-orange-500 text-orange-500 bg-orange-50"
                           : "border-gray-300 text-gray-700 hover:border-gray-400"
                       }`}
