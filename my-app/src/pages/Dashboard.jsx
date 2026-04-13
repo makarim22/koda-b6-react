@@ -9,6 +9,7 @@ import ArrowRise from "../assets/admin/arrowRise.svg";
 import Calendar from "../assets/admin/Calendar.svg";
 import Chart from "../assets/admin/chart.svg";
 import http from "../lib/http";
+import AreaChartCustom from "../component/AreaChart"
 
 function Dashboard() {
   const [stats, setStats] = useState({
@@ -58,6 +59,27 @@ function Dashboard() {
 
     fetchDashboardData();
   }, []);
+
+//     // Di dalam TotalPopulationChart.jsx
+// useEffect(() => {
+//   // Hitung total order per hari dari data orders
+//   const groupByDate = orders.reduce((acc, order) => {
+//     const date = new Date(order.date).toLocaleDateString('id-ID', { 
+//       day: '2-digit', 
+//       month: 'short' 
+//     });
+//     const existing = acc.find(d => d.date === date);
+//     if (existing) {
+//       existing.value += parseInt(order.subtotal.replace(/\D/g, ''));
+//     } else {
+//       acc.push({ date, value: parseInt(order.subtotal.replace(/\D/g, '')) });
+//     }
+//     return acc;
+//   }, []);
+  
+//   setData(groupByDate);
+// }, [orders]);
+
 
   if (loading) {
     return (
@@ -146,33 +168,9 @@ function Dashboard() {
                 </div>
               </div>
             </section>
-            <section className="bg-white p-6 rounded-lg shadow-md mb-8">
-              <div className="flex flex-col justify-between  mb-4">
-                <h2 className="text-xl font-semibold text-gray-800">
-                  Total Penjualan
-                </h2>
-                <p className="text-sm text-gray-500">
-                  {salesData.total} cup ({salesData.dateRange})
-                </p>
-              </div>
-              <div className="flex items-center space-x-2 border rounded-md px-3 py-2 text-gray-700 bg-white">
-                <img src={Calendar} alt="Calendar" />
-                <select>
-                  <option>{salesData.dateRange}</option>
-                </select>
-              </div>
-              <div className="chart-container relative h-64">
-                <canvas
-                  id="salesChart"
-                  className="absolute inset-0 w-full h-full"
-                />
-                <img
-                  src={Chart}
-                  alt="Chart Placeholder"
-                  className="absolute inset-0 w-full h-full object-contain"
-                />
-              </div>
-            </section>
+            
+            <AreaChartCustom />
+
             <section className="bg-white p-6 rounded-lg shadow-md">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-gray-800">
