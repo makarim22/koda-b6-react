@@ -41,6 +41,9 @@ export const ProductTable = ({
               <th className="px-4 py-3 text-left font-semibold text-gray-600 text-xs uppercase whitespace-nowrap">
                 Product Size
               </th>
+               <th className="px-4 py-3 text-left font-semibold text-gray-600 text-xs uppercase whitespace-nowrap">
+                Product Variant
+              </th>
               <th className="px-4 py-3 text-left font-semibold text-gray-600 text-xs uppercase whitespace-nowrap">
                 Method
               </th>
@@ -85,6 +88,9 @@ export const ProductTable = ({
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm">
                   {product.sizeOptions || '-'}
+                </td>
+                 <td className="px-4 py-3 text-gray-800 text-sm">
+                  {product.variantOptions || '-'}
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm">
                   {product.payment || 'Dine In, Deliver'}
