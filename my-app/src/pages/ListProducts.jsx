@@ -36,7 +36,7 @@ export default function ListProducts() {
           description: product.description,
           stock: product.stock,
           image: primaryImage?.path || "",
-          sizeOptions: "-",
+          sizeOptions: product.sizes.map((size) => size.name).join(", "),
           payment: "Dine In, Deliver",
         };
       });
