@@ -6,19 +6,15 @@ import ProductGallery from "../component/ProductGallery";
 import ProductOptions from "../component/ProductOptions";
 import { ProductGrid } from "../component/ProductGrid";
 import { getRecommendedProducts } from "../utils/product";
-
-import americano from "./../assets/icons/productPage/americano.jfif";
-import espresso from "./../assets/icons/productPage/espresso.jfif";
-import flatWhite from "./../assets/icons/productPage/flat-white.jfif";
 import http from "../lib/http";
 
 function ProductReview() {
   const { productId } = useParams();
-  console.log("product id nyaa", productId);
   const [products, setProducts] = useState([]);
   const [productVariants, setProductVariants] = useState([]);
   const [productSizes, setProductSizes] = useState([]);
-  console.log("idnyaa", productId);
+  const [thumbnails, setThumbnails] = useState([]);
+
 
   const fetchProducts = async () => {
     try {
@@ -53,15 +49,31 @@ function ProductReview() {
     }
   };
 
+const fetchProductImages = async () => {
+  try {
+    const response = await http(`/api/products/${productId}/images`);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    const data = await response.json();
+
+    const images = data.images || [];
+    
+    setThumbnails(images);
+    
+  } catch (err) {
+    console.error(err);
+  } 
+}
+
   useEffect(() => {
     if (!productId) return; 
 
     fetchProducts();
     fetchProductVariants();
     fetchProductSizes();
+    fetchProductImages();
   }, [productId]); 
-
-  const thumbnails = [americano, espresso, flatWhite];
 
   const selectedProduct = useMemo(() => {
     return products; 
@@ -80,7 +92,7 @@ function ProductReview() {
 
   const user = getActiveUser();
 
-  console.log("user", user);
+
 
   if (!selectedProduct) {
     return (
@@ -94,15 +106,12 @@ function ProductReview() {
     );
   }
 
-  const images = [selectedProduct.image];
-
-  console.log("selectedProducts", selectedProduct);
   return (
     <div>
       <Header bgColor="bg-black" />
       <section className="grid grid-cols-2 pt-16">
         <div className="w-full max-w-2xl mx-auto p-8 bg-white">
-          <ProductGallery images={images} thumbnails={thumbnails} />
+          <ProductGallery thumbnails={thumbnails} />
         </div>
         <div>
           <ProductOptions 
