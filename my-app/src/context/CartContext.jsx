@@ -38,6 +38,7 @@ export function CartProvider({ children }) {
         size_name: item.size_name,
         variant_id: item.variant_id,
         variant_name: item.variant_name,
+        image: item.image,
         subtotal: item.subtotal
       }));
       setItems(formattedCart);

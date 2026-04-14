@@ -54,7 +54,6 @@ export default function ProductOptions({
 
   const Navigate = useNavigate();
 
-  // Fetch sizes from API
   useEffect(() => {
     const fetchSizes = async () => {
       try {
@@ -78,7 +77,6 @@ export default function ProductOptions({
     }
   }, [id]);
 
-  // Fetch variants from API
   useEffect(() => {
     const fetchVariants = async () => {
       try {
@@ -102,14 +100,6 @@ export default function ProductOptions({
     }
   }, [id]);
 
-  console.log("usernyaa", user);
-  console.log("productSizes", productSizes);
-  console.log("product variants", productVariants);
-  console.log("fetchedSizes", fetchedSizes);
-  console.log("fetchedVariants", fetchedVariants);
-  console.log("selectedProduct API data:", apiProduct);
-
-  // Handle size selection with additional price
   const handleSizeSelect = (sizeOption) => {
     setSelectedSize(sizeOption.id);
     setSizeAdditionalPrice(sizeOption.additional_price || 0);
@@ -124,12 +114,11 @@ export default function ProductOptions({
  
   const handleVariantSelect = (variantOption) => {
   if (selectedVariant === variantOption.id) {
-    // Toggle off if clicking same variant
     setSelectedVariant(null);
     setVariantAdditionalPrice(0);
     console.log("Variant deselected");
   } else {
-    setSelectedVariant(variantOption.id); // Store ID for API
+    setSelectedVariant(variantOption.id); 
     setVariantAdditionalPrice(variantOption.additional_price || 0);
     console.log(
       "Variant selected:",
@@ -142,13 +131,11 @@ export default function ProductOptions({
   }
 };
 
-  // Calculate total price including additional charges
   const basePrice = apiProduct.base_price || 0;
   const totalItemPrice =
     basePrice + sizeAdditionalPrice + variantAdditionalPrice;
   const totalCheckoutPrice = qty * totalItemPrice;
 
-  // Format price for display
   const formatPrice = (priceValue) => {
     return `IDR ${priceValue.toLocaleString("id-ID")}`;
   };
