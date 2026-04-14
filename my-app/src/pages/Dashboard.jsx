@@ -12,6 +12,7 @@ import http from "../lib/http";
 import AreaChartCustom from "../component/AreaChart"
 
 function Dashboard() {
+
   const [stats, setStats] = useState({
     ordersInProgress: 0,
     ordersShipping: 0,
@@ -28,7 +29,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+ useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
@@ -57,29 +58,44 @@ function Dashboard() {
       }
     };
 
+    const fetchSalesData = async () => {
+      try {
+        const response = await http(`/public/daily-sales`, {}, { method: 'GET' });
+        const data = await response.json();
+        console.log('sales data', data);
+
+        if (data.success && data.data && data.data.length > 0) {
+          const chartData = data.data.map((item) => {
+            const date = new Date(item.sales_date);
+            return {
+              date: date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' }),
+              value: item.total_products_sold,
+              fullDate: date,
+            };
+          });
+
+          chartData.sort((a, b) => a.fullDate - b.fullDate);
+
+          const firstDate = chartData[0].date;
+          const lastDate = chartData[chartData.length - 1].date;
+          const dateRange = `${firstDate} - ${lastDate}`;
+
+          const total = data.data.reduce((sum, item) => sum + item.total_products_sold, 0);
+
+          setSalesData({
+            total: total,
+            chartData: chartData,
+            dateRange: dateRange,
+          });
+        }
+      } catch (err) {
+        console.log('Error fetching sales data:', err);
+      }
+    };
+
     fetchDashboardData();
+    fetchSalesData();
   }, []);
-
-//     // Di dalam TotalPopulationChart.jsx
-// useEffect(() => {
-//   // Hitung total order per hari dari data orders
-//   const groupByDate = orders.reduce((acc, order) => {
-//     const date = new Date(order.date).toLocaleDateString('id-ID', { 
-//       day: '2-digit', 
-//       month: 'short' 
-//     });
-//     const existing = acc.find(d => d.date === date);
-//     if (existing) {
-//       existing.value += parseInt(order.subtotal.replace(/\D/g, ''));
-//     } else {
-//       acc.push({ date, value: parseInt(order.subtotal.replace(/\D/g, '')) });
-//     }
-//     return acc;
-//   }, []);
-  
-//   setData(groupByDate);
-// }, [orders]);
-
 
   if (loading) {
     return (
@@ -169,7 +185,12 @@ function Dashboard() {
               </div>
             </section>
             
-            <AreaChartCustom />
+  
+              <AreaChartCustom 
+              data={salesData.chartData} 
+              dateRange={salesData.dateRange}
+              total={salesData.total}
+            />
 
             <section className="bg-white p-6 rounded-lg shadow-md">
               <div className="flex justify-between items-center mb-4">
