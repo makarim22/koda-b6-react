@@ -142,7 +142,7 @@ export default function HistoryOrder() {
                     className="bg-white rounded-lg p-6 flex gap-6 hover:shadow-md transition cursor-pointer"
                   >
                     <img
-                      src={order.image}
+                      src={order.items?.[0]?.image}
                       alt="Coffee"
                       className="w-24 h-24 rounded object-cover bg-gray-300"
                     />
