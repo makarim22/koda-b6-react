@@ -1,12 +1,10 @@
-// src/pages/Auth/LoginPage.jsx
-import React from "react";
 import { Input } from "../component/Input";
 import { Button } from "/src/component/Button";
-import AuthLayout from "/src/layouts/AuthLayout";
+
 import loginImg from "../assets/icons/barista-girl.svg";
 import http from "../lib/http";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import coffeeCupLogo from "../assets/icons/logo-coffee.svg";
 import coffeeShopLogo from "../assets/icons/cup.svg";
@@ -14,14 +12,8 @@ import mailIcon from "../assets/icons/mail.svg";
 import passwordIcon from "../assets/icons/Password.svg";
 import facebookIcon from "../assets/icons/facebook.svg";
 import googleIcon from "../assets/icons/google.svg";
-
 import { loginSuccess } from "../features/user/authSlice";
-
-import { useDispatch, useSelector } from "react-redux";
-
-const STORAGE_KEY = "user-data";
-
-// const API_BASE_URL = import.meta.env.VITE_ || 'http://localhost:8888';
+import { useDispatch } from "react-redux";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -31,16 +23,6 @@ function LoginPage() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-
-  // Effect to redirect if already authenticated via Redux
-  useEffect(() => {
-    if (isAuthenticated) {
-      alert("You are already logged in! Redirecting to home.");
-      navigate("/");
-    }
-  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,6 +65,7 @@ function LoginPage() {
       }
 
       const user = data.data || data;
+      console.log("data", user);
 
       dispatch(
         loginSuccess({
@@ -97,8 +80,12 @@ function LoginPage() {
       setEmail("");
       setPassword("");
 
-      alert("Login successful! Redirecting to home.");
-      navigate("/");
+      // alert("Login successful! Redirecting to home.");
+      if (user.role === "admin") {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       setError("Network error. Please check your connection and try again.");
       console.error("Login error:", err);

@@ -23,9 +23,16 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ScrollToTop from "./utils/scrollRestoration";
 import {CartProvider} from "./context/CartContext"
 import { ProtectedRoute, AdminRoute } from "./component/ProtectedRoutes";
-
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { initializeAuth } from './features/user/authSlice'; 
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initializeAuth());
+  }, [dispatch]);
   return (
     <CartProvider>
       <Router>

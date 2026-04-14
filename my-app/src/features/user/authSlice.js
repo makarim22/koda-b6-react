@@ -2,45 +2,45 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const CURRENT_USER_SESSION_KEY = 'currentUserSession';
 
-const getInitialAuthState = () => {
-  try {
-    const storedSession = localStorage.getItem(CURRENT_USER_SESSION_KEY);
-    if (storedSession) {
-      const sessionData = JSON.parse(storedSession);
-      if (sessionData && sessionData.user && sessionData.isAuthenticated === true) {
-        return {
-          user: sessionData.user,
-          isAuthenticated: true,
-        };
-      }
-    }
-  } catch (e) {
-    console.error("Error loading auth session from localStorage:", e);
-    localStorage.removeItem(CURRENT_USER_SESSION_KEY);
-  }
-  return {
-    user: null,
-    isAuthenticated: false,
-  };
+const initialState = {
+  user: null,
+  isAuthenticated: false,
+  isLoading: true, 
 };
-
-const initialState = getInitialAuthState();
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    initializeAuth: (state) => {
+      try {
+        const storedSession = localStorage.getItem(CURRENT_USER_SESSION_KEY);
+        if (storedSession) {
+          const sessionData = JSON.parse(storedSession);
+          if (sessionData && sessionData.user && sessionData.isAuthenticated === true) {
+            state.user = sessionData.user;
+            state.isAuthenticated = true;
+          }
+        }
+      } catch (e) {
+        console.error("Error loading auth session from localStorage:", e);
+        localStorage.removeItem(CURRENT_USER_SESSION_KEY);
+      } finally {
+        state.isLoading = false;
+      }
+    },
     loginSuccess: (state, action) => {
       const user = action.payload;
       state.user = {
         id: user.id,
         email: user.email,
         fullName: user.fullName || user.full_name || '',
-        role: user.role || 'user', 
+        role: user.role || 'user',
         token: user.token,
-        ...user, 
+        ...user,
       };
       state.isAuthenticated = true;
+      state.isLoading = false;
       localStorage.setItem(CURRENT_USER_SESSION_KEY, JSON.stringify({
         user: state.user,
         isAuthenticated: true,
@@ -49,6 +49,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      state.isLoading = false;
       try {
         const users = JSON.parse(localStorage.getItem('user-data')) || [];
         const updatedUsers = users.map((user) => ({
@@ -73,10 +74,11 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginSuccess, logout, updateUserRole } = authSlice.actions;
+export const { initializeAuth, loginSuccess, logout, updateUserRole } = authSlice.actions;
 
 export const selectUser = (state) => state.auth.user;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
+export const selectIsLoading = (state) => state.auth.isLoading;
 export const selectUserRole = (state) => state.auth.user?.role || null;
 export const selectIsAdmin = (state) => state.auth.user?.role === 'admin';
 

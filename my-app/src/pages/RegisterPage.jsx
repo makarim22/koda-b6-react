@@ -1,8 +1,6 @@
 
-import React from 'react';
 import { Input } from '../component/Input';
 import { Button } from '/src/component/Button';
-import AuthLayout from '/src/layouts/AuthLayout';
 import RegisterImg from '../assets/coffee-cup.svg';
 
 import { useState, useEffect } from 'react';
