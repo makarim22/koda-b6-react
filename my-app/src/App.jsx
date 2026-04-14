@@ -22,42 +22,140 @@ import ListUsers from "./pages/ListUsers";
 import NotFoundPage from "./pages/NotFoundPage";
 import ScrollToTop from "./utils/scrollRestoration";
 import {CartProvider} from "./context/CartContext"
+import { ProtectedRoute, AdminRoute } from "./component/ProtectedRoutes";
 
 
 function App() {
   return (
     <CartProvider>
-    <Router>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        
-        <Route path="/" element={<HomePage />} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="/product" element={<ProductPage />} />
-         <Route path="/product-review" element={<ProductReview />} />
-        <Route path="/product-review/:productId" element={<ProductReview />} />
-        <Route path="/product-checkout/:productId" element={<ProductCheckout />} />
-        <Route path="/product-checkout" element={<ProductCheckout />} />
-        <Route path="/order-history" element={<HistoryOrder/>} />
-        <Route path="/detail-order/:id" element={<DetailOrder />} />
-        <Route path="/profile" element={<Profile />} />
+      <Router>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-        <Route path="/admin-dashboard" element={<Dashboard />} />
-        <Route path="/admin-products" element={<ListProducts />} />
-        <Route path="/admin-orders" element={<ListOrders />} />
-        <Route path="/admin-users" element={<ListUsers />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <HomePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <ChatPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/product"
+            element={
+              <ProtectedRoute>
+                <ProductPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/product-review"
+            element={
+              <ProtectedRoute>
+                <ProductReview />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/product-review/:productId"
+            element={
+              <ProtectedRoute>
+                <ProductReview />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/product-checkout/:productId"
+            element={
+              <ProtectedRoute>
+                <ProductCheckout />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/product-checkout"
+            element={
+              <ProtectedRoute>
+                <ProductCheckout />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/order-history"
+            element={
+              <ProtectedRoute>
+                <HistoryOrder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/detail-order/:id"
+            element={
+              <ProtectedRoute>
+                <DetailOrder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route path="/*" element={<NotFoundPage />} />
+          <Route
+            path="/admin-dashboard"
+            element={
+              <AdminRoute>
+                <Dashboard />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin-products"
+            element={
+              <AdminRoute>
+                <ListProducts />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin-orders"
+            element={
+              <AdminRoute>
+                <ListOrders />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin-users"
+            element={
+              <AdminRoute>
+                <ListUsers />
+              </AdminRoute>
+            }
+          />
 
-
-      </Routes>
-    </Router>
+          <Route path="/*" element={<NotFoundPage />} />
+        </Routes>
+      </Router>
     </CartProvider>
   );
 }
+
 
 export default App;

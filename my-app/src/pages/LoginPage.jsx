@@ -83,7 +83,16 @@ function LoginPage() {
       }
 
       const user = data.data || data;
-      dispatch(loginSuccess(user));
+
+      dispatch(
+        loginSuccess({
+          id: user.id,
+          email: user.email,
+          role: user.role, 
+          fullName: user.fullName,
+          token: user.token,
+        }),
+      );
 
       setEmail("");
       setPassword("");
