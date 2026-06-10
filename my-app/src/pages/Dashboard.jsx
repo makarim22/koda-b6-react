@@ -49,6 +49,24 @@ function Dashboard() {
 
         setTopProducts(transformedProducts);
 
+        // Fetch Order Stats
+        const statsResponse = await http("/public/order-stats", {}, { method: 'GET' });
+        if (statsResponse.ok) {
+          const statsData = await statsResponse.json();
+          if (statsData.success && statsData.data) {
+            const data = statsData.data;
+            const inProgress = (data["pending"] || 0) + (data["processing"] || 0);
+            const shipping = data["shipped"] || 0;
+            const done = (data["delivered"] || 0) + (data["completed"] || 0);
+            
+            setStats({
+              ordersInProgress: inProgress,
+              ordersShipping: shipping,
+              ordersDone: done,
+            });
+          }
+        }
+
         setError(null);
       } catch (err) {
         setError(err.message);
