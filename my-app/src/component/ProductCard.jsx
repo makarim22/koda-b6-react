@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Heart } from 'lucide-react';
 import Cart from '../assets/user/ShoppingCart.svg';
 import { useNavigate } from 'react-router-dom';
 import { CartModal } from "../component/CartModal.jsx"
+import http from "../lib/http";
 
 export const ProductCard = ({ 
   image, 
@@ -19,6 +21,64 @@ export const ProductCard = ({
 }) => {
   const navigate = useNavigate(); 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoadingFavorite, setIsLoadingFavorite] = useState(false);
+
+  useEffect(() => {
+    const fetchFavoriteStatus = async () => {
+      if (!product?.id) return;
+      try {
+        const userStr = localStorage.getItem('currentUserSession');
+        if (!userStr) return;
+        const user = JSON.parse(userStr);
+        const token = user?.token || user?.user?.token;
+        if (!token) return;
+
+        const response = await http(`/api/wishlists/${product.id}/status`, null, { method: 'GET', token });
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            setIsFavorite(result.data.is_favorite);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch favorite status:", err);
+      }
+    };
+    fetchFavoriteStatus();
+  }, [product?.id]);
+
+  const toggleFavorite = async (e) => {
+    e.stopPropagation(); // prevent navigating if card is clickable
+    if (!product?.id) return;
+    
+    const userStr = localStorage.getItem('currentUserSession');
+    if (!userStr) {
+      alert("Silakan login terlebih dahulu untuk menyimpan produk favorit");
+      return;
+    }
+    const user = JSON.parse(userStr);
+    const token = user?.token || user?.user?.token;
+    if (!token) {
+      alert("Silakan login terlebih dahulu untuk menyimpan produk favorit");
+      return;
+    }
+
+    setIsLoadingFavorite(true);
+    try {
+      if (isFavorite) {
+        const res = await http(`/api/wishlists/${product.id}`, null, { method: 'DELETE', token });
+        if (res.ok) setIsFavorite(false);
+      } else {
+        const res = await http(`/api/wishlists`, { product_id: product.id }, { method: 'POST', token });
+        if (res.ok) setIsFavorite(true);
+      }
+    } catch (err) {
+      console.error("Failed to toggle favorite:", err);
+    } finally {
+      setIsLoadingFavorite(false);
+    }
+  };
 
   const handleBuyClick = () => {
     navigate(`/product-review/${product?.id}`);
@@ -53,8 +113,20 @@ export const ProductCard = ({
             </div>
           )}
           
+          {/* Wishlist Button */}
+          <button 
+            onClick={toggleFavorite}
+            disabled={isLoadingFavorite}
+            className="absolute top-3 left-3 bg-white/80 p-2 rounded-full shadow-sm hover:bg-white transition-colors disabled:opacity-50 z-10"
+          >
+            <Heart 
+              size={20} 
+              className={`transition-colors ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+            />
+          </button>
+
           {isFlashSale && (
-            <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+            <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
               FLASH SALE!
             </div>
           )}

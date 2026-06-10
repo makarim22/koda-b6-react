@@ -6,7 +6,7 @@ import SearchIcon from "../assets/icons/Search.svg";
 import ShoppingCartIcon from "../assets/icons/ShoppingCart.svg";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Heart } from "lucide-react";
 import {useDispatch, useSelector} from 'react-redux'
 import {logout} from '../features/user/authSlice'
 
@@ -72,6 +72,9 @@ const Header = (props) => {
             alt="Search"
             className="h-5 w-5 cursor-pointer"
           />
+          <Link to="/wishlist" className="flex items-center">
+            <Heart className="h-5 w-5 cursor-pointer text-white hover:text-red-500 transition-colors" />
+          </Link>
           <img
             src={ShoppingCartIcon}
             alt="Cart"
@@ -141,6 +144,9 @@ const Header = (props) => {
                     alt="Search"
                     className="h-6 w-6 cursor-pointer hover:opacity-80"
                   />
+                  <Link to="/wishlist" onClick={toggleMobileMenu} className="flex items-center">
+                    <Heart className="h-6 w-6 cursor-pointer text-black hover:text-red-500 transition-colors" />
+                  </Link>
                   <img
                     src={ShoppingCartIcon}
                     alt="Cart"

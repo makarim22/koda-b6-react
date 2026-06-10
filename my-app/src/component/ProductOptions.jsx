@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Heart } from "lucide-react";
 import http from "../lib/http";
 import SuccessModal from "../component/SuccessModal.jsx"
 
@@ -51,6 +52,8 @@ export default function ProductOptions({
   const [loadingVariants, setLoadingVariants] = useState(true);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoadingFavorite, setIsLoadingFavorite] = useState(false);
 
   const Navigate = useNavigate();
 
@@ -101,6 +104,62 @@ export default function ProductOptions({
       fetchVariants();
     }
   }, [id]);
+
+  useEffect(() => {
+    const fetchFavoriteStatus = async () => {
+      if (!id) return;
+      try {
+        const userStr = localStorage.getItem('currentUserSession');
+        if (!userStr) return;
+        const userSession = JSON.parse(userStr);
+        const token = userSession?.token || userSession?.user?.token;
+        if (!token) return;
+
+        const response = await http(`/api/wishlists/${id}/status`, null, { method: 'GET', token });
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            setIsFavorite(result.data.is_favorite);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch favorite status:", err);
+      }
+    };
+    fetchFavoriteStatus();
+  }, [id]);
+
+  const toggleFavorite = async (e) => {
+    e.stopPropagation();
+    if (!id) return;
+    
+    const userStr = localStorage.getItem('currentUserSession');
+    if (!userStr) {
+      alert("Silakan login terlebih dahulu untuk menyimpan produk favorit");
+      return;
+    }
+    const userSession = JSON.parse(userStr);
+    const token = userSession?.token || userSession?.user?.token;
+    if (!token) {
+      alert("Silakan login terlebih dahulu untuk menyimpan produk favorit");
+      return;
+    }
+
+    setIsLoadingFavorite(true);
+    try {
+      if (isFavorite) {
+        const res = await http(`/api/wishlists/${id}`, null, { method: 'DELETE', token });
+        if (res.ok) setIsFavorite(false);
+      } else {
+        const res = await http(`/api/wishlists`, { product_id: id }, { method: 'POST', token });
+        if (res.ok) setIsFavorite(true);
+      }
+    } catch (err) {
+      console.error("Failed to toggle favorite:", err);
+    } finally {
+      setIsLoadingFavorite(false);
+    }
+  };
 
   const handleSizeSelect = (sizeOption) => {
     setSelectedSize(sizeOption.id);
@@ -216,7 +275,20 @@ const handleBuy = async () => {
         </div>
       )}
 
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">{title}</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-4xl font-bold text-gray-900">{title}</h1>
+        <button 
+          onClick={toggleFavorite}
+          disabled={isLoadingFavorite}
+          className="p-3 border-2 border-gray-200 rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50"
+          title={isFavorite ? "Remove from Wishlist" : "Add to Wishlist"}
+        >
+          <Heart 
+            size={24} 
+            className={`transition-colors ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} 
+          />
+        </button>
+      </div>
 
       <div className="mb-6">
         <div className="flex items-center gap-4 mb-4">
