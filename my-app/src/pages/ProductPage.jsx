@@ -45,6 +45,9 @@ const ProductPage = () => {
           rating: Math.floor(Math.random() * 2) + 4,
           reviews: 0,
           isFlashSale: Math.random() > 0.3,
+          isBuy1Get1: Math.random() > 0.5,
+          isBirthdayPackage: Math.random() > 0.8,
+          categoryIds: product.categories ? product.categories.map(c => c.id) : [],
         }));
 
       setAllProducts(mappedProducts);
@@ -90,7 +93,7 @@ const ProductPage = () => {
     // Category filter
     if (appliedFilters.categories && appliedFilters.categories.length > 0) {
       currentProducts = currentProducts.filter(product =>
-        appliedFilters.categories.includes(product.categoryId)
+        product.categoryIds && product.categoryIds.some(id => appliedFilters.categories.includes(id))
       );
     }
 
@@ -200,13 +203,31 @@ const ProductPage = () => {
     },
   ];
 
-  const categories = [
+  const [categoriesList, setCategoriesList] = useState([
     { id: 1, name: 'Favorite Product' },
     { id: 2, name: 'Coffee' },
     { id: 3, name: 'Non Coffee' },
     { id: 4, name: 'Foods' },
     { id: 5, name: 'Add-On' },
-  ];
+  ]);
+
+  useEffect(() => {
+    // Optionally fetch categories from backend
+    const fetchCategories = async () => {
+      try {
+        const res = await http('/api/product-categories');
+        if (res.ok) {
+          const { data } = await res.json();
+          if (data && data.length > 0) {
+            setCategoriesList(data.map(c => ({ id: c.id, name: c.name })));
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch categories', err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const sortOptions = [
     { id: 1, name: 'Buy 1 get 1' },
@@ -237,7 +258,7 @@ const ProductPage = () => {
             <div className="flex flex-col md:flex-row lg:flex-row gap-6">
               <div className="w-full md:w-64 shrink-0">
                 <FilterSidebar
-                  categories={categories}
+                  categories={categoriesList}
                   sortOptions={sortOptions}
                   onApplyFilters={handleApplyFilters}
                   onResetFilters={handleResetFilters}
