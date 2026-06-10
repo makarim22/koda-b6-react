@@ -35,10 +35,9 @@ const ProductPage = () => {
       console.log("data", data);
 
       const mappedProducts = data
-        .filter(product => product.images && product.images.length > 0)
         .map((product) => ({
           id: product.id,
-          image: product.images[0].path,
+          image: product.images && product.images.length > 0 ? product.images[0].path : glasses,
           title: product.product_name,
           price: `IDR ${product.base_price.toLocaleString('id-ID')}`,
           originalPrice: `IDR ${Math.ceil(product.base_price * 1.15).toLocaleString('id-ID')}`,

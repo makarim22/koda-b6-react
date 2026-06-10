@@ -42,7 +42,7 @@ function ProductReview() {
     try {
       const res = await http(`/api/products/${productId}/sizes`);
       const { data } = await res.json();
-      console.log("sizes", data);
+      console.log("product_sizes", data);
       setProductSizes(data);
     } catch (err) {
       console.error(err);

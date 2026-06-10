@@ -58,10 +58,11 @@ export default function ProductOptions({
     const fetchSizes = async () => {
       try {
         setLoadingSizes(true);
-        const response = await http(`api/products/${id}/sizes`);
+        const response = await http(`/api/products/${id}/sizes`);
         console.log("response", response);
         if (!response.ok) throw new Error("Failed to fetch sizes");
-        const data = await response.json();
+        const json = await response.json();
+        const data = json.data || [];
         setFetchedSizes(Array.isArray(data) ? data : []);
         console.log("Sizes fetched:", data);
       } catch (error) {
@@ -81,10 +82,11 @@ export default function ProductOptions({
     const fetchVariants = async () => {
       try {
         setLoadingVariants(true);
-        const response = await http(`api/products/${id}/variants`);
+        const response = await http(`/api/products/${id}/variants`);
         console.log("response", response);
         if (!response.ok) throw new Error("Failed to fetch variants");
-        const data = await response.json();
+        const json = await response.json();
+        const data = json.data || [];
         setFetchedVariants(Array.isArray(data) ? data : []);
         console.log("Variants fetched:", data);
       } catch (error) {
@@ -158,8 +160,8 @@ const handleBuy = async () => {
 
    const cartPayload = {
     product_id: parseInt(id, 10),
-    size_id: selectedSize ? parseInt(selectedSize, 10) : 0,
-    variant_id: selectedVariant ? parseInt(selectedVariant, 10) : 0,
+    size_id: selectedSize ? parseInt(selectedSize, 10) : null,
+    variant_id: selectedVariant ? parseInt(selectedVariant, 10) : null,
     quantity: qty,
   };
 
@@ -276,8 +278,8 @@ const handleBuy = async () => {
           <div className="text-gray-500 text-sm">Loading sizes...</div>
         ) : (
           <div className="grid grid-cols-3 gap-3">
-            {productSizes && productSizes.length > 0
-              ? productSizes.map((sizeOption) => (
+            {fetchedSizes && fetchedSizes.length > 0
+              ? fetchedSizes.map((sizeOption) => (
                   <button
                     key={sizeOption.id}
                     onClick={() => handleSizeSelect(sizeOption)}
@@ -311,14 +313,14 @@ const handleBuy = async () => {
           </div>
         )}
       </div>
-      {productVariants && productVariants.length > 0 && (
+      {fetchedVariants && fetchedVariants.length > 0 && (
         <div className="mb-8">
           <h3 className="font-bold text-gray-900 mb-3">Choose Variant</h3>
           {loadingVariants ? (
             <div className="text-gray-500 text-sm">Loading variants...</div>
           ) : (
             <div className="grid grid-cols-2 gap-3">
-              {productVariants.map((variantOption) => (
+              {fetchedVariants.map((variantOption) => (
                 <button
                   key={variantOption.id}
                   onClick={() => handleVariantSelect(variantOption)}
@@ -352,7 +354,7 @@ const handleBuy = async () => {
         >
           Buy
         </button>
-        <button className="flex-1 border-2 border-orange-500 text-orange-500 font-bold py-3 px-6 rounded hover:bg-orange-50 transition flex items-center justify-center gap-2">
+        <button onClick={handleBuy} className="flex-1 border-2 border-orange-500 text-orange-500 font-bold py-3 px-6 rounded hover:bg-orange-50 transition flex items-center justify-center gap-2">
           <span></span> add to cart
         </button>
 

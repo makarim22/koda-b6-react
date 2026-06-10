@@ -31,20 +31,10 @@ export const CartModal = ({ product, isOpen, onClose, onAddToCart }) => {
         setLoadingSizes(true);
         const response = await http(`/api/products/${product.id}/sizes`);
         if (!response.ok) throw new Error("Failed to fetch sizes");
-        const data = await response.json();
-
-        // Extract sizes array from whatever structure the API returns
-        let sizes = [];
-        if (Array.isArray(data)) {
-          sizes = data;
-        } else if (data?.sizes && Array.isArray(data.sizes)) {
-          sizes = data.sizes;
-        } else if (data?.data && Array.isArray(data.data)) {
-          sizes = data.data;
-        }
-
-        setFetchedSizes(sizes);
-        console.log("Sizes fetched:", sizes);
+        const json = await response.json();
+        const data = json.data || [];
+        setFetchedSizes(Array.isArray(data) ? data : []);
+        console.log("Sizes fetched:", data);
       } catch (error) {
         console.error("Error fetching sizes:", error);
         setFetchedSizes([]);
@@ -65,20 +55,10 @@ export const CartModal = ({ product, isOpen, onClose, onAddToCart }) => {
         setLoadingVariants(true);
         const response = await http(`/api/products/${product.id}/variants`);
         if (!response.ok) throw new Error("Failed to fetch variants");
-        const data = await response.json();
-
-        // Extract variants array from whatever structure the API returns
-        let variants = [];
-        if (Array.isArray(data)) {
-          variants = data;
-        } else if (data?.variants && Array.isArray(data.variants)) {
-          variants = data.variants;
-        } else if (data?.data && Array.isArray(data.data)) {
-          variants = data.data;
-        }
-
-        setFetchedVariants(variants);
-        console.log("Variants fetched:", variants);
+        const json = await response.json();
+        const data = json.data || [];
+        setFetchedVariants(Array.isArray(data) ? data : []);
+        console.log("Variants fetched:", data);
       } catch (error) {
         console.error("Error fetching variants:", error);
         setFetchedVariants([]);
