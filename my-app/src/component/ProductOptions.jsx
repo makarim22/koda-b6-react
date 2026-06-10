@@ -157,9 +157,9 @@ const handleBuy = async () => {
     console.log("token", token);
 
    const cartPayload = {
-    product_id: id,
-    size_id: selectedSize,
-    variant_id: selectedVariant,
+    product_id: parseInt(id, 10),
+    size_id: selectedSize ? parseInt(selectedSize, 10) : 0,
+    variant_id: selectedVariant ? parseInt(selectedVariant, 10) : 0,
     quantity: qty,
   };
 

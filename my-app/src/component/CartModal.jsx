@@ -158,9 +158,9 @@ export const CartModal = ({ product, isOpen, onClose, onAddToCart }) => {
       }
 
       const cartData = {
-        product_id: product?.id,
-        variant_id: selectedVariant,
-        size_id: selectedSize,
+        product_id: parseInt(product?.id, 10),
+        variant_id: parseInt(selectedVariant, 10),
+        size_id: parseInt(selectedSize, 10),
         quantity: quantity
       };
 
