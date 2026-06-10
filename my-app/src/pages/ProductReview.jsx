@@ -6,6 +6,7 @@ import ProductGallery from "../component/ProductGallery";
 import ProductOptions from "../component/ProductOptions";
 import { ProductGrid } from "../component/ProductGrid";
 import { getRecommendedProducts } from "../utils/product";
+import ReviewSection from "../component/ReviewSection";
 import http from "../lib/http";
 
 function ProductReview() {
@@ -121,6 +122,11 @@ const fetchProductImages = async () => {
            productVariants={productVariants} />
         </div>
       </section>
+
+      <section className="bg-gray-50 border-t border-gray-200 mt-12">
+        <ReviewSection productId={productId} />
+      </section>
+
       <section className="px-4">
         <h1 className="text-4xl font-bold text-left mt-8 mb-4">
           Recommended for you
