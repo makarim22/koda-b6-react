@@ -6,6 +6,7 @@ import { useState, useEffect, useContext } from "react";
 import Cart from "../component/Cart";
 import CartCtx from "../context/CartContext";
 import http from "../lib/http";
+import OrderTracking from "../component/OrderTracking";
 
 function DetailOrder() {
   const { id } = useParams();
@@ -94,6 +95,12 @@ function DetailOrder() {
       <div className="pt-20 grid grid-cols-1 md:grid-cols-2 gap-8 w-full min-h-screen px-5 md:px-32">
         <div className="col-span-1">
           <OrderInformation props={order} />
+          {user && (
+            <OrderTracking 
+              orderId={id} 
+              token={user?.user?.token || user?.token} 
+            />
+          )}
         </div>
         <div className="col-span-1">
           <Cart
