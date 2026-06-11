@@ -1,58 +1,70 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import locationIcon from "../assets/icons/productPage/Location.svg";
 import mailIcon from "../assets/icons/mail.svg";
 import ProfileIcon from "../assets/icons/productPage/Profile.svg";
 import passwordIcon from "../assets/icons/Password.svg";
-
+import http from "../lib/http";
+import { selectUser, loginSuccess } from "../features/user/authSlice";
 import { Phone } from "lucide-react";
 
 function Profile() {
   const fileInputRef = useRef(null);
+  const dispatch = useDispatch();
+  const authUser = useSelector(selectUser);
 
-  const [user, setUser] = useState(() => {
-    const userData = localStorage.getItem("user-data");
-    if (userData) {
-      const parsedData = JSON.parse(userData);
-      const activeUser = parsedData.find((u) => u.isLoggedIn === true);
-      if (activeUser) {
-        const { fullname, email, phone, address, id, profileImage } =
-          activeUser;
-        return {
-          fullname,
-          email,
-          phone,
-          address,
-          id,
-          profileImage: profileImage || null,
-        };
-      }
-    }
-    return {
-      fullname: "Guest",
-      email: "",
-      phone: "",
-      address: "",
-      profileImage: null,
-    };
+  const [user, setUser] = useState({
+    fullname: "",
+    email: "",
+    phone: "",
+    address: "",
+    profileImage: null,
   });
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      fullName: user.fullname || "",
-      email: user.email || "",
-      phone: user.phone || "",
-      address: user.address || "",
+      fullName: "",
+      email: "",
+      phone: "",
+      address: "",
     },
   });
 
-  const handlePhotoUpload = (e) => {
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!authUser?.id) return;
+      try {
+        const res = await http(`/api/users/${authUser.id}`);
+        if (res.ok) {
+          const { data } = await res.json();
+          setUser({
+            fullname: data.name,
+            email: data.email,
+            phone: data.phone || "",
+            address: data.address || "",
+            profileImage: data.profile_image ? `http://localhost:3002${data.profile_image}` : null,
+          });
+          setValue("fullName", data.name);
+          setValue("email", data.email);
+          setValue("phone", data.phone || "");
+          setValue("address", data.address || "");
+        }
+      } catch (err) {
+        console.error("Failed to fetch user data", err);
+      }
+    };
+    fetchUser();
+  }, [authUser?.id, setValue]);
+
+  const handlePhotoUpload = async (e) => {
     const file = e.target.files?.[0];
 
     if (file) {
@@ -61,33 +73,37 @@ function Profile() {
         return;
       }
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result;
+      if (!authUser?.id) {
+        alert("User not found");
+        return;
+      }
 
-        try {
-          const users = JSON.parse(localStorage.getItem("user-data")) || [];
-          const userLoggedInIndex = users.findIndex(
-            (u) => u.isLoggedIn === true,
-          );
+      const formData = new FormData();
+      formData.append("photo", file);
 
-          if (userLoggedInIndex !== -1) {
-            users[userLoggedInIndex].profileImage = base64String;
-            localStorage.setItem("user-data", JSON.stringify(users));
+      try {
+        const res = await http(`/api/users/${authUser.id}/photo`, {
+          method: "POST",
+          body: formData,
+        }, {
+          headers: {} // Need to let browser set Content-Type for boundary
+        });
 
-            setUser({
-              ...user,
-              profileImage: base64String,
-            });
-
-            alert("Berhasil mengunggah foto!");
-          }
-        } catch (error) {
-          console.error("terjadi kesalahan:", error);
-          alert("gagal mengupload foto!");
+        if (res.ok) {
+          const { data } = await res.json();
+          setUser({
+            ...user,
+            profileImage: `http://localhost:3002${data.profile_image}`,
+          });
+          alert("Berhasil mengunggah foto!");
+        } else {
+          const errorData = await res.json();
+          alert("Gagal mengupload foto: " + errorData.error);
         }
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error("terjadi kesalahan:", error);
+        alert("Gagal mengupload foto!");
+      }
     }
   };
 
@@ -95,39 +111,48 @@ function Profile() {
     fileInputRef.current?.click();
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     try {
-      const users = JSON.parse(localStorage.getItem("user-data")) || [];
-      const userLoggedInIndex = users.findIndex((u) => u.isLoggedIn === true);
-
-      if (userLoggedInIndex === -1) {
-        alert("Gagam mendapatkan data user");
+      if (!authUser?.id) {
+        alert("Gagal mendapatkan data user");
         return;
       }
 
-      const updatedUsers = [...users];
-      updatedUsers[userLoggedInIndex] = {
-        ...updatedUsers[userLoggedInIndex],
-        fullname: data.fullName,
+      const updateData = {
+        name: data.fullName,
         email: data.email,
         phone: data.phone || "",
         address: data.address || "",
-        profileImage: user.profileImage,
-        ...(data.password && { password: data.password }),
+        password: data.password || "",
       };
 
-      localStorage.setItem("user-data", JSON.stringify(updatedUsers));
-
-      setUser({
-        fullname: data.fullName,
-        email: data.email,
-        phone: data.phone,
-        address: data.address,
-        id: user.id,
-        profileImage: user.profileImage,
+      const res = await http(`/api/users/${authUser.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updateData),
       });
 
-      alert("Berhasil mengupdate profil!");
+      if (res.ok) {
+        setUser({
+          ...user,
+          fullname: data.fullName,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+        });
+
+        // Also update Redux store session
+        dispatch(loginSuccess({
+          ...authUser,
+          fullName: data.fullName,
+          email: data.email,
+        }));
+
+        alert("Berhasil mengupdate profil!");
+      } else {
+        const errData = await res.json();
+        alert("Gagal mengupdate profil: " + errData.error);
+      }
     } catch (error) {
       console.error("terjadi kesalahan:", error);
       alert("Gagal mengupdate profil");

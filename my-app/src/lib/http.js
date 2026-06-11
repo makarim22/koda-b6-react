@@ -14,8 +14,13 @@ function http(url, body, opts = {}) {
   
   // Only add body and Content-Type for POST/PUT/PATCH requests
   if (body && (opts.method === "POST" || opts.method === "PUT" || opts.method === "PATCH")) {
-    config.body = typeof body === "string" ? body : JSON.stringify(body)
-    headers["Content-Type"] = "application/json"
+    if (body instanceof FormData) {
+      config.body = body;
+      // Do not set Content-Type header for FormData; the browser will set it with the boundary
+    } else {
+      config.body = typeof body === "string" ? body : JSON.stringify(body)
+      headers["Content-Type"] = "application/json"
+    }
   }
   
   return fetch(BASE_URL + url, config)
