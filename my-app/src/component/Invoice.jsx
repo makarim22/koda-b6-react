@@ -118,12 +118,37 @@ function Invoice(props) {
       );
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const data = await response.json();
+      
+      if (data.data && data.data.snap_token) {
+        // Trigger Midtrans Snap
+        window.snap.pay(data.data.snap_token, {
+          onSuccess: function(result){
+            alert("Payment success!");
+            navigate("/order-history");
+          },
+          onPending: function(result){
+            alert("Waiting your payment!");
+            navigate("/order-history");
+          },
+          onError: function(result){
+            alert("Payment failed!");
+            navigate("/order-history");
+          },
+          onClose: function(){
+            alert("You closed the popup without finishing the payment");
+            navigate("/order-history");
+          }
+        });
+      } else {
+        alert("Pesanan berhasil dibuat!");
+        navigate("/order-history");
+      }
     } catch (err) {
       console.warn("error", err);
+      alert("Failed to checkout");
     }
-      alert("Pesanan berhasil dibuat!");
-      navigate("/order-history");
-    
   };
   return (
     <div className="bg-white rounded-lg p-6 w-full md:w-80">
