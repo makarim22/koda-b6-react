@@ -15,6 +15,7 @@ function ProductCheckout() {
   const [error, setError] = useState(null)
 
   const [deliveryMethod, setDeliveryMethod] = useState('dine-in');
+  const [paymentMethod, setPaymentMethod] = useState('snap');
   
   const { items, fetchCartFromAPI } = useContext(CartCtx);
   console.log('items from context', items)
@@ -138,11 +139,12 @@ function ProductCheckout() {
           <PaymentInfo 
             onDeliveryMethodChange={handleDeliveryMethodChange}
             selectedDeliveryMethod={deliveryMethod}
+            onPaymentMethodChange={setPaymentMethod}
             user={user}
           />
         </div>
         <div className='flex flex-col pt-30'>
-          <Invoice paymentDetails={payment} cartItems={items} user = {user} />
+          <Invoice paymentDetails={payment} cartItems={items} user={user} paymentMethod={paymentMethod} />
         </div> 
       </div>
 

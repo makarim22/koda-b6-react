@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import BCA from "../assets/icons/productPage/BCA.svg";
 import BRI from "../assets/icons/productPage/BRI.svg";
 import DANA from "../assets/icons/productPage/DANA.svg";
@@ -90,9 +90,22 @@ function Invoice(props) {
   };
 
  
-  const handleCheckout = async () => {
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
+
+  const handleCheckout = useCallback(async () => {
     const token = user?.token || user?.user?.token;
-    console.log("token", token);
+    if (!token) {
+      setCheckoutError("You must be logged in to checkout.");
+      return;
+    }
+    if (!rawSubtotal || rawSubtotal <= 0) {
+      setCheckoutError("Your cart is empty.");
+      return;
+    }
+
+    setCheckoutLoading(true);
+    setCheckoutError("");
 
     const requestBody = {
       delivery_fee: rawDelivery || 0,
@@ -111,45 +124,53 @@ function Invoice(props) {
       const response = await http(
         `/api/orders`,
         requestBody,
-        {
-          method: "POST",
-          token,
-        },
+        { method: "POST", token }
       );
 
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
       const data = await response.json();
-      
-      if (data.data && data.data.snap_token) {
-        // Trigger Midtrans Snap
-        window.snap.pay(data.data.snap_token, {
-          onSuccess: function(result){
-            alert("Payment success!");
+
+      if (!response.ok) {
+        throw new Error(data.message || data.error || `HTTP ${response.status}`);
+      }
+
+      // snap_token can be at data.snap_token or data.data.snap_token
+      const snapToken = data.snap_token || data?.data?.snap_token;
+
+      if (snapToken && window.snap) {
+        window.snap.pay(snapToken, {
+          onSuccess: function() {
             navigate("/order-history");
           },
-          onPending: function(result){
-            alert("Waiting your payment!");
+          onPending: function() {
             navigate("/order-history");
           },
-          onError: function(result){
-            alert("Payment failed!");
-            navigate("/order-history");
+          onError: function() {
+            setCheckoutError("Payment failed. Please try again.");
           },
-          onClose: function(){
-            alert("You closed the popup without finishing the payment");
+          onClose: function() {
+            // User closed without paying — order still created, redirect
             navigate("/order-history");
           }
         });
+      } else if (snapToken && !window.snap) {
+        // Snap.js not loaded — fallback: redirect to Midtrans hosted page
+        const redirectUrl = data.redirect_url || data?.data?.redirect_url;
+        if (redirectUrl) {
+          window.location.href = redirectUrl;
+        } else {
+          navigate("/order-history");
+        }
       } else {
-        alert("Pesanan berhasil dibuat!");
+        // No snap token returned (e.g. Midtrans key not set in backend)
         navigate("/order-history");
       }
     } catch (err) {
-      console.warn("error", err);
-      alert("Failed to checkout");
+      console.error("Checkout error:", err);
+      setCheckoutError(err.message || "Failed to place order. Please try again.");
+    } finally {
+      setCheckoutLoading(false);
     }
-  };
+  }, [user, rawDelivery, rawTax, rawSubtotal, appliedVoucher, usePoints, maxPointsToUse, navigate]);
   return (
     <div className="bg-white rounded-lg p-6 w-full md:w-80">
       <h3 className="text-xl font-bold mb-6 text-gray-900">Total</h3>
@@ -234,11 +255,29 @@ function Invoice(props) {
         )}
       </div>
 
+      {checkoutError && (
+        <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-600 text-sm">{checkoutError}</p>
+        </div>
+      )}
       <button
         onClick={handleCheckout}
-        className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-lg mb-6 transition"
+        disabled={checkoutLoading}
+        className={`w-full font-bold py-3 px-4 rounded-lg mb-6 transition flex items-center justify-center gap-2 ${
+          checkoutLoading
+            ? 'bg-orange-300 cursor-not-allowed text-white'
+            : 'bg-orange-500 hover:bg-orange-600 text-white'
+        }`}
       >
-        Checkout
+        {checkoutLoading ? (
+          <>
+            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            Processing...
+          </>
+        ) : 'Proceed to Payment'}
       </button>
       <div>
         <p className="text-sm text-gray-600 mb-3">We Accept</p>
