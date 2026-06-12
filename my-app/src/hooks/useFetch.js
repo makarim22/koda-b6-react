@@ -20,10 +20,15 @@ export function useFetch(endpoint, options = {}) {
       }
       const result = await response.json();
       // Handle the common { success, message, data } response format from backend
-      if (result.success !== undefined && !result.success) {
+      if (result && result.success !== undefined && !result.success) {
         throw new Error(result.message || "Failed to fetch data");
       }
-      setData(result.data || result); // Some endpoints might return data directly
+      
+      if (result === null) {
+        setData([]);
+      } else {
+        setData(result.data || result); // Some endpoints might return data directly
+      }
     } catch (err) {
       setError(err.message);
     } finally {

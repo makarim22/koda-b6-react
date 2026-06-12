@@ -7,6 +7,7 @@ import Users from '../assets/admin/users.svg'
 import { Link } from 'react-router-dom' 
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { Tags, Ticket, Star } from 'lucide-react'
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -46,6 +47,12 @@ function Sidebar() {
       setActiveSection('order');
     } else if (path === '/admin-users') {
       setActiveSection('user');
+    } else if (path === '/admin-categories') {
+      setActiveSection('categories');
+    } else if (path === '/admin-vouchers') {
+      setActiveSection('vouchers');
+    } else if (path === '/admin-reviews') {
+      setActiveSection('reviews');
     } else {
       setActiveSection('');
     }
@@ -73,6 +80,24 @@ function Sidebar() {
             <span className='font-semibold'>Product</span> 
             </Link>
             
+        </div>
+        <div className={getSectionClasses('categories')}>
+            <Tags className="text-black" size={24} />
+            <Link to={'/admin-categories'}>
+            <span className='font-semibold'>Categories</span> 
+            </Link>
+        </div>
+        <div className={getSectionClasses('vouchers')}>
+            <Ticket className="text-black" size={24} />
+            <Link to={'/admin-vouchers'}>
+            <span className='font-semibold'>Vouchers</span> 
+            </Link>
+        </div>
+        <div className={getSectionClasses('reviews')}>
+            <Star className="text-black" size={24} />
+            <Link to={'/admin-reviews'}>
+            <span className='font-semibold'>Reviews</span> 
+            </Link>
         </div>
                 <div 
                 className={getSectionClasses('order')}>

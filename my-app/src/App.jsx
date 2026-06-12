@@ -20,6 +20,9 @@ import Dashboard from "./pages/Dashboard";
 import ListProducts from "./pages/ListProducts";
 import ListOrders from "./pages/ListOrders";
 import ListUsers from "./pages/ListUsers";
+import ListCategories from "./pages/ListCategories";
+import ListVouchers from "./pages/ListVouchers";
+import ListReviews from "./pages/ListReviews";
 import NotFoundPage from "./pages/NotFoundPage";
 import WishlistPage from "./pages/WishlistPage";
 import ScrollToTop from "./utils/scrollRestoration";
@@ -164,6 +167,30 @@ function App() {
             element={
               <AdminRoute>
                 <ListUsers />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin-categories"
+            element={
+              <AdminRoute>
+                <ListCategories />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin-vouchers"
+            element={
+              <AdminRoute>
+                <ListVouchers />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin-reviews"
+            element={
+              <AdminRoute>
+                <ListReviews />
               </AdminRoute>
             }
           />
