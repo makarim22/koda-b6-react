@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import ResetPasswordPage from "./pages/ResetPassword";
+import OAuthCallback from "./pages/OAuthCallback";
 import HomePage from "./pages/Homepage";
 import ProductPage from "./pages/ProductPage";
 import ChatPage from "./pages/ChatPage";
@@ -43,6 +44,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/oauth-callback" element={<OAuthCallback />} />
 
           <Route
             path="/"

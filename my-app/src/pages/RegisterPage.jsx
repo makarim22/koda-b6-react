@@ -12,6 +12,8 @@ import ProfileIcon from '../assets/icons/productPage/Profile.svg';
 import passwordIcon from '../assets/icons/Password.svg';
 import facebookIcon from '../assets/icons/facebook.svg';
 import googleIcon from '../assets/icons/google.svg';
+import { Github } from "lucide-react";
+import { BASE_URL } from "../lib/http";
 import { useNavigate } from 'react-router-dom';
 import {useSelector} from 'react-redux'
 import http from '../lib/http'
@@ -221,14 +223,16 @@ function RegisterPage() {
     <div className="grid grid-cols-2 gap-4">
       <button
         type="button"
-        className="flex items-center justify-center space-x-2 border border-gray-300 rounded-lg px-4 py-3 cursor-pointer hover:bg-gray-50 hover:border-gray-400 transition duration-150"
+        onClick={() => window.location.href = `${BASE_URL}/api/auth/github`}
+        className="flex items-center justify-center space-x-2 border border-gray-300 rounded-lg px-4 py-3 cursor-pointer hover:bg-gray-50 hover:border-gray-400 hover:scale-[1.02] active:scale-95 transition-all duration-200"
       >
-        <img src={facebookIcon} alt="Facebook Icon" className="w-5 h-5" />
-        <span className="text-sm font-medium text-gray-700">Facebook</span>
+        <Github className="w-5 h-5 text-gray-800" />
+        <span className="text-sm font-medium text-gray-700">GitHub</span>
       </button>
       <button
         type="button"
-        className="flex items-center justify-center space-x-2 border border-gray-300 rounded-lg px-4 py-3 cursor-pointer hover:bg-gray-50 hover:border-gray-400 transition duration-150"
+        onClick={() => window.location.href = `${BASE_URL}/api/auth/google`}
+        className="flex items-center justify-center space-x-2 border border-gray-300 rounded-lg px-4 py-3 cursor-pointer hover:bg-gray-50 hover:border-gray-400 hover:scale-[1.02] active:scale-95 transition-all duration-200"
       >
         <img src={googleIcon} alt="Google Icon" className="w-5 h-5" />
         <span className="text-sm font-medium text-gray-700">Google</span>
