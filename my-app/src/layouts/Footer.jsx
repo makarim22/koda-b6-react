@@ -1,133 +1,125 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
+import { Instagram, Twitter, Facebook, Coffee, MapPin, Mail, ArrowUpRight } from "lucide-react";
 import CoffeeCupIcon from "../assets/icons/homepage/cup-brown.svg";
-import CoffeeShopIcon from "../assets/icons/homepage/CoffeeShop.svg";
-import FacebookIcon from "../assets/icons/Facebook.png";
-import TwitterIcon from "../assets/icons/Twitter.png";
-import InstagramIcon from "../assets/icons/Instagram.png";
+
+const LINKS = {
+  Explore: [
+    { label: "Our Menu", to: "/product" },
+    { label: "Order History", to: "/order-history" },
+    { label: "Wishlist", to: "/wishlist" },
+    { label: "Profile", to: "/profile" },
+  ],
+  Company: [
+    { label: "About Us", to: "#" },
+    { label: "Blog", to: "#" },
+    { label: "Careers", to: "#" },
+    { label: "Partner With Us", to: "#" },
+  ],
+  Legal: [
+    { label: "Privacy Policy", to: "#" },
+    { label: "Terms of Service", to: "#" },
+    { label: "Cookie Policy", to: "#" },
+    { label: "FAQ", to: "#" },
+  ],
+};
+
+const SOCIALS = [
+  { icon: Instagram, label: "Instagram", href: "#" },
+  { icon: Twitter,   label: "Twitter",   href: "#" },
+  { icon: Facebook,  label: "Facebook",  href: "#" },
+];
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-gray-600 py-12 md:py-16 px-8 md:px-32">
-      <div className="footer-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-16">
-        <div className="footer-section about flex flex-col items-center md:items-start text-center md:text-left">
-          <div className="flex items-center space-x-2 mb-4">
-            <img src={CoffeeCupIcon} alt="Coffee Cup" className="h-8 w-8" />
-            <img src={CoffeeShopIcon} alt="Coffee Shop Logo" className="h-8" />
+    <footer
+      className="bg-zinc-950 text-zinc-400 border-t border-white/5"
+      style={{ fontFamily: "'Outfit', sans-serif" }}
+    >
+      {/* Main footer grid */}
+      <div className="max-w-7xl mx-auto px-6 md:px-8 pt-14 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+
+          {/* Brand column — takes 2 cols on large */}
+          <div className="lg:col-span-2">
+            {/* Logo */}
+            <Link to="/" className="inline-flex items-center gap-2.5 mb-5">
+              <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                <Coffee size={16} className="text-white" />
+              </div>
+              <span className="text-white font-bold text-lg tracking-tight">
+                Koda<span className="text-orange-400">.</span>
+              </span>
+            </Link>
+
+            <p className="text-sm leading-relaxed max-w-[34ch] mb-6 text-zinc-500">
+              High-quality beans, healthy meals, and a warm space — crafted with care for people who value a good start to their day.
+            </p>
+
+            {/* Contact info */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2.5 text-xs text-zinc-500">
+                <MapPin size={13} className="text-zinc-600 shrink-0" />
+                Jakarta, Indonesia · 30+ Locations
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-zinc-500">
+                <Mail size={13} className="text-zinc-600 shrink-0" />
+                hello@koda.coffee
+              </div>
+            </div>
+
+            {/* Social icons */}
+            <div className="flex gap-2 mt-7">
+              {SOCIALS.map(({ icon: Icon, label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-zinc-500 hover:text-white hover:border-white/30 hover:bg-white/5 transition"
+                >
+                  <Icon size={15} />
+                </a>
+              ))}
+            </div>
           </div>
-          <p className="mt-4 text-base max-w-xs">
-            Coffee Shop is a store that sells some good meals, and especially
-            coffee. We provide high quality beans.
-          </p>
-          <p className="mt-6 text-sm">
-            &copy; {new Date().getFullYear()} CoffeeStore
-          </p>
-        </div>
 
-        <div className="footer-section products text-center md:text-left">
-          <h3 className="text-lg font-semibold text-black mb-4">Product</h3>
-          <ul className="space-y-2">
-            <li>
-              <a
-                href="#"
-              >
-                Our Product
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-              >
-                Pricing
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-              >
-                Locations
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-              >
-                Countries
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-              >
-                Blog
-              </a>
-            </li>
-          </ul>
+          {/* Link columns */}
+          {Object.entries(LINKS).map(([group, items]) => (
+            <div key={group}>
+              <h4 className="text-xs font-semibold text-zinc-300 uppercase tracking-widest mb-4">
+                {group}
+              </h4>
+              <ul className="space-y-2.5">
+                {items.map(({ label, to }) => (
+                  <li key={label}>
+                    <Link
+                      to={to}
+                      className="text-sm text-zinc-500 hover:text-white transition-colors duration-150 flex items-center gap-1 group"
+                    >
+                      {label}
+                      {to === "#" && (
+                        <ArrowUpRight
+                          size={12}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity"
+                        />
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
+      </div>
 
-        <div className="footer-section engage text-center md:text-left">
-          <h3 className="text-lg font-semibold text-black mb-4">Engage</h3>
-          <ul className="space-y-2">
-            <li>
-              <a
-                href="#"
-              >
-                Partner
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-              >
-                FAQ
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-              >
-                About Us
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-              >
-                Privacy Policy
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-              >
-                Terms of Service
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div className="footer-section social-media text-center md:text-left">
-          <h3 className="text-lg font-semibold text-black mb-4">
-            Social Media
-          </h3>
-          <div className="social-icons flex justify-center md:justify-center">
-            <img
-              src={FacebookIcon}
-              alt="Facebook"
-              className="w-15 h-15 "
-            />
-            <img
-              src={TwitterIcon}
-              alt="Twitter"
-              className="w-15 h-15 "
-            />
-            <img
-              src={InstagramIcon}
-              alt="Instagram"
-              className="w-15 h-15 "
-            />
-          </div>
-        </div>
+      {/* Bottom bar */}
+      <div className="max-w-7xl mx-auto px-6 md:px-8 py-5 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p className="text-xs text-zinc-600">
+          &copy; {new Date().getFullYear()} Koda Coffee. All rights reserved.
+        </p>
+        <p className="text-xs text-zinc-700">
+          Made with care in Jakarta
+        </p>
       </div>
     </footer>
   );
