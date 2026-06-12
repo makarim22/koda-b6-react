@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import NavbarAdmin from "../layouts/NavbarAdmin";
 import Sidebar from "../layouts/Sidebar";
 import { ProductTable } from "../component/ProductTable";
@@ -7,46 +7,44 @@ import Search from "../assets/admin/Search.svg";
 import AdminModal from "../component/AdminModal";
 import ProductSidebar from "../component/ProductSidebar";
 import VariantSidebar from "../component/VariantSidebar";
-import { useEffect, useState } from "react";
-import http from "../lib/http";
+import { useFetch } from "../hooks/useFetch";
 
 export default function ListProducts() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [modalConfig, setModalConfig] = useState({
     title: "Add Product",
     action: "AddProduct",
   });
 
-  useEffect(() => {
-    const fetchProductsFromAPI = async () => {
-      const response = await http(`/api/products`, {}, { method: "GET" });
-      if (!response) {
-        throw new Error("gagal mengambil data produk");
-      }
-      const result = await response.json();
-      const mapped = (result.data || []).map((product) => {
-        const primaryImage =
-          product.images?.find((img) => img.is_primary) || product.images?.[0];
-        return {
-          id: product.id,
-          name: product.product_name,
-          price: product.base_price.toLocaleString("id-ID"),
-          description: product.description,
-          stock: product.stock,
-          image: primaryImage?.path || "",
-          sizeOptions: product.sizes.map((size) => size.name).join(", "),
-          variantOptions: product.variants
-            .map((variant) => variant.name)
-            .join(", "),
-          payment: "Dine In, Deliver",
-        };
-      });
-      setProducts(mapped);
-    };
-    fetchProductsFromAPI();
-  }, []);
+  const { data: rawProducts, isLoading, error, refetch } = useFetch("/api/products");
+
+  const products = useMemo(() => {
+    if (!rawProducts) return [];
+
+    const mapped = rawProducts.map((product) => {
+      const primaryImage =
+        product.images?.find((img) => img.is_primary) || product.images?.[0];
+      return {
+        id: product.id,
+        name: product.product_name,
+        price: product.base_price.toLocaleString("id-ID"),
+        description: product.description,
+        stock: product.stock,
+        image: primaryImage?.path || "",
+        sizeOptions: product.sizes?.map((size) => size.name).join(", ") || "",
+        variantOptions: product.variants?.map((variant) => variant.name).join(", ") || "",
+        payment: "Dine In, Deliver",
+      };
+    });
+
+    if (!searchQuery) return mapped;
+
+    return mapped.filter(product => 
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [rawProducts, searchQuery]);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -154,6 +152,8 @@ export default function ListProducts() {
                 <div className="relative w-72">
                   <input
                     type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Product Name"
                     className="pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full"
                   />
@@ -171,12 +171,35 @@ export default function ListProducts() {
             </div>
           </div>
 
-          <ProductTable
-            products={products}
-            itemsPerPage={5}
-            onEdit={handleOpenEditModal}
-            onView={handleOpenViewModal}
-          />
+          <div className="px-7">
+            {isLoading ? (
+              <div className="flex justify-center items-center h-64 border rounded-lg bg-gray-50">
+                <p className="text-gray-500 text-lg font-medium">Loading products...</p>
+              </div>
+            ) : error ? (
+              <div className="flex flex-col justify-center items-center h-64 border rounded-lg bg-red-50 text-red-700 p-4">
+                <p className="font-semibold mb-2">Error loading products</p>
+                <p className="mb-4">{error}</p>
+                <button 
+                  onClick={refetch}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition"
+                >
+                  Retry
+                </button>
+              </div>
+            ) : products.length === 0 ? (
+               <div className="flex justify-center items-center h-64 border rounded-lg bg-gray-50">
+                <p className="text-gray-500 text-lg font-medium">No products found.</p>
+              </div>
+            ) : (
+              <ProductTable
+                products={products}
+                itemsPerPage={5}
+                onEdit={handleOpenEditModal}
+                onView={handleOpenViewModal}
+              />
+            )}
+          </div>
 
           <AdminModal
             isOpen={isModalOpen}

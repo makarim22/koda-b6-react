@@ -1,20 +1,18 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import NavbarAdmin from "../layouts/NavbarAdmin";
 import Sidebar from "../layouts/Sidebar";
 import UserTable from "../component/UserTable";
 import Filter from "../assets/admin/filter.svg";
 import Search from "../assets/admin/Search.svg";
 import Dropdown from "../assets/admin/dropdown.svg";
-import { useState, useEffect } from "react";
 import UserSidebar from "../component/UserSidebar";
 import AdminModal from "../component/AdminModal";
-import http from "../lib/http";
+import { useFetch } from "../hooks/useFetch";
 
 function ListUsers() {
-  const [users, setUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  console.log("selected user", selectedUser);
+  const [searchQuery, setSearchQuery] = useState("");
   const [modalConfig, setModalConfig] = useState({
     title: "Add",
     action: "Add",
@@ -23,7 +21,6 @@ function ListUsers() {
   const getActiveUser = () => {
     try {
       const activeUser = JSON.parse(localStorage.getItem("currentUserSession"));
-      console.log("active user", activeUser);
       return activeUser;
     } catch (error) {
       console.warn("tidak bisa mengambil data user", error);
@@ -31,37 +28,30 @@ function ListUsers() {
     }
   };
 
-  useEffect(() => {
-    const user = getActiveUser();
-    const token = user?.token || user?.user?.token;
-    console.log("token", token);
-    const fetchUsersFromAPI = async () => {
-      try {
-        const response = await http(`/api/users`, {}, { method: "GET", token });
-        if (!response) {
-          throw new Error("gagal mengambil user");
-        }
-        const result = await response.json();
+  const user = getActiveUser();
+  const token = user?.token || user?.user?.token;
 
-        const mapped = (result.data || []).map((user) => ({
-          id: user.id,
-          fullname: user.name,
-          email: user.email,
-          phone: user.phone || "",
-          address: user.address || "",
-          profileImage: user.profile_image || "",
-        }));
+  const { data: rawUsers, isLoading, error, refetch } = useFetch("/api/users", { token });
 
-        setUsers(mapped);
-      } catch (err) {
-        console.error("Error parsing order data from localStorage:", err);
-        setUsers([]);
-      }
-    };
-    fetchUsersFromAPI();
-  }, []);
+  const users = useMemo(() => {
+    if (!rawUsers) return [];
 
-  console.log("userss", users);
+    const mapped = rawUsers.map((user) => ({
+      id: user.id,
+      fullname: user.name,
+      email: user.email,
+      phone: user.phone || "",
+      address: user.address || "",
+      profileImage: user.profile_image || "",
+    }));
+
+    if (!searchQuery) return mapped;
+
+    return mapped.filter(user => 
+      user.fullname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [rawUsers, searchQuery]);
 
   const handleOpenAddModal = () => {
     setModalConfig({ title: "Add", action: "Add" });
@@ -100,46 +90,70 @@ function ListUsers() {
       <div className="flex flex-1">
         <Sidebar />
         <main className="flex-1 overflow-y-auto ">
-          <div className="flex flex-row justify-between pl-7 pr-7">
-            <div className="flex flex-col">
-              User List
+          <div className="flex flex-row justify-between pl-7 pr-7 mt-6 mb-4">
+            <div className="flex flex-col gap-4">
+              <h2 className="text-xl font-semibold">User List</h2>
               <button
                 onClick={handleOpenAddModal}
-                className="bg-orange-400 text-black w-35 py-2 px-4 rounded-lg"
+                className="bg-orange-400 hover:bg-orange-500 text-black px-4 py-2 rounded-lg font-medium transition w-36"
               >
-                {" "}
                 + Add User
               </button>
             </div>
             <div className="flex flex-row gap-4 items-end">
               <div className="flex flex-col">
-                <span>Search User</span>
-                <div class="relative w-72">
+                <span className="text-sm font-medium mb-2">Search User</span>
+                <div className="relative w-72">
                   <input
                     type="text"
-                    placeholder="Enter Username"
-                    class="pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full" /* w-full makes input take full width of its relative parent */
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Enter Username or Email"
+                    className="pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full"
                   />
                   <img
                     src={Search}
                     alt="Search icon"
-                    class="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" /* Positioned the icon */
+                    className="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
                   />
                 </div>
               </div>
-              <button className="flex items-center px-4 py-2 bg-orange-400 text-black rounded-lg h-10">
-                <img src={Filter} alt="Filter icon" class="h-5 w-5 mr-2" />
+              <button className="flex items-center px-4 py-2 bg-orange-400 hover:bg-orange-500 text-black rounded-lg h-10 font-medium transition">
+                <img src={Filter} alt="Filter icon" className="h-5 w-5 mr-2" />
                 Filter
               </button>
             </div>
           </div>
 
-          <UserTable
-            users={users}
-            onEdit={handleOpenEditModal}
-            onView={handleOpenViewModal}
-            onDelete={handleDeleteUser}
-          />
+          <div className="px-7">
+            {isLoading ? (
+              <div className="flex justify-center items-center h-64 border rounded-lg bg-gray-50">
+                <p className="text-gray-500 text-lg font-medium">Loading users...</p>
+              </div>
+            ) : error ? (
+              <div className="flex flex-col justify-center items-center h-64 border rounded-lg bg-red-50 text-red-700 p-4">
+                <p className="font-semibold mb-2">Error loading users</p>
+                <p className="mb-4">{error}</p>
+                <button 
+                  onClick={refetch}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition"
+                >
+                  Retry
+                </button>
+              </div>
+            ) : users.length === 0 ? (
+               <div className="flex justify-center items-center h-64 border rounded-lg bg-gray-50">
+                <p className="text-gray-500 text-lg font-medium">No users found.</p>
+              </div>
+            ) : (
+              <UserTable
+                users={users}
+                onEdit={handleOpenEditModal}
+                onView={handleOpenViewModal}
+                onDelete={handleDeleteUser}
+              />
+            )}
+          </div>
 
           <AdminModal
             isOpen={isModalOpen}

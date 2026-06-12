@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import NavbarAdmin from "../layouts/NavbarAdmin";
 import Sidebar from "../layouts/Sidebar";
@@ -29,59 +29,41 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
- useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        setLoading(true);
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-        const response = await http("/api/products/top-products");
-        if (!response.ok) throw new Error("Failed to fetch products");
-        const apiData = await response.json();
-
-        const products = apiData.data;
-
-        const transformedProducts = products.map((product) => ({
+      // Fetch Top Products
+      const productsPromise = http("/api/products/top-products").then(async (res) => {
+        if (!res.ok) throw new Error("Failed to fetch products");
+        const apiData = await res.json();
+        return apiData.data.map((product) => ({
           id: product.product_id,
           name: product.product_name,
           sold: product.quantity,
           profit: `Rp ${product.revenue.toLocaleString("id-ID")}`,
         }));
+      });
 
-        setTopProducts(transformedProducts);
-
-        // Fetch Order Stats
-        const statsResponse = await http("/public/order-stats", {}, { method: 'GET' });
-        if (statsResponse.ok) {
-          const statsData = await statsResponse.json();
+      // Fetch Order Stats
+      const statsPromise = http("/public/order-stats", {}, { method: 'GET' }).then(async (res) => {
+        if (res.ok) {
+          const statsData = await res.json();
           if (statsData.success && statsData.data) {
             const data = statsData.data;
             const inProgress = (data["pending"] || 0) + (data["processing"] || 0);
             const shipping = data["shipped"] || 0;
             const done = (data["delivered"] || 0) + (data["completed"] || 0);
-            
-            setStats({
-              ordersInProgress: inProgress,
-              ordersShipping: shipping,
-              ordersDone: done,
-            });
+            return { ordersInProgress: inProgress, ordersShipping: shipping, ordersDone: done };
           }
         }
+        return { ordersInProgress: 0, ordersShipping: 0, ordersDone: 0 };
+      });
 
-        setError(null);
-      } catch (err) {
-        setError(err.message);
-        console.error("Dashboard fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchSalesData = async () => {
-      try {
-        const response = await http(`/public/daily-sales`, {}, { method: 'GET' });
-        const data = await response.json();
-        console.log('sales data', data);
-
+      // Fetch Sales Data
+      const salesPromise = http(`/public/daily-sales`, {}, { method: 'GET' }).then(async (res) => {
+        const data = await res.json();
         if (data.success && data.data && data.data.length > 0) {
           const chartData = data.data.map((item) => {
             const date = new Date(item.sales_date);
@@ -97,23 +79,36 @@ function Dashboard() {
           const firstDate = chartData[0].date;
           const lastDate = chartData[chartData.length - 1].date;
           const dateRange = `${firstDate} - ${lastDate}`;
-
           const total = data.data.reduce((sum, item) => sum + item.total_products_sold, 0);
 
-          setSalesData({
-            total: total,
-            chartData: chartData,
-            dateRange: dateRange,
-          });
+          return { total, chartData, dateRange };
         }
-      } catch (err) {
-        console.log('Error fetching sales data:', err);
-      }
-    };
+        return null;
+      });
 
-    fetchDashboardData();
-    fetchSalesData();
+      const [transformedProducts, statsObj, salesObj] = await Promise.all([
+        productsPromise,
+        statsPromise,
+        salesPromise
+      ]);
+
+      setTopProducts(transformedProducts);
+      setStats(statsObj);
+      if (salesObj) {
+        setSalesData(salesObj);
+      }
+
+    } catch (err) {
+      setError(err.message);
+      console.error("Dashboard fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   if (loading) {
     return (
@@ -135,10 +130,16 @@ function Dashboard() {
         <NavbarAdmin />
         <div className="flex flex-1">
           <Sidebar />
-          <main className="flex-1 p-8">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
-              <p className="font-semibold">Error loading dashboard</p>
-              <p className="text-sm">{error}</p>
+          <main className="flex-1 p-8 flex items-center justify-center">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-red-800 flex flex-col items-center">
+              <p className="font-semibold text-lg mb-2">Error loading dashboard</p>
+              <p className="text-sm mb-4">{error}</p>
+              <button 
+                onClick={fetchData}
+                className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded shadow transition"
+              >
+                Retry
+              </button>
             </div>
           </main>
         </div>
