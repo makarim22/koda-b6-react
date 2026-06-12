@@ -62,6 +62,14 @@ const Header = (props) => {
           >
             Product
           </Link>
+          {loggedInUser && (
+            <Link
+              to="/order-history"
+              className="text-white text-base hover:text-gray-300"
+            >
+              Orders
+            </Link>
+          )}
         </nav>
       </div>
 
@@ -135,6 +143,15 @@ const Header = (props) => {
                 >
                   Product
                 </Link>
+                {loggedInUser && (
+                  <Link
+                    onClick={toggleMobileMenu}
+                    to="/order-history"
+                    className="text-black hover:bg-[#FF8906] px-4 py-3 rounded-lg transition-colors duration-200"
+                  >
+                    Orders
+                  </Link>
+                )}
               </nav>
 
               <div className="border-t border-gray-700 px-4 py-6">

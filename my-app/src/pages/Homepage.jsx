@@ -242,7 +242,19 @@ const HomePage = () => {
         </div>
       </section>
 
-      <TestimonyCard testimonies={testimonials} />
+      <section className="py-16 md:py-24 bg-gray-50 text-gray-800 px-8 md:px-32">
+        <div className="mb-12 text-center">
+          <p className="text-3xl md:text-4xl font-bold mb-4">
+            What Our <strong className="text-[#DEB887]">Customers</strong> Say
+          </p>
+          <p className="text-lg max-w-2xl mx-auto text-gray-600">
+            Hear from our lovely customers about their experience with us.
+          </p>
+        </div>
+        <div className="flex justify-center">
+          <TestimonyCard testimonies={testimonials} />
+        </div>
+      </section>
 
       <Footer />
     </div>

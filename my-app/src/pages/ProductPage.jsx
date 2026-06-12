@@ -267,7 +267,7 @@ const ProductPage = () => {
 
               <div className="flex-1">
                 {/* Pass only the current page's slice — qty prop removed since we slice manually */}
-                <ProductGrid products={paginatedProducts} columns={2} qty={paginatedProducts.length} />
+                <ProductGrid products={paginatedProducts} columns={3} qty={paginatedProducts.length} />
 
                 {/* Pagination controls */}
                 {totalPages > 1 && (
