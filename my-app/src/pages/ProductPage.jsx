@@ -237,96 +237,147 @@ const ProductPage = () => {
   ];
 
   return (
-    <>
-      <Header bgColor="bg-black" />
-      <div className="min-h-screen bg-gray-50">
-        <div className="bg-cover bg-center h-64 flex items-center justify-center"
-          style={{ backgroundImage: `url(${glasses})` }}>
-          <h1 className="text-4xl font-bold text-white text-center">
-            We Provide Good Coffee and Healthy Meals
+    <div className="min-h-screen bg-slate-50" style={{ fontFamily: "'Outfit', sans-serif" }}>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+      <Header bgColor="bg-zinc-950" />
+
+      {/* Page Hero — clean, text-only, no blurry image */}
+      <div className="bg-zinc-950 pt-28 pb-10 px-6 md:px-8">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-xs font-semibold text-orange-400 uppercase tracking-widest mb-2">Menu</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+            Our <span className="text-orange-400">Products</span>
           </h1>
+          <p className="text-zinc-400 text-sm mt-2">
+            {allProducts.length > 0 ? `${filteredProducts.length} items available` : "Exploring our menu..."}
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+        {/* Promo carousel */}
+        <div className="mb-8">
+          <PromoSection promos={promoData} />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <PromoSection promos={promoData} />
+        {/* Section header */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-zinc-900 tracking-tight">
+            All <span className="text-amber-700">Products</span>
+          </h2>
+          {filteredProducts.length > 0 && (
+            <span className="text-sm text-slate-400">
+              {filteredProducts.length} result{filteredProducts.length !== 1 ? "s" : ""}
+            </span>
+          )}
+        </div>
 
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-6">
-              Our <span className="text-yellow-800">Product</span>
-            </h2>
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Filter sidebar */}
+          <div className="w-full md:w-60 shrink-0">
+            <FilterSidebar
+              categories={categoriesList}
+              sortOptions={sortOptions}
+              onApplyFilters={handleApplyFilters}
+              onResetFilters={handleResetFilters}
+            />
+          </div>
 
-            <div className="flex flex-col md:flex-row lg:flex-row gap-6">
-              <div className="w-full md:w-64 shrink-0">
-                <FilterSidebar
-                  categories={categoriesList}
-                  sortOptions={sortOptions}
-                  onApplyFilters={handleApplyFilters}
-                  onResetFilters={handleResetFilters}
-                />
-              </div>
-
-              <div className="flex-1">
-                {/* Pass only the current page's slice — qty prop removed since we slice manually */}
-                <ProductGrid products={paginatedProducts} columns={3} qty={paginatedProducts.length} />
-
-                {/* Pagination controls */}
-                {totalPages > 1 && (
-                  <>
-                    <div className="flex justify-center items-center gap-2 mt-8">
-                      {/* Prev */}
-                      <button
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center hover:bg-orange-600 disabled:opacity-40 disabled:cursor-not-allowed transition"
-                      >
-                        <ChevronLeft size={16} />
-                      </button>
-
-                      {/* Page numbers */}
-                      {getPageNumbers().map((page, i) =>
-                        page === '...' ? (
-                          <span key={`ellipsis-${i}`} className="w-8 h-8 flex items-center justify-center text-gray-500 select-none text-sm">
-                            …
-                          </span>
-                        ) : (
-                          <button
-                            key={page}
-                            onClick={() => handlePageChange(page)}
-                            className={`w-8 h-8 rounded-full text-sm font-semibold transition ${
-                              currentPage === page
-                                ? 'bg-orange-500 text-white'
-                                : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
-                            }`}
-                          >
-                            {page}
-                          </button>
-                        )
-                      )}
-
-                      {/* Next */}
-                      <button
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center hover:bg-orange-600 disabled:opacity-40 disabled:cursor-not-allowed transition"
-                      >
-                        <ChevronRight size={16} />
-                      </button>
+          {/* Product grid + pagination */}
+          <div className="flex-1 min-w-0">
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="animate-pulse bg-white rounded-2xl overflow-hidden shadow-sm">
+                    <div className="bg-slate-200 h-48 w-full" />
+                    <div className="p-4 space-y-2">
+                      <div className="h-3 bg-slate-200 rounded w-3/4" />
+                      <div className="h-4 bg-slate-200 rounded w-1/2" />
                     </div>
-
-                    {/* Page info */}
-                    <p className="text-center text-sm text-gray-500 mt-3">
-                      Showing {(currentPage - 1) * PRODUCTS_PER_PAGE + 1}–{Math.min(currentPage * PRODUCTS_PER_PAGE, filteredProducts.length)} of {filteredProducts.length} products
-                    </p>
-                  </>
-                )}
+                  </div>
+                ))}
               </div>
-            </div>
+            ) : error ? (
+              <div className="flex flex-col items-center justify-center py-24 text-center">
+                <p className="text-zinc-400 mb-3">{error}</p>
+                <button
+                  onClick={fetchProducts}
+                  className="px-4 py-2 bg-orange-500 text-white text-sm font-semibold rounded-lg hover:bg-orange-600 transition"
+                >
+                  Try Again
+                </button>
+              </div>
+            ) : paginatedProducts.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-24 text-center">
+                <p className="text-lg font-semibold text-zinc-700 mb-1">No products found</p>
+                <p className="text-sm text-zinc-400 mb-4">Try adjusting your filters or search query.</p>
+                <button
+                  onClick={handleResetFilters}
+                  className="px-4 py-2 border border-slate-200 text-sm font-medium rounded-lg text-zinc-600 hover:bg-slate-100 transition"
+                >
+                  Reset Filters
+                </button>
+              </div>
+            ) : (
+              <ProductGrid products={paginatedProducts} columns={3} qty={paginatedProducts.length} />
+            )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-10 flex flex-col items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+
+                  {getPageNumbers().map((page, i) =>
+                    page === "..." ? (
+                      <span key={`ellipsis-${i}`} className="w-9 h-9 flex items-center justify-center text-slate-400 text-sm select-none">
+                        …
+                      </span>
+                    ) : (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`w-9 h-9 rounded-full text-sm font-semibold transition ${
+                          currentPage === page
+                            ? "bg-zinc-900 text-white"
+                            : "border border-slate-200 text-slate-600 hover:bg-slate-100"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
+
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+                <p className="text-xs text-slate-400">
+                  Showing {(currentPage - 1) * PRODUCTS_PER_PAGE + 1}–
+                  {Math.min(currentPage * PRODUCTS_PER_PAGE, filteredProducts.length)} of {filteredProducts.length}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
       <Footer />
-    </>
+    </div>
   );
 };
 
-export default ProductPage;
+export default ProductPage;
