@@ -159,7 +159,15 @@ export default function HistoryOrder() {
                     {/* Product image */}
                     <div className="w-16 h-16 rounded-lg bg-slate-100 shrink-0 overflow-hidden">
                       {order.items?.[0]?.image ? (
-                        <img src={order.items[0].image} alt="" className="w-full h-full object-cover" />
+                        <img
+                          src={order.items[0].image}
+                          alt=""
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = `https://picsum.photos/seed/order-${order.id}/128/128`;
+                          }}
+                        />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <Package className="text-slate-300" size={20} />

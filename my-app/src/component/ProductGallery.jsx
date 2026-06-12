@@ -25,6 +25,10 @@ export default function ProductGallery({ thumbnails = [] }) {
             src={mainImage}
             alt="Main Product"
             className="w-full h-auto object-cover rounded-md"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `https://picsum.photos/seed/main-product/600/400`;
+            }}
           />
         </div>
         <div className="flex flex-row gap-2 overflow-x-auto pb-2">
@@ -34,8 +38,12 @@ export default function ProductGallery({ thumbnails = [] }) {
               src={img.path}
               alt={`Product thumbnail ${img.id}`}
               className={`w-20 h-20 object-cover rounded-md cursor-pointer border-2 transition-all duration-200 flex-shrink-0
-                          ${mainImage === img.path ? 'border-blue-500 shadow-md' : 'border-gray-300 hover:border-blue-300'}`}
+                          ${mainImage === img.path ? 'border-orange-500 shadow-md' : 'border-gray-300 hover:border-orange-300'}`}
               onClick={() => setMainImage(img.path)}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `https://picsum.photos/seed/thumb-${img.id}/80/80`;
+              }}
             />
           ))}
         </div>

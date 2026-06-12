@@ -1,92 +1,92 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MenuIcon from "../assets/admin/cup-brown.svg";
-import LogoIcon from "../assets/admin/brand.svg";
-import ProfileImg from "../assets/admin/Profile.png";
-import DropdownIcon from "../assets/admin/dropdown.svg";
+import { Coffee, ChevronDown, LogOut, User } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { logout } from "../features/user/authSlice";
 
 function NavbarAdmin() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [adminName, setAdminName] = useState("Admin");
+  const [adminEmail, setAdminEmail] = useState("");
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     try {
       const activeUser = JSON.parse(localStorage.getItem("currentUserSession"));
-      if (activeUser?.user?.name) {
-        setAdminName(activeUser.user.name);
-      } else if (activeUser?.name) {
-        setAdminName(activeUser.name);
-      }
-    } catch (error) {
-      console.warn("Could not retrieve admin data");
-    }
+      if (activeUser?.user?.name) setAdminName(activeUser.user.name);
+      else if (activeUser?.name) setAdminName(activeUser.name);
+      if (activeUser?.user?.email) setAdminEmail(activeUser.user.email);
+      else if (activeUser?.email) setAdminEmail(activeUser.email);
+    } catch { /* silent */ }
 
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setIsDropdownOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
+    dispatch(logout(adminEmail));
     localStorage.removeItem("currentUserSession");
     navigate("/login");
   };
 
   return (
-    <div className="relative z-50">
-      <div className="flex flex-row justify-between space-x-2 p-5 bg-white border-b border-gray-100">
-        <div className="flex items-center space-x-2">
-          <img src={MenuIcon} alt="Menu" className="h-6 w-6" />
-          <img src={LogoIcon} alt="Logo" className="h-6" />
+    <header
+      className="h-14 flex items-center justify-between px-6 bg-zinc-950 border-b border-white/8 shrink-0"
+      style={{ fontFamily: "'Outfit', sans-serif" }}
+    >
+      {/* Brand */}
+      <div className="flex items-center gap-2.5">
+        <div className="w-7 h-7 bg-orange-500 rounded-lg flex items-center justify-center">
+          <Coffee size={14} className="text-white" />
         </div>
-        
-        {/* Profile Section */}
-        <div className="relative" ref={dropdownRef}>
-          <button 
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex flex-row gap-x-3 items-center hover:bg-gray-50 px-3 py-1.5 rounded-lg transition"
-          >
-            <div className="flex flex-col text-right hidden sm:flex">
-              <span className="text-sm font-semibold text-gray-800">{adminName}</span>
-              <span className="text-xs text-gray-500">Administrator</span>
-            </div>
-            <img
-              src={ProfileImg}
-              alt="Profile"
-              className="h-9 w-9 rounded-full object-cover border border-gray-200"
-            />
-            <img
-              src={DropdownIcon}
-              alt="Dropdown"
-              className={`h-4 w-4 text-gray-500 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}
-            />
-          </button>
-
-          {/* Dropdown Menu */}
-          {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-100 sm:hidden">
-                <p className="text-sm font-medium text-gray-900 truncate">{adminName}</p>
-                <p className="text-xs text-gray-500 truncate">Administrator</p>
-              </div>
-              <button 
-                onClick={handleLogout}
-                className="w-full text-left block px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition"
-              >
-                Log out
-              </button>
-            </div>
-          )}
-        </div>
+        <span className="text-white font-bold text-base tracking-tight">
+          Koda<span className="text-orange-400">.</span>
+          <span className="text-zinc-500 text-xs font-normal ml-1.5">Admin</span>
+        </span>
       </div>
-    </div>
+
+      {/* Profile Dropdown */}
+      <div className="relative" ref={dropdownRef}>
+        <button
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg hover:bg-white/5 transition"
+        >
+          <div className="w-7 h-7 rounded-full bg-orange-500 flex items-center justify-center">
+            <User size={13} className="text-white" />
+          </div>
+          <div className="hidden sm:flex flex-col text-left leading-tight">
+            <span className="text-xs font-semibold text-zinc-200">{adminName}</span>
+            <span className="text-[10px] text-zinc-500">Administrator</span>
+          </div>
+          <ChevronDown
+            size={14}
+            className={`text-zinc-500 transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
+          />
+        </button>
+
+        {isDropdownOpen && (
+          <div className="absolute right-0 mt-2 w-44 bg-zinc-900 border border-white/10 rounded-xl shadow-xl overflow-hidden z-50">
+            <div className="px-3 py-2.5 border-b border-white/8">
+              <p className="text-xs font-semibold text-zinc-200 truncate">{adminName}</p>
+              <p className="text-[10px] text-zinc-500 truncate">{adminEmail || "Administrator"}</p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-2 px-3 py-2.5 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition"
+            >
+              <LogOut size={13} /> Log out
+            </button>
+          </div>
+        )}
+      </div>
+    </header>
   );
 }
 

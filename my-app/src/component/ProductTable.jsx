@@ -70,9 +70,13 @@ export const ProductTable = ({
                 </td>
                 <td className="px-4 py-3">
                   <img
-                    src={product.image}
+                    src={product.image || `https://picsum.photos/seed/${product.name || 'product'}/48/48`}
                     alt={product.name}
                     className="w-12 h-12 rounded-lg object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `https://picsum.photos/seed/fallback-${Math.floor(Math.random()*100)}/48/48`;
+                    }}
                   />
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm font-medium">

@@ -190,7 +190,15 @@ const ReviewSection = ({ productId }) => {
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold uppercase overflow-hidden">
                     {review.user_profile_image ? (
-                      <img src={review.user_profile_image} alt={review.user_name} className="w-full h-full object-cover" />
+                      <img
+                        src={review.user_profile_image}
+                        alt={review.user_name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `https://picsum.photos/seed/${review.user_name || 'user'}/40/40`;
+                        }}
+                      />
                     ) : (
                       review.user_name.charAt(0)
                     )}

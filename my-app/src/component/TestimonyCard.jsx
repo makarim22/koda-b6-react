@@ -21,11 +21,15 @@ export default function TestimonyCard({ testimonies }) {
   return (
     <div className="bg-stone-950 text-white p-8 rounded-lg">
       <div className="flex flex-col md:flex-row lg:flex-row gap-8 max-w-4xl">
-        <div className="shrink-0 ">
+        <div className="shrink-0">
           <img
             src={currentTestimony.image}
             alt={currentTestimony.name}
             className="w-80 h-80 object-cover rounded-lg"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `https://picsum.photos/seed/${currentTestimony.name}/320/320`;
+            }}
           />
         </div>
 

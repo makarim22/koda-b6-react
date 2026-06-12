@@ -5,7 +5,7 @@ import http from "../lib/http";
 import KpiCard from "../component/Dashboard/KpiCard";
 import SalesChart from "../component/Dashboard/SalesChart";
 import RecentActivity from "../component/Dashboard/RecentActivity";
-import { CircleDollarSign, Package, ShoppingBag, Users } from "lucide-react";
+import { CircleDollarSign, Package, ShoppingBag, CheckCircle, AlertCircle } from "lucide-react";
 
 function Dashboard() {
   const [stats, setStats] = useState({
@@ -30,7 +30,6 @@ function Dashboard() {
       setLoading(true);
       setError(null);
 
-      // Fetch Top Products
       const productsPromise = http("/api/products/top-products").then(async (res) => {
         if (!res.ok) throw new Error("Failed to fetch products");
         const apiData = await res.json();
@@ -42,42 +41,41 @@ function Dashboard() {
         }));
       });
 
-      // Fetch Order Stats
-      const statsPromise = http("/public/order-stats", {}, { method: 'GET' }).then(async (res) => {
+      const statsPromise = http("/public/order-stats", {}, { method: "GET" }).then(async (res) => {
         if (res.ok) {
           const statsData = await res.json();
           if (statsData.success && statsData.data) {
             const data = statsData.data;
-            const inProgress = (data["pending"] || 0) + (data["processing"] || 0);
-            const shipping = data["shipped"] || 0;
-            const done = (data["delivered"] || 0) + (data["completed"] || 0);
-            return { ordersInProgress: inProgress, ordersShipping: shipping, ordersDone: done };
+            return {
+              ordersInProgress: (data["pending"] || 0) + (data["processing"] || 0),
+              ordersShipping: data["shipped"] || 0,
+              ordersDone: (data["delivered"] || 0) + (data["completed"] || 0),
+            };
           }
         }
         return { ordersInProgress: 0, ordersShipping: 0, ordersDone: 0 };
       });
 
-      // Fetch Sales Data
-      const salesPromise = http(`/public/daily-sales`, {}, { method: 'GET' }).then(async (res) => {
+      const salesPromise = http("/public/daily-sales", {}, { method: "GET" }).then(async (res) => {
         const data = await res.json();
         if (data.success && data.data && data.data.length > 0) {
-          const chartData = data.data.map((item) => {
-            const date = new Date(item.sales_date);
-            return {
-              date: date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' }),
-              value: item.total_products_sold,
-              fullDate: date,
-            };
-          });
+          const chartData = data.data
+            .map((item) => {
+              const date = new Date(item.sales_date);
+              return {
+                date: date.toLocaleDateString("id-ID", { day: "2-digit", month: "short" }),
+                value: item.total_products_sold,
+                fullDate: date,
+              };
+            })
+            .sort((a, b) => a.fullDate - b.fullDate);
 
-          chartData.sort((a, b) => a.fullDate - b.fullDate);
-
-          const firstDate = chartData[0].date;
-          const lastDate = chartData[chartData.length - 1].date;
-          const dateRange = `${firstDate} - ${lastDate}`;
           const total = data.data.reduce((sum, item) => sum + item.total_products_sold, 0);
-
-          return { total, chartData, dateRange };
+          return {
+            total,
+            chartData,
+            dateRange: `${chartData[0].date} – ${chartData[chartData.length - 1].date}`,
+          };
         }
         return { total: 0, chartData: [], dateRange: "No Data" };
       });
@@ -85,146 +83,132 @@ function Dashboard() {
       const [transformedProducts, statsObj, salesObj] = await Promise.all([
         productsPromise,
         statsPromise,
-        salesPromise
+        salesPromise,
       ]);
 
       setTopProducts(transformedProducts);
-      
-      // Calculate a rough "total revenue" mock for the demo if not provided directly
-      // In a real app, this should come directly from the order-stats API.
+
       const mockTotalRevenue = transformedProducts.reduce((acc, curr) => {
-        const val = parseInt(curr.profit.replace(/[^0-9]/g, ''), 10);
+        const val = parseInt(curr.profit.replace(/[^0-9]/g, ""), 10);
         return acc + (isNaN(val) ? 0 : val);
       }, 0);
 
-      setStats({
-        ...statsObj,
-        totalRevenue: mockTotalRevenue > 0 ? mockTotalRevenue : 15450000 
-      });
-      
-      if (salesObj) {
-        setSalesData(salesObj);
-      }
-
+      setStats({ ...statsObj, totalRevenue: mockTotalRevenue > 0 ? mockTotalRevenue : 15450000 });
+      if (salesObj) setSalesData(salesObj);
     } catch (err) {
       setError(err.message);
-      console.error("Dashboard fetch error:", err);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  useEffect(() => { fetchData(); }, [fetchData]);
+
+  const AdminShell = ({ children }) => (
+    <div
+      className="flex flex-col h-screen bg-zinc-950"
+      style={{ fontFamily: "'Outfit', sans-serif" }}
+    >
+      <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+      <NavbarAdmin />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar />
+        <main className="flex-1 overflow-y-auto bg-[#111318]">{children}</main>
+      </div>
+    </div>
+  );
 
   if (loading) {
     return (
-      <div className="flex flex-col h-screen bg-gray-50">
-        <NavbarAdmin />
-        <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
-          <main className="flex-1 p-8 flex items-center justify-center">
-            <div className="flex flex-col items-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mb-4"></div>
-              <div className="text-lg text-gray-500 font-medium">Loading Dashboard...</div>
-            </div>
-          </main>
+      <AdminShell>
+        <div className="flex items-center justify-center h-full flex-col gap-3">
+          <div className="w-8 h-8 border-2 border-zinc-700 border-t-white rounded-full animate-spin" />
+          <p className="text-sm text-zinc-500 font-medium">Loading dashboard...</p>
         </div>
-      </div>
+      </AdminShell>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col h-screen bg-gray-50">
-        <NavbarAdmin />
-        <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
-          <main className="flex-1 p-8 flex items-center justify-center">
-            <div className="bg-white border border-red-200 rounded-xl p-8 text-center max-w-md shadow-sm">
-              <div className="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Error Loading Data</h3>
-              <p className="text-gray-600 mb-6">{error}</p>
-              <button 
-                onClick={fetchData}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors w-full"
-              >
-                Try Again
-              </button>
+      <AdminShell>
+        <div className="flex items-center justify-center h-full">
+          <div className="bg-zinc-900 border border-white/8 rounded-2xl p-8 text-center max-w-sm">
+            <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <AlertCircle size={22} className="text-white/60" />
             </div>
-          </main>
+            <h3 className="text-base font-semibold text-white mb-1">Failed to Load</h3>
+            <p className="text-sm text-zinc-500 mb-6">{error}</p>
+            <button
+              onClick={fetchData}
+              className="bg-white hover:bg-white/90 text-zinc-900 text-sm font-semibold px-5 py-2 rounded-lg transition active:scale-95"
+            >
+              Try Again
+            </button>
+          </div>
         </div>
-      </div>
+      </AdminShell>
     );
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      <NavbarAdmin />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 p-6 md:p-8 overflow-y-auto">
-          
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-800">Overview</h1>
-            <p className="text-gray-500 text-sm mt-1">Monitor your store's performance and sales metrics.</p>
-          </div>
+    <AdminShell>
+      <div className="p-6 md:p-8">
+        {/* Page Header */}
+        <div className="mb-8">
+          <p className="text-[11px] font-semibold text-zinc-600 uppercase tracking-widest mb-1">Admin</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Overview</h1>
+          <p className="text-sm text-zinc-500 mt-1">Monitor your store's performance and sales metrics.</p>
+        </div>
 
-          {/* Top KPI Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <KpiCard 
-              title="Total Revenue" 
-              value={`Rp ${stats.totalRevenue.toLocaleString("id-ID")}`}
-              icon={CircleDollarSign}
-              colorClass="bg-emerald-500 text-emerald-600"
-              trend={{ isUp: true, value: 12.5 }}
-            />
-            <KpiCard 
-              title="Orders Processing" 
-              value={stats.ordersInProgress}
-              icon={Package}
-              colorClass="bg-indigo-500 text-indigo-600"
-            />
-            <KpiCard 
-              title="Orders Shipped" 
-              value={stats.ordersShipping}
-              icon={ShoppingBag}
-              colorClass="bg-blue-500 text-blue-600"
-            />
-            <KpiCard 
-              title="Orders Completed" 
-              value={stats.ordersDone}
-              icon={Users}
-              colorClass="bg-purple-500 text-purple-600"
-              trend={{ isUp: true, value: 2.1 }}
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+          <KpiCard
+            title="Total Revenue"
+            value={`Rp ${stats.totalRevenue.toLocaleString("id-ID")}`}
+            icon={CircleDollarSign}
+            accent="emerald"
+            trend={{ isUp: true, value: 12.5 }}
+          />
+          <KpiCard
+            title="Processing"
+            value={stats.ordersInProgress}
+            icon={Package}
+            accent="white"
+          />
+          <KpiCard
+            title="Shipped"
+            value={stats.ordersShipping}
+            icon={ShoppingBag}
+            accent="white"
+          />
+          <KpiCard
+            title="Completed"
+            value={stats.ordersDone}
+            icon={CheckCircle}
+            accent="white"
+            trend={{ isUp: true, value: 2.1 }}
+          />
+        </div>
+
+        {/* Chart + Top Products */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2">
+            <SalesChart
+              data={salesData.chartData}
+              total={salesData.total}
+              dateRange={salesData.dateRange}
             />
           </div>
-
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Sales Chart (Takes 2 columns on large screens) */}
-            <div className="lg:col-span-2">
-              <SalesChart 
-                data={salesData.chartData} 
-                total={salesData.total} 
-                dateRange={salesData.dateRange} 
-              />
-            </div>
-            
-            {/* Recent Activity / Top Products */}
-            <div className="lg:col-span-1">
-              <RecentActivity topProducts={topProducts} />
-            </div>
+          <div className="lg:col-span-1">
+            <RecentActivity topProducts={topProducts} />
           </div>
-
-        </main>
+        </div>
       </div>
-    </div>
+    </AdminShell>
   );
 }
 

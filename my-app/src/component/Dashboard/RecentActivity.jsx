@@ -1,54 +1,50 @@
-import React from 'react';
+import React from "react";
+import { ArrowRight } from "lucide-react";
+
+const RANK_COLORS = [
+  "bg-orange-500/10 text-orange-400",
+  "bg-zinc-700 text-zinc-300",
+  "bg-amber-800/20 text-amber-600",
+  "bg-zinc-800 text-zinc-400",
+  "bg-zinc-800 text-zinc-400",
+];
 
 const RecentActivity = ({ topProducts }) => {
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-full">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg font-semibold text-gray-800">Top Selling Products</h2>
+    <div className="bg-zinc-900 border border-white/8 rounded-2xl p-5 h-full flex flex-col">
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-sm font-semibold text-zinc-200">Top Selling Products</h2>
+        <span className="text-[10px] font-medium text-zinc-600 uppercase tracking-widest">Revenue</span>
       </div>
-      
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-100">
-          <thead>
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Product</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Sold</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Revenue</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {topProducts.slice(0, 5).map((product, index) => (
-              <tr key={product.id || index} className="hover:bg-gray-50 transition-colors">
-                <td className="px-4 py-3 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 h-8 w-8 bg-indigo-100 text-indigo-600 rounded-md flex items-center justify-center font-bold text-xs">
-                      {index + 1}
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-800">{product.name}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap">
-                  <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
-                    {product.sold} units
-                  </span>
-                </td>
-                <td className="px-4 py-3 whitespace-nowrap text-sm font-semibold text-emerald-600">
-                  {product.profit}
-                </td>
-              </tr>
-            ))}
-            {topProducts.length === 0 && (
-              <tr>
-                <td colSpan="3" className="px-4 py-8 text-center text-sm text-gray-500">
-                  No products data available.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+
+      {topProducts.length === 0 ? (
+        <div className="flex-1 flex items-center justify-center">
+          <p className="text-sm text-zinc-600">No data available.</p>
+        </div>
+      ) : (
+        <div className="space-y-1 flex-1">
+          {topProducts.slice(0, 5).map((product, index) => (
+            <div
+              key={product.id || index}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/4 transition-colors group"
+            >
+              {/* Rank badge */}
+              <div className={`w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold shrink-0 ${RANK_COLORS[index] || RANK_COLORS[4]}`}>
+                {index + 1}
+              </div>
+
+              {/* Name + sold */}
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-zinc-200 truncate leading-tight">{product.name}</p>
+                <p className="text-[11px] text-zinc-600 mt-0.5">{product.sold} units sold</p>
+              </div>
+
+              {/* Revenue */}
+              <p className="text-xs font-semibold text-emerald-400 shrink-0">{product.profit}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

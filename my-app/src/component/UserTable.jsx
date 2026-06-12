@@ -90,9 +90,13 @@ export default function UserTable({
                 </td>
                 <td className="px-4 py-3">
                   <img
-                    src={user.profileImage || ''} 
+                    src={user.profileImage || `https://picsum.photos/seed/${user.fullname || 'user'}/48/48`}
                     alt={user.fullname}
                     className="w-12 h-12 rounded-lg object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `https://picsum.photos/seed/fallback-${Math.floor(Math.random()*100)}/48/48`;
+                    }}
                   />
                 </td>
                 <td className="px-4 py-3 text-gray-800 text-sm font-medium">

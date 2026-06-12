@@ -96,22 +96,15 @@ export const ProductCard = ({
     <>
       <div className="w-full max-w-sm rounded-lg overflow-hidden shadow-lg transition-all duration-300 bg-white">
         <div className="relative h-64 overflow-hidden bg-gray-100">
-          {image ? (
-            <img 
-              src={image} 
-              alt={title} 
-              className="w-full h-full object-cover" 
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = 'https://via.placeholder.com/400x256?text=Image+Not+Found';
-                console.error(`Failed to load product image: ${image}`);
-              }}
-            />
-          ) : (
-            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-              No Image Provided
-            </div>
-          )}
+          <img
+            src={image || `https://picsum.photos/seed/${title || 'product'}/400/256`}
+            alt={title}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `https://picsum.photos/seed/fallback-${Math.floor(Math.random()*100)}/400/256`;
+            }}
+          />
           
           {/* Wishlist Button */}
           <button 

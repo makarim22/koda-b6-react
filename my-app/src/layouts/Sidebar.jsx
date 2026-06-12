@@ -1,128 +1,55 @@
-import React from 'react'
-import Bag from '../assets/admin/Bag.svg'
-import GlassTea from '../assets/admin/glass-tea.svg'
-import Logout from '../assets/admin/logout.svg'
-import Option from '../assets/admin/option.svg'
-import Users from '../assets/admin/users.svg'
-import { Link } from 'react-router-dom' 
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { Tags, Ticket, Star } from 'lucide-react'
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Coffee,
+  ShoppingBag,
+  Users,
+  Tag,
+  Ticket,
+  Star,
+} from "lucide-react";
+
+const NAV_ITEMS = [
+  { key: "dashboard",  label: "Dashboard",  to: "/admin-dashboard",  icon: LayoutDashboard },
+  { key: "product",    label: "Products",   to: "/admin-products",   icon: Coffee },
+  { key: "categories", label: "Categories", to: "/admin-categories", icon: Tag },
+  { key: "vouchers",   label: "Vouchers",   to: "/admin-vouchers",   icon: Ticket },
+  { key: "reviews",    label: "Reviews",    to: "/admin-reviews",    icon: Star },
+  { key: "order",      label: "Orders",     to: "/admin-orders",     icon: ShoppingBag },
+  { key: "user",       label: "Users",      to: "/admin-users",      icon: Users },
+];
 
 function Sidebar() {
-  const navigate = useNavigate();
-
   const location = useLocation();
-  console.log('locationnya', location);
-  const [activeSection, setActiveSection] = useState(''); 
-  console.log('active session', activeSection)
+  const isActive = (to) => location.pathname === to;
 
-  const handleLogout = () => {
-    const usersString = localStorage.getItem('user-data');
-    if (usersString) {
-      try {
-        let allUsers = JSON.parse(usersString);
-        const loggedInUserIndex = allUsers.findIndex(user => user.isLoggedIn === true);
-        if (loggedInUserIndex !== -1) {
-          allUsers[loggedInUserIndex].isLoggedIn = false;
-          localStorage.setItem('user-data', JSON.stringify(allUsers));
-        }
-        navigate('/login');
-      } catch (error) {
-        console.error('Error parsing or updating users data during logout:', error);
-        navigate('/login');
-      }
-    } else {
-      navigate('/login');
-    }
-  };
-
-  useEffect(() => {
-    const path = location.pathname;
-    if (path === '/admin-dashboard') {
-      setActiveSection('dashboard');
-    } else if (path === '/admin-products') {
-      setActiveSection('product');
-    } else if (path === '/admin-orders') {
-      setActiveSection('order');
-    } else if (path === '/admin-users') {
-      setActiveSection('user');
-    } else if (path === '/admin-categories') {
-      setActiveSection('categories');
-    } else if (path === '/admin-vouchers') {
-      setActiveSection('vouchers');
-    } else if (path === '/admin-reviews') {
-      setActiveSection('reviews');
-    } else {
-      setActiveSection('');
-    }
-  }, [location.pathname]);
-
-   const getSectionClasses = (sectionName) => {
-    return `flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer ${
-      activeSection === sectionName ? 'bg-orange-400' : ''
-    }`;
-  };
   return (
-    <div className='w-64 bg-white h-full shadow-lg p-4 pt-6'>
-      <aside className='flex flex-col'>
-        <div className={getSectionClasses('dashboard')}>
-            <img src={Option} alt="" ></img>
-            <Link to={'/admin-dashboard'}>
-            <span className='font-semibold'>Dashboard</span> 
-            </Link>
-            
-        </div>
-                <div 
-                className={getSectionClasses('product')}>
-            <img src={GlassTea} alt="" ></img>
-            <Link to={'/admin-products'}>
-            <span className='font-semibold'>Product</span> 
-            </Link>
-            
-        </div>
-        <div className={getSectionClasses('categories')}>
-            <Tags className="text-black" size={24} />
-            <Link to={'/admin-categories'}>
-            <span className='font-semibold'>Categories</span> 
-            </Link>
-        </div>
-        <div className={getSectionClasses('vouchers')}>
-            <Ticket className="text-black" size={24} />
-            <Link to={'/admin-vouchers'}>
-            <span className='font-semibold'>Vouchers</span> 
-            </Link>
-        </div>
-        <div className={getSectionClasses('reviews')}>
-            <Star className="text-black" size={24} />
-            <Link to={'/admin-reviews'}>
-            <span className='font-semibold'>Reviews</span> 
-            </Link>
-        </div>
-                <div 
-                className={getSectionClasses('order')}>
-            <img src={Bag} alt="" ></img>
-            <Link to={'/admin-orders'}>
-            <span className='font-semibold'>Order</span> 
-            </Link>
-        </div>
-                <div 
-                className={getSectionClasses('user')}>
-            <img src={Users} alt="" ></img>
-            <Link to={'/admin-users'}>
-            <span className='font-semibold'>User</span> 
-            </Link>
-        </div>
-                <div className='flex items-center gap-3 p-3 mb-2 text-black rounded-lg cursor-pointer'>
-            <img src={Logout} alt="" ></img>
-            <button
-             onClick={handleLogout}
-             className='font-semibold'>Keluar</button> 
-        </div>
-
-      </aside>
-    </div>
-  )
+    <aside
+      className="w-56 bg-zinc-900 border-r border-white/8 flex flex-col h-full shrink-0"
+      style={{ fontFamily: "'Outfit', sans-serif" }}
+    >
+      <nav className="flex-1 px-3 py-5 space-y-0.5">
+        <p className="text-[10px] font-semibold text-zinc-500 uppercase tracking-widest px-3 mb-3">
+          Navigation
+        </p>
+        {NAV_ITEMS.map(({ key, label, to, icon: Icon }) => (
+          <Link
+            key={key}
+            to={to}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150 ${
+              isActive(to)
+                ? "bg-white/10 text-white border border-white/15"
+                : "text-zinc-400 hover:text-white hover:bg-white/6"
+            }`}
+          >
+            <Icon size={16} />
+            {label}
+          </Link>
+        ))}
+      </nav>
+    </aside>
+  );
 }
 
-export default Sidebar
+export default Sidebar;

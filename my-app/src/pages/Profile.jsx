@@ -125,7 +125,15 @@ function Profile() {
               <div className="relative mb-5">
                 <div className="w-28 h-28 rounded-full border-4 border-slate-100 overflow-hidden bg-slate-100">
                   {user.profileImage ? (
-                    <img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" />
+                    <img
+                      src={user.profileImage}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `https://picsum.photos/seed/${user.fullname || 'user'}/112/112`;
+                      }}
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <User size={40} className="text-slate-300" />
