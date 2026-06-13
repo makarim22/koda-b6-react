@@ -3,11 +3,12 @@ import { Button } from "/src/component/Button";
 import ForgotPasswordImg from "../assets/icons/forgot-password.svg";
 
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import coffeeCupLogo from "../assets/icons/logo-coffee.svg";
 import coffeeShopLogo from "../assets/icons/cup.svg";
 import mailIcon from "../assets/icons/mail.svg";
-import { useNavigate } from "react-router-dom";
 import http from "../lib/http";
+import { ChevronLeft } from "lucide-react";
 
 function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -22,7 +23,6 @@ function ForgotPasswordPage() {
 
     const trimmedEmail = email.trim();
 
-    // Frontend validation
     if (!trimmedEmail) {
       setError("Email is required.");
       return;
@@ -50,7 +50,6 @@ function ForgotPasswordPage() {
         return;
       }
 
-      // Store email and OTP in localStorage for reset page
       localStorage.setItem(
         "forgotPasswordData",
         JSON.stringify({
@@ -59,58 +58,89 @@ function ForgotPasswordPage() {
         }),
       );
 
-      // Clear form
       setEmail("");
 
       alert("OTP sent successfully! Check your email.");
       navigate("/reset-password");
     } catch (err) {
       setError("Network error. Please check your connection and try again.");
-      console.error("Forgot password error:", err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row font-sans">
-      <div className="hidden md:flex md:w-3/10 bg-linear-to-br from-orange-50 to-orange-100 items-center justify-center overflow-hidden">
-        <img
-          src={ForgotPasswordImg}
-          alt="Login Illustration"
-          className="w-full h-full object-cover"
-        />
+    <div className="min-h-screen flex flex-col md:flex-row bg-slate-50" style={{ fontFamily: "'Outfit', sans-serif" }}>
+      {/* Left Side - Image/Branding */}
+      <div className="hidden md:flex md:w-[45%] relative bg-zinc-950 items-center justify-center overflow-hidden p-12 isolate">
+        {/* Abstract Background Effects */}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-zinc-900 to-zinc-950 z-0" />
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-orange-500/20 rounded-full blur-[100px] z-0" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-rose-500/10 rounded-full blur-[100px] z-0" />
+        
+        {/* Content */}
+        <div className="relative z-10 w-full max-w-md flex flex-col items-center">
+          <div className="w-full aspect-square relative rounded-[2rem] overflow-hidden bg-white/5 border border-white/10 shadow-2xl backdrop-blur-sm p-8 mb-12 group">
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <img
+              src={ForgotPasswordImg}
+              alt="Forgot Password"
+              className="w-full h-full object-contain filter drop-shadow-xl group-hover:scale-105 transition-transform duration-700"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://picsum.photos/seed/koda2/600/600";
+              }}
+            />
+          </div>
+          <h1 className="text-4xl font-bold text-white tracking-tight text-center mb-4">
+            Reset Your <span className="text-orange-400">Access.</span>
+          </h1>
+          <p className="text-zinc-400 text-center text-lg leading-relaxed max-w-sm">
+            Don't worry, it happens to the best of us. We'll help you securely recover your Koda account.
+          </p>
+        </div>
       </div>
 
-      <div className="w-full md:w-7/10 flex items-center justify-center p-6 md:p-12 bg-white">
-        <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col">
-          <div className="flex flex-row items-center gap-3">
-            <img src={coffeeShopLogo} alt="Logo" className="h-7" />
-            <img src={coffeeCupLogo} alt="Text" className="w-22 h-22" />
+      {/* Right Side - Form */}
+      <div className="w-full md:w-[55%] flex items-center justify-center p-6 md:p-12 lg:p-20 bg-white relative">
+        <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col relative z-10">
+          
+          <Link 
+            to="/login" 
+            className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-zinc-900 transition-colors mb-10 font-medium text-sm w-fit"
+          >
+            <ChevronLeft size={16} />
+            Back to Login
+          </Link>
+
+          <div className="flex flex-row items-center gap-3 mb-10">
+            <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center border border-orange-100 shadow-sm">
+              <img src={coffeeShopLogo} alt="Logo" className="h-6 w-6" />
+            </div>
+            <img src={coffeeCupLogo} alt="Koda Logo" className="h-7" />
           </div>
 
-          <h2 className="text-3xl text-left mb-2 text-yellow-800 ">
-            {" "}
-            Fill out the form correctly{" "}
-          </h2>
-          <span className="block text-left text-gray-600 mb-8 text-sm">
-            We will send new password to your email
-          </span>
+          <div className="mb-10">
+            <h2 className="text-3xl font-bold text-zinc-900 tracking-tight mb-2">Forgot Password</h2>
+            <p className="text-zinc-500 text-sm">Enter the email associated with your account and we'll send an OTP code.</p>
+          </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm font-medium flex items-center gap-2 animate-fade-in-up">
+              <span className="shrink-0">⚠️</span>
               {error}
             </div>
           )}
 
-          <div className="mb-6">
+          <div className="space-y-4 mb-8">
             <Input
-              label="Email"
+              label="Email Address"
               type="email"
               id="email"
               name="email"
-              placeholder="Enter Your Email"
+              placeholder="Enter your email"
               required
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               icon={mailIcon}
               iconAlt="Email Icon"
@@ -119,12 +149,28 @@ function ForgotPasswordPage() {
 
           <Button
             type="submit"
-            className="w-full bg-orange-400 text-black font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 transition duration-200"
+            disabled={loading}
+            className="w-full bg-zinc-900 hover:bg-zinc-800 text-white font-bold py-4 px-4 rounded-xl shadow-lg shadow-zinc-900/20 active:scale-[0.98] transition-all duration-200 disabled:opacity-70 flex justify-center items-center h-[56px]"
           >
-            Submit
+            {loading ? (
+              <div className="w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+            ) : (
+              "Send Reset Link"
+            )}
           </Button>
+
         </form>
       </div>
+      
+      <style jsx>{`
+        @keyframes fade-in-up {
+          0% { opacity: 0; transform: translateY(10px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+          animation: fade-in-up 0.4s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 }
