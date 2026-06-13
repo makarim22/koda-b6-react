@@ -6,28 +6,27 @@ import {
   Truck,
   RefreshCw,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 function OrderInformation({ props }) {
-  console.log("props", props);
-
   if (!props) {
-    return <p className="text-gray-500 p-8">No order information available.</p>;
+    return <p className="text-zinc-500">No order information available.</p>;
   }
 
   const {
     name,
     address,
     paymentMethod,
-    payment,        // fallback if API uses 'payment' instead of 'paymentMethod'
+    payment,
     phone,
     shipping,
     status,
     id,
     order,
-    subtotal,       // fallback if API uses 'subtotal' instead of 'order'
+    subtotal,
     cartHistory,
-    created_at,     // API likely returns this instead of timestamp inside cartHistory
-    customer,       // API might return customer name at top level
+    created_at,
+    customer,
   } = props;
 
   function convertISOToReadable(isoString) {
@@ -40,7 +39,6 @@ function OrderInformation({ props }) {
         day: "numeric",
         hour: "2-digit",
         minute: "2-digit",
-        second: "2-digit",
         timeZone: "Asia/Jakarta",
       }).format(new Date(isoString));
     } catch {
@@ -48,70 +46,91 @@ function OrderInformation({ props }) {
     }
   }
 
-  // Safely resolve fields — API top-level first, fallback to cartHistory[0]
   const timestamp = created_at || cartHistory?.[0]?.timestamp || null;
   const fullname = customer || name || cartHistory?.[0]?.customer || "—";
   const resolvedPayment = paymentMethod || payment || cartHistory?.[0]?.paymentMethod || "—";
   const resolvedTotal = order || subtotal || "—";
 
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { type: "spring", stiffness: 300, damping: 25 }
+    }
+  };
+
   return (
-    <div className="w-full max-w-2xl mx-auto p-8 bg-white shadow-lg rounded-lg mb-4">
-      <h1 className="text-3xl">Order #{id}</h1>
-      <h2 className="text-gray-500 mb-2">{convertISOToReadable(timestamp)}</h2>
-      <h2 className="text-lg font-semibold mb-4">Order Information</h2>
-
-      <div className="mb-4 flex flex-row justify-between gap-2 border-b pb-2">
-        <div className="flex flex-row gap-2">
-          <CircleUserRound size={16} />
-          <span className="font-semibold">Full Name:</span>
+    <div className="w-full space-y-8">
+      {/* Header Section */}
+      <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-100 pb-6 gap-4">
+        <div>
+          <h2 className="text-xs font-semibold text-orange-500 uppercase tracking-widest mb-2">Order Information</h2>
+          <h1 className="text-4xl tracking-tighter font-semibold text-zinc-900 leading-none">Order <span className="font-mono text-3xl">#{id}</span></h1>
         </div>
-        {fullname}
-      </div>
-
-      <div className="mb-4 flex flex-row justify-between gap-2 border-b pb-2">
-        <div className="flex flex-row gap-2">
-          <MapPinHouse size={16} />
-          <span className="font-semibold">Address:</span>
+        <div className="text-sm font-mono text-zinc-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 w-fit">
+          {convertISOToReadable(timestamp)}
         </div>
-        {address || "—"}
+      </motion.div>
+
+      {/* Grid Data Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+        <motion.div variants={itemVariants} className="flex flex-col gap-2 border-b border-slate-50 pb-4">
+          <div className="flex items-center gap-2 text-zinc-500">
+            <CircleUserRound size={16} />
+            <span className="text-xs font-semibold uppercase tracking-widest">Full Name</span>
+          </div>
+          <div className="font-semibold text-zinc-900 text-lg">{fullname}</div>
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="flex flex-col gap-2 border-b border-slate-50 pb-4">
+          <div className="flex items-center gap-2 text-zinc-500">
+            <MapPinHouse size={16} />
+            <span className="text-xs font-semibold uppercase tracking-widest">Address</span>
+          </div>
+          <div className="font-medium text-zinc-700 leading-relaxed max-w-[30ch]">{address || "—"}</div>
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="flex flex-col gap-2 border-b border-slate-50 pb-4">
+          <div className="flex items-center gap-2 text-zinc-500">
+            <Phone size={16} />
+            <span className="text-xs font-semibold uppercase tracking-widest">Phone</span>
+          </div>
+          <div className="font-mono text-zinc-900 text-base">{phone || "—"}</div>
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="flex flex-col gap-2 border-b border-slate-50 pb-4">
+          <div className="flex items-center gap-2 text-zinc-500">
+            <CreditCard size={16} />
+            <span className="text-xs font-semibold uppercase tracking-widest">Payment Method</span>
+          </div>
+          <div className="font-semibold text-zinc-900 text-base capitalize">{resolvedPayment}</div>
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="flex flex-col gap-2 border-b border-slate-50 pb-4">
+          <div className="flex items-center gap-2 text-zinc-500">
+            <Truck size={16} />
+            <span className="text-xs font-semibold uppercase tracking-widest">Shipping</span>
+          </div>
+          <div className="font-semibold text-zinc-900 text-base capitalize">{shipping || "—"}</div>
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="flex flex-col gap-2 border-b border-slate-50 pb-4">
+          <div className="flex items-center gap-2 text-zinc-500">
+            <RefreshCw size={16} />
+            <span className="text-xs font-semibold uppercase tracking-widest">Status</span>
+          </div>
+          <div className="w-fit font-semibold text-zinc-900 text-sm capitalize bg-orange-50 text-orange-600 px-3 py-1 rounded-full border border-orange-100">
+            {status || "—"}
+          </div>
+        </motion.div>
       </div>
 
-      <div className="mb-4 flex flex-row justify-between gap-2 border-b pb-2">
-        <div className="flex flex-row gap-2">
-          <Phone size={16} />
-          <span className="font-semibold">Phone:</span>
-        </div>
-        {phone || "—"}
-      </div>
-
-      <div className="mb-4 flex flex-row justify-between gap-2 border-b pb-2">
-        <div className="flex flex-row gap-2">
-          <CreditCard size={16} />
-          <span className="font-semibold">Payment Method:</span>
-        </div>
-        {resolvedPayment}
-      </div>
-
-      <div className="mb-4 flex flex-row justify-between gap-2 border-b pb-2">
-        <div className="flex flex-row gap-2">
-          <Truck size={16} />
-          <span className="font-semibold">Shipping:</span>
-        </div>
-        {shipping || "—"}
-      </div>
-
-      <div className="mb-4 flex flex-row justify-between gap-2 border-b pb-2">
-        <div className="flex flex-row gap-2">
-          <RefreshCw size={16} />
-          <span className="font-semibold">Status:</span>
-        </div>
-        {status || "—"}
-      </div>
-
-      <div className="mb-4 flex flex-row justify-between">
-        <span className="font-semibold">Total:</span>
-        {resolvedTotal}
-      </div>
+      {/* Total Section */}
+      <motion.div variants={itemVariants} className="bg-zinc-950 rounded-2xl p-6 flex items-center justify-between shadow-lg shadow-zinc-900/10 mt-4">
+        <span className="text-zinc-400 text-sm font-semibold uppercase tracking-widest">Total Amount</span>
+        <span className="font-mono text-2xl font-bold text-white">{resolvedTotal}</span>
+      </motion.div>
     </div>
   );
 }

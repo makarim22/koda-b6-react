@@ -7,8 +7,9 @@ import Cart from "../component/Cart";
 import CartCtx from "../context/CartContext";
 import http from "../lib/http";
 import OrderTracking from "../component/OrderTracking";
-import { ArrowLeft, Package, AlertCircle } from "lucide-react";
+import { ArrowLeft, Package, AlertCircle, Truck } from "lucide-react";
 import { Button } from "../component/Button";
+import { motion } from "framer-motion";
 
 function DetailOrder() {
   const { id } = useParams();
@@ -59,13 +60,41 @@ function DetailOrder() {
     <Header bgColor="bg-zinc-950" />
   );
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { type: "spring", stiffness: 300, damping: 25 }
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col">
         {sharedHeader}
-        <main className="flex-1 flex flex-col items-center justify-center gap-4 pt-16 animate-fade-in-up">
-          <div className="w-10 h-10 border-4 border-slate-200 border-t-orange-500 rounded-full animate-spin shadow-sm" />
-          <p className="text-sm text-zinc-500 font-semibold uppercase tracking-widest">Loading order details...</p>
+        <main className="flex-1 flex flex-col items-center justify-center gap-4 pt-16">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-10 h-10 border-4 border-slate-200 border-t-orange-500 rounded-full animate-spin shadow-sm" 
+          />
+          <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-sm text-zinc-500 font-semibold uppercase tracking-widest"
+          >
+            Loading order details...
+          </motion.p>
         </main>
         <Footer />
       </div>
@@ -77,18 +106,31 @@ function DetailOrder() {
       <div className="min-h-screen bg-slate-50 flex flex-col">
         {sharedHeader}
         <main className="flex-1 flex flex-col items-center justify-center gap-4 pt-16 text-center px-6">
-          <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center border border-red-100 shadow-sm mb-2 animate-fade-in-up">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center border border-red-100 shadow-sm mb-2"
+          >
             <AlertCircle className="text-red-500" size={32} />
-          </div>
-          <div className="animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-            <p className="text-2xl font-extrabold text-zinc-950 mb-2 tracking-tighter">{error || "Order not found."}</p>
-            <p className="text-base font-medium text-zinc-500 max-w-sm mx-auto mb-8">The order you're looking for doesn't exist or you don't have access to it.</p>
-          </div>
-          <div className="animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            <Button variant="primary" onClick={() => navigate('/order-history')} className="px-8">
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <p className="text-3xl font-bold text-zinc-900 mb-2 tracking-tight">{error || "Order not found."}</p>
+            <p className="text-base text-zinc-500 max-w-sm mx-auto mb-8">The order you're looking for doesn't exist or you don't have access to it.</p>
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Button variant="primary" onClick={() => navigate('/order-history')} className="px-8 bg-zinc-950 text-white hover:bg-zinc-800 border-none">
               Back to Orders
             </Button>
-          </div>
+          </motion.div>
         </main>
         <Footer />
       </div>
@@ -96,66 +138,93 @@ function DetailOrder() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       {sharedHeader}
 
-      {/* Top Banner Context */}
-      <div className="bg-zinc-950 pt-28 pb-10 px-6 md:px-8 shadow-sm isolate relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="max-w-7xl mx-auto relative z-10 animate-fade-in-up flex items-center justify-between">
-          <div>
+      {/* Asymmetric Top Hero Banner */}
+      <div className="bg-zinc-950 pt-32 pb-16 px-6 md:px-8 border-b border-zinc-900 overflow-hidden relative">
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="flex flex-col items-start"
+          >
             <button
               onClick={() => navigate('/order-history')}
-              className="flex items-center gap-2 text-xs font-bold text-zinc-400 hover:text-white uppercase tracking-widest transition-colors mb-6 group"
+              className="flex items-center gap-2 text-xs font-semibold text-zinc-400 hover:text-white uppercase tracking-widest transition-colors mb-8 group"
             >
-              <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
+              <div className="w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
                 <ArrowLeft size={12} />
               </div>
               Back to Orders
             </button>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tighter leading-tight flex items-center gap-4">
-              Order <span className="text-orange-400">Detail</span>
+            <h1 className="text-5xl md:text-6xl font-semibold text-white tracking-tighter leading-none mb-4">
+              Order Detail
             </h1>
-            <p className="text-zinc-400 text-lg mt-2 font-mono tracking-wider">
-              #{id}
+            <p className="text-zinc-500 text-lg max-w-lg leading-relaxed">
+              Review your purchase information, track shipping progress, and see a summary of your items.
             </p>
-          </div>
-          <div className="hidden md:flex w-24 h-24 bg-white/5 border border-white/10 rounded-3xl items-center justify-center backdrop-blur-sm shadow-xl">
-            <Package size={40} className="text-white" />
-          </div>
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 }}
+            className="hidden lg:flex w-40 h-40 bg-gradient-to-br from-zinc-800 to-zinc-950 border border-zinc-800 rounded-[2.5rem] items-center justify-center shadow-2xl relative"
+          >
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:1rem_1rem] rounded-[2.5rem] pointer-events-none" />
+            <Package size={64} className="text-zinc-700" strokeWidth={1} />
+          </motion.div>
         </div>
       </div>
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 md:px-8 py-12 md:py-16">
-        {/* 2-column layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
-          {/* Left: Info + Tracking */}
-          <div className="lg:col-span-3 space-y-8 animate-fade-in-up">
-            <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+      <motion.main 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="flex-1 max-w-7xl mx-auto w-full px-6 md:px-8 py-12"
+      >
+        {/* Bento 2.0 Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Left Column: Order Info & Tracking */}
+          <div className="lg:col-span-7 flex flex-col gap-8">
+            <motion.div variants={itemVariants} className="bg-white rounded-[2.5rem] border border-slate-200/60 p-8 md:p-10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
               <OrderInformation props={order} />
-            </div>
+            </motion.div>
 
             {user && (
-              <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-                <h2 className="text-sm font-extrabold text-zinc-950 uppercase tracking-widest mb-6 border-b border-slate-100 pb-4">Shipping Tracking</h2>
+              <motion.div variants={itemVariants} className="bg-white rounded-[2.5rem] border border-slate-200/60 p-8 md:p-10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
+                <div className="flex items-center gap-3 mb-8 border-b border-slate-100 pb-6">
+                  <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center">
+                    <Truck size={18} className="text-zinc-600" />
+                  </div>
+                  <h2 className="text-lg font-bold text-zinc-900 tracking-tight">Shipping Tracking</h2>
+                </div>
                 <OrderTracking orderId={id} token={user?.user?.token || user?.token} />
-              </div>
+              </motion.div>
             )}
           </div>
 
-          {/* Right: Cart summary */}
-          <div className="lg:col-span-2 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm lg:sticky lg:top-28">
-              <h2 className="text-sm font-extrabold text-zinc-950 uppercase tracking-widest mb-6 border-b border-slate-100 pb-4">Items Ordered</h2>
+          {/* Right Column: Items Summary */}
+          <div className="lg:col-span-5">
+            <motion.div variants={itemVariants} className="bg-white rounded-[2.5rem] border border-slate-200/60 p-8 md:p-10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] lg:sticky lg:top-28">
+              <div className="flex items-center gap-3 mb-8 border-b border-slate-100 pb-6">
+                <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center">
+                  <Package size={18} className="text-zinc-600" />
+                </div>
+                <h2 className="text-lg font-bold text-zinc-900 tracking-tight">Items Ordered</h2>
+              </div>
               <Cart
                 items={order?.items}
                 isRemoveShowed={false}
                 showAddMenu={false}
               />
-            </div>
+            </motion.div>
           </div>
         </div>
-      </main>
+      </motion.main>
 
       <Footer />
     </div>
