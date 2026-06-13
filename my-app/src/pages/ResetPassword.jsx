@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import coffeeCupLogo from '../assets/icons/logo-coffee.svg';
 import coffeeShopLogo from '../assets/icons/cup.svg';
 import { Lock } from 'lucide-react';
- import http from '../lib/http'
+import http from '../lib/http'
 
 function ResetPasswordPage() {
   const navigate = useNavigate();
@@ -94,43 +94,67 @@ function ResetPasswordPage() {
 
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row font-sans">
-      <div className="hidden md:flex md:w-3/10 bg-gradient-to-br from-orange-50 to-orange-100 items-center justify-center overflow-hidden">
-        <img 
-          src={ResetPasswordImg} 
-          alt="Reset Password Illustration" 
-          className="w-full h-full object-cover"
-        />
+    <div className="min-h-screen flex flex-col md:flex-row bg-slate-50" style={{ fontFamily: "'Outfit', sans-serif" }}>
+      {/* Left Side - Image/Branding */}
+      <div className="hidden md:flex md:w-[45%] relative bg-zinc-950 items-center justify-center overflow-hidden p-12 isolate">
+        {/* Abstract Background Effects */}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-zinc-900 to-zinc-950 z-0" />
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-orange-500/20 rounded-full blur-[100px] z-0" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-rose-500/10 rounded-full blur-[100px] z-0" />
+        
+        {/* Content */}
+        <div className="relative z-10 w-full max-w-md flex flex-col items-center">
+          <div className="w-full aspect-square relative rounded-[2rem] overflow-hidden bg-white/5 border border-white/10 shadow-2xl backdrop-blur-sm p-8 mb-12 group">
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <img 
+              src={ResetPasswordImg} 
+              alt="Reset Password" 
+              className="w-full h-full object-contain filter drop-shadow-xl group-hover:scale-105 transition-transform duration-700"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://picsum.photos/seed/resetpass/600/600";
+              }}
+            />
+          </div>
+          <h1 className="text-4xl font-bold text-white tracking-tight text-center mb-4">
+            Secure your <span className="text-orange-400">Account.</span>
+          </h1>
+          <p className="text-zinc-400 text-center text-lg leading-relaxed max-w-sm">
+            Please enter your verification code and set a new password.
+          </p>
+        </div>
       </div>
 
-      <div className="w-full md:w-7/10 flex items-center justify-center p-6 md:p-12 bg-white">
-        <form 
-          onSubmit={handleSubmit} 
-          className="w-full max-w-md flex flex-col"
-        >
-          <div className="flex flex-row items-center gap-3">
-            <img src={coffeeShopLogo} alt="Logo" className="h-7" />
-            <img src={coffeeCupLogo} alt="Text" className="w-22 h-22" />
+      {/* Right Side - Form */}
+      <div className="w-full md:w-[55%] flex items-center justify-center p-6 md:p-12 lg:p-20 bg-white relative">
+        <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col relative z-10">
+          
+          <div className="flex flex-row items-center gap-3 mb-10">
+            <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center border border-orange-100 shadow-sm">
+              <img src={coffeeShopLogo} alt="Logo" className="h-6 w-6" />
+            </div>
+            <img src={coffeeCupLogo} alt="Koda Logo" className="h-7" />
           </div>
 
-          <h2 className="text-3xl text-left mb-2 text-yellow-800">Reset Your Password</h2>
-          <span className="block text-left text-gray-600 mb-8 text-sm">
-            Enter the OTP and your new password below
-          </span>
+          <div className="mb-10">
+            <h2 className="text-3xl font-bold text-zinc-900 tracking-tight mb-2">Reset Password</h2>
+            <p className="text-zinc-500 text-sm">Enter the OTP and your new password below.</p>
+          </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm font-medium flex items-center gap-2 animate-fade-in-up">
+              <span className="shrink-0">⚠️</span>
               {error}
             </div>
           )}
 
           {email && (
-            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
-              Recovery email: <strong>{email}</strong>
+            <div className="mb-6 p-4 bg-orange-50 border border-orange-100 rounded-xl text-sm text-zinc-700 animate-fade-in-up">
+              Recovery email: <strong className="text-zinc-900">{email}</strong>
             </div>
           )}
 
-          <div className="mb-6">
+          <div className="space-y-4 mb-8">
             <Input
               label="OTP Code"
               type="text"
@@ -142,9 +166,7 @@ function ResetPasswordPage() {
               disabled={loading}
               required
             />
-          </div>
 
-          <div className="mb-6">
             <Input
               label="New Password"
               type="password"
@@ -158,9 +180,7 @@ function ResetPasswordPage() {
               iconAlt="Lock Icon"
               required
             />
-          </div>
 
-          <div className="mb-6">
             <Input
               label="Confirm Password"
               type="password"
@@ -179,12 +199,26 @@ function ResetPasswordPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-orange-400 text-black font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-zinc-900 hover:bg-zinc-800 text-white font-bold py-4 px-4 rounded-xl shadow-lg shadow-zinc-900/20 active:scale-[0.98] transition-all duration-200 disabled:opacity-70 flex justify-center items-center h-[56px]"
           >
-            {loading ? 'Resetting Password...' : 'Reset Password'}
+            {loading ? (
+              <div className="w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+            ) : (
+              "Reset Password"
+            )}
           </Button>
         </form>
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in-up {
+          0% { opacity: 0; transform: translateY(10px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+          animation: fade-in-up 0.4s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 }

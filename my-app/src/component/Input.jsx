@@ -1,39 +1,42 @@
-export function  Input({
+import React from "react";
+
+export function Input({
   label,
   type = 'text',
   value,
   onChange,
   icon, 
   iconAlt,
+  className = '',
   ...props 
 }) {
-  const inputId = label;
+  const inputId = label ? label.toLowerCase().replace(/\s+/g, '-') : Math.random().toString();
 
-  
   return (
-    <div className="mb-4"> 
+    <div className={`mb-4 w-full ${className}`}> 
       {label && (
-        <label htmlFor={inputId} className="block text-gray-700 text-sm font-bold mb-2">
+        <label htmlFor={inputId} className="block text-xs uppercase tracking-widest text-zinc-500 font-semibold mb-2 ml-1">
           {label}
         </label>
       )}
-      <div className="relative flex items-center border rounded-md shadow-sm">
+      <div className="relative flex items-center bg-white border border-slate-200 rounded-xl transition-all focus-within:ring-2 focus-within:ring-orange-400 focus-within:border-transparent shadow-sm">
+        {icon && (
+          <div className="absolute left-4 flex items-center justify-center pointer-events-none">
+            <img
+              src={icon}
+              alt={iconAlt || 'Input Icon'} 
+              className="w-5 h-5 opacity-50 grayscale" 
+            />
+          </div>
+        )}
         <input
           type={type}
           id={inputId}
           value={value} 
           onChange={onChange}
-          className="appearance-none border-none w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline grow"
-          style={icon ? { paddingRight: '2.5rem' } : {}}
+          className={`w-full bg-transparent px-4 py-3 text-zinc-900 leading-tight focus:outline-none placeholder:text-zinc-400 ${icon ? 'pl-11' : ''}`}
           {...props} 
         />
-        {icon && (
-          <img
-            src={icon}
-            alt={iconAlt || 'Input Icon'} 
-            className="absolute left-3 w-5 h-5 text-gray-500" 
-          />
-        )}
       </div>
     </div>
   );

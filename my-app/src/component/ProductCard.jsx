@@ -4,6 +4,7 @@ import Cart from '../assets/user/ShoppingCart.svg';
 import { useNavigate } from 'react-router-dom';
 import { CartModal } from "../component/CartModal.jsx"
 import http from "../lib/http";
+import { Button } from "./Button";
 
 export const ProductCard = ({ 
   image, 
@@ -94,12 +95,12 @@ export const ProductCard = ({
 
   return (
     <>
-      <div className="w-full max-w-sm rounded-lg overflow-hidden shadow-lg transition-all duration-300 bg-white">
-        <div className="relative h-64 overflow-hidden bg-gray-100">
+      <div className="w-full max-w-sm rounded-3xl overflow-hidden shadow-lg shadow-zinc-900/5 bg-white border border-slate-200 group transition-all duration-300 hover:shadow-xl hover:shadow-zinc-900/10 flex flex-col">
+        <div className="relative h-64 overflow-hidden bg-slate-100 shrink-0">
           <img
             src={image || `https://picsum.photos/seed/${title || 'product'}/400/256`}
             alt={title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = `https://picsum.photos/seed/fallback-${Math.floor(Math.random()*100)}/400/256`;
@@ -110,58 +111,59 @@ export const ProductCard = ({
           <button 
             onClick={toggleFavorite}
             disabled={isLoadingFavorite}
-            className="absolute top-3 left-3 bg-white/80 p-2 rounded-full shadow-sm hover:bg-white transition-colors disabled:opacity-50 z-10"
+            className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm p-2.5 rounded-full shadow-sm hover:bg-white hover:scale-105 active:scale-95 transition-all disabled:opacity-50 z-10"
           >
             <Heart 
-              size={20} 
-              className={`transition-colors ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+              size={18} 
+              className={`transition-colors ${isFavorite ? 'fill-red-500 text-red-500' : 'text-zinc-500'}`} 
             />
           </button>
 
           {isFlashSale && (
-            <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
-              FLASH SALE!
+            <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase z-10 shadow-md shadow-orange-500/20">
+              Flash Sale
             </div>
           )}
         </div>
 
-        <div className="p-5 bg-white">
-          <h3 className="font-bold text-xl text-gray-900 mb-2">{title}</h3>
+        <div className="p-6 flex flex-col grow">
+          <h3 className="font-extrabold text-2xl text-zinc-950 mb-2 tracking-tighter leading-tight line-clamp-1" title={title}>{title}</h3>
 
           {description && (
-            <p className="text-gray-600 text-sm leading-normal mb-4">
+            <p className="text-zinc-500 text-sm leading-relaxed mb-4 line-clamp-2">
               {description}
             </p>
           )}
 
           {showRating && rating !== undefined && reviews !== undefined && (
-            <div className="flex items-center gap-1 mb-4">
-              <span className="text-yellow-500 text-lg">★</span>
-              <span className="text-sm font-semibold text-gray-700">{rating}.0</span>
-              <span className="text-xs text-gray-500">({reviews} reviews)</span>
+            <div className="flex items-center gap-1.5 mb-4 mt-auto">
+              <span className="text-orange-400 text-lg leading-none">★</span>
+              <span className="text-sm font-bold text-zinc-700">{rating}.0</span>
+              <span className="text-xs font-medium text-zinc-400">({reviews} reviews)</span>
             </div>
           )}
 
-          <div className="mb-5">
-            <p className="text-3xl font-medium text-orange-400">{price}</p>
+          <div className="mb-6 mt-auto">
+            <p className="text-2xl font-extrabold text-orange-500 tracking-tighter">{price}</p>
             {showOriginalPrice && originalPrice && (
-              <p className="text-sm text-gray-400 line-through mt-1">{originalPrice}</p>
+              <p className="text-sm font-medium text-zinc-400 line-through mt-0.5">{originalPrice}</p>
             )}
           </div>
 
-          <div className="flex gap-3">
-            <button
+          <div className="flex gap-3 mt-auto">
+            <Button
+              variant="primary"
               onClick={handleBuyClick} 
-              className="flex-1 bg-orange-400 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold text-base transition duration-200"
+              className="flex-1 py-3 px-4 shadow-none"
             >
-              Buy
-            </button>
+              Buy Now
+            </Button>
             <button
               onClick={handleAddToCartClick}
-              className="p-3 border-2 border-orange-500 text-orange-500 hover:bg-orange-50 rounded-lg transition duration-200 flex items-center justify-center"
+              className="p-3 bg-orange-50 text-orange-500 hover:bg-orange-100 rounded-xl transition duration-200 flex items-center justify-center shrink-0 border border-orange-100"
               title="Add to cart"
             >
-              <img src={Cart} alt="Add to cart" className="w-6 h-6" />
+              <img src={Cart} alt="Add to cart" className="w-5 h-5" style={{ filter: 'brightness(0) saturate(100%) invert(56%) sepia(85%) saturate(1210%) hue-rotate(344deg) brightness(101%) contrast(96%)' }} />
             </button>
           </div>
         </div>

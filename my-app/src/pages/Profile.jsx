@@ -6,20 +6,21 @@ import Footer from "../layouts/Footer";
 import http from "../lib/http";
 import { selectUser, loginSuccess } from "../features/user/authSlice";
 import { User, Mail, Phone, Lock, MapPin, Camera, CheckCircle, AlertCircle } from "lucide-react";
+import { Button } from "../component/Button";
 
 function InputField({ label, icon: Icon, error, children }) {
   return (
-    <div className="space-y-1.5">
-      <label className="block text-sm font-medium text-zinc-700">{label}</label>
-      <div className="relative">
-        <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
-          <Icon size={16} />
+    <div className="space-y-2">
+      <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-widest">{label}</label>
+      <div className="relative flex items-center bg-white border border-slate-200 rounded-xl transition-all focus-within:ring-2 focus-within:ring-orange-400 focus-within:border-transparent shadow-sm">
+        <div className="absolute left-4 flex items-center justify-center pointer-events-none text-zinc-400">
+          <Icon size={18} />
         </div>
         {children}
       </div>
       {error && (
-        <p className="text-xs text-red-500 flex items-center gap-1">
-          <AlertCircle size={12} /> {error}
+        <p className="text-xs font-medium text-red-500 flex items-center gap-1.5 mt-1.5">
+          <AlertCircle size={14} /> {error}
         </p>
       )}
     </div>
@@ -107,23 +108,33 @@ function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col" style={{ fontFamily: "'Outfit', sans-serif" }}>
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <div className="min-h-screen bg-slate-50 flex flex-col">
       <Header bgColor="bg-zinc-950" />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-12 pt-28">
-        <div className="mb-8">
-          <p className="text-sm text-slate-500 font-medium mb-1">Account</p>
-          <h1 className="text-3xl font-bold text-zinc-900 tracking-tight">Profile Settings</h1>
+      {/* Top Banner Context */}
+      <div className="bg-zinc-950 pt-28 pb-10 px-6 md:px-8 shadow-sm isolate relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="max-w-7xl mx-auto relative z-10 animate-fade-in-up flex flex-col items-center justify-center py-10 text-center">
+          <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center mb-6 shadow-sm backdrop-blur-sm">
+            <User size={28} className="text-white" />
+          </div>
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white tracking-tighter leading-tight">
+            Profile <span className="text-orange-400">Settings</span>
+          </h1>
+          <p className="text-zinc-400 text-lg mt-4 font-medium max-w-xl">
+            Manage your personal information and account preferences.
+          </p>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+      <main className="flex-1 max-w-5xl mx-auto w-full px-6 md:px-8 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start animate-fade-in-up">
           {/* Left: Avatar Card */}
           <div className="md:col-span-1">
-            <div className="bg-white rounded-2xl border border-slate-100 p-8 flex flex-col items-center text-center shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)]">
+            <div className="bg-white rounded-3xl border border-slate-200 p-8 flex flex-col items-center text-center shadow-sm">
               {/* Avatar */}
-              <div className="relative mb-5">
-                <div className="w-28 h-28 rounded-full border-4 border-slate-100 overflow-hidden bg-slate-100">
+              <div className="relative mb-6">
+                <div className="w-32 h-32 rounded-full border-4 border-slate-100 overflow-hidden bg-slate-50 shadow-inner">
                   {user.profileImage ? (
                     <img
                       src={user.profileImage}
@@ -136,41 +147,45 @@ function Profile() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <User size={40} className="text-slate-300" />
+                      <User size={48} className="text-slate-300" />
                     </div>
                   )}
                 </div>
                 <button
+                  type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploadingPhoto}
-                  className="absolute bottom-1 right-1 w-8 h-8 bg-orange-500 hover:bg-orange-600 text-white rounded-full flex items-center justify-center shadow-md transition active:scale-95 disabled:opacity-60"
+                  className="absolute bottom-1 right-1 w-10 h-10 bg-orange-500 hover:bg-orange-600 text-white rounded-full flex items-center justify-center shadow-lg transition active:scale-95 disabled:opacity-60 border-2 border-white"
                 >
                   {uploadingPhoto
-                    ? <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    : <Camera size={14} />
+                    ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    : <Camera size={16} />
                   }
                 </button>
                 <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
               </div>
 
-              <h2 className="text-lg font-bold text-zinc-900">{user.fullname || "Your Name"}</h2>
-              <p className="text-sm text-slate-500 mb-6">{user.email || "—"}</p>
+              <h2 className="text-xl font-extrabold text-zinc-950 tracking-tight">{user.fullname || "Your Name"}</h2>
+              <p className="text-sm font-medium text-zinc-500 mb-8">{user.email || "—"}</p>
 
-              {user.phone && (
-                <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                  <Phone size={12} /> {user.phone}
-                </div>
-              )}
-              {user.address && (
-                <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-1">
-                  <MapPin size={12} /> {user.address}
-                </div>
-              )}
+              <div className="w-full space-y-3 mb-8">
+                {user.phone && (
+                  <div className="flex items-center gap-3 text-sm font-medium text-zinc-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <Phone size={16} className="text-orange-400" /> {user.phone}
+                  </div>
+                )}
+                {user.address && (
+                  <div className="flex gap-3 text-sm font-medium text-zinc-600 bg-slate-50 p-3 rounded-xl border border-slate-100 text-left">
+                    <MapPin size={16} className="text-orange-400 shrink-0 mt-0.5" /> 
+                    <span className="leading-snug">{user.address}</span>
+                  </div>
+                )}
+              </div>
 
-              <div className="w-full mt-6 pt-6 border-t border-slate-100">
-                <p className="text-xs text-slate-400">Member since</p>
-                <p className="text-sm font-medium text-zinc-700 mt-0.5">
-                  {new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+              <div className="w-full pt-6 border-t border-slate-100 flex flex-col gap-1">
+                <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Member since</p>
+                <p className="text-sm font-bold text-zinc-950">
+                  {new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                 </p>
               </div>
             </div>
@@ -178,16 +193,16 @@ function Profile() {
 
           {/* Right: Form */}
           <div className="md:col-span-2">
-            <div className="bg-white rounded-2xl border border-slate-100 p-8 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.06)]">
-              <h2 className="text-base font-semibold text-zinc-900 mb-6">Personal Information</h2>
+            <div className="bg-white rounded-3xl border border-slate-200 p-8 md:p-10 shadow-sm">
+              <h2 className="text-2xl font-extrabold text-zinc-950 mb-8 tracking-tighter">Personal Information</h2>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <InputField label="Full Name" icon={User} error={errors.fullName?.message}>
                     <input
                       type="text"
                       {...register("fullName", { required: "Full name is required" })}
-                      className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-zinc-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 transition"
+                      className="w-full pl-12 pr-4 py-3.5 bg-transparent text-sm font-medium text-zinc-900 placeholder:text-slate-400 focus:outline-none"
                       placeholder="Your full name"
                     />
                   </InputField>
@@ -199,7 +214,7 @@ function Profile() {
                         required: "Email is required",
                         pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email" },
                       })}
-                      className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-zinc-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 transition"
+                      className="w-full pl-12 pr-4 py-3.5 bg-transparent text-sm font-medium text-zinc-900 placeholder:text-slate-400 focus:outline-none"
                       placeholder="your@email.com"
                     />
                   </InputField>
@@ -209,7 +224,7 @@ function Profile() {
                   <input
                     type="tel"
                     {...register("phone")}
-                    className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-zinc-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 transition"
+                    className="w-full pl-12 pr-4 py-3.5 bg-transparent text-sm font-medium text-zinc-900 placeholder:text-slate-400 focus:outline-none"
                     placeholder="+62 8xx xxxx xxxx"
                   />
                 </InputField>
@@ -218,52 +233,54 @@ function Profile() {
                   <input
                     type="text"
                     {...register("address")}
-                    className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-zinc-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 transition"
+                    className="w-full pl-12 pr-4 py-3.5 bg-transparent text-sm font-medium text-zinc-900 placeholder:text-slate-400 focus:outline-none"
                     placeholder="Your delivery address"
                   />
                 </InputField>
 
-                <div className="border-t border-slate-100 pt-5">
+                <div className="border-t border-slate-200 pt-8 mt-4">
                   <div className="flex items-center justify-between mb-3">
-                    <label className="text-sm font-medium text-zinc-700">New Password</label>
-                    <span className="text-xs text-slate-400">Leave blank to keep current</span>
+                    <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-widest">New Password</label>
+                    <span className="text-xs font-medium text-zinc-400">Leave blank to keep current</span>
                   </div>
-                  <div className="relative">
-                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
-                      <Lock size={16} />
+                  <div className="relative flex items-center bg-white border border-slate-200 rounded-xl transition-all focus-within:ring-2 focus-within:ring-orange-400 focus-within:border-transparent shadow-sm">
+                    <div className="absolute left-4 flex items-center justify-center pointer-events-none text-zinc-400">
+                      <Lock size={18} />
                     </div>
                     <input
                       type="password"
                       {...register("password")}
-                      className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm text-zinc-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 transition"
+                      className="w-full pl-12 pr-4 py-3.5 bg-transparent text-sm font-medium text-zinc-900 placeholder:text-slate-400 focus:outline-none"
                       placeholder="New password"
                     />
                   </div>
                 </div>
 
                 {/* Submit row */}
-                <div className="flex items-center justify-between pt-2">
-                  {saveStatus === 'success' && (
-                    <p className="text-sm text-emerald-600 flex items-center gap-1.5">
-                      <CheckCircle size={14} /> Profile saved successfully.
-                    </p>
-                  )}
-                  {saveStatus === 'error' && (
-                    <p className="text-sm text-red-500 flex items-center gap-1.5">
-                      <AlertCircle size={14} /> Something went wrong.
-                    </p>
-                  )}
-                  {!saveStatus && <span />}
+                <div className="flex flex-col sm:flex-row items-center justify-between pt-6 gap-4">
+                  <div className="h-6">
+                    {saveStatus === 'success' && (
+                      <p className="text-sm font-bold text-emerald-500 flex items-center gap-2 animate-fade-in-up">
+                        <CheckCircle size={16} /> Profile saved successfully.
+                      </p>
+                    )}
+                    {saveStatus === 'error' && (
+                      <p className="text-sm font-bold text-red-500 flex items-center gap-2 animate-fade-in-up">
+                        <AlertCircle size={16} /> Something went wrong.
+                      </p>
+                    )}
+                  </div>
 
-                  <button
+                  <Button
                     type="submit"
+                    variant="primary"
                     disabled={isSubmitting}
-                    className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white text-sm font-semibold rounded-lg transition active:scale-[0.98] flex items-center gap-2"
+                    className="w-full sm:w-auto"
                   >
                     {isSubmitting ? (
-                      <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Saving...</>
+                      <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" /> Saving...</>
                     ) : 'Save Changes'}
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>

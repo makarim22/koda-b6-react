@@ -45,12 +45,23 @@ function OAuthCallback() {
   }, [searchParams, navigate, dispatch]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="text-center">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-2">Authenticating...</h2>
-        <p className="text-gray-500">Please wait while we log you in.</p>
-        <div className="mt-4 animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto"></div>
+    <div className="min-h-screen flex items-center justify-center bg-slate-50" style={{ fontFamily: "'Outfit', sans-serif" }}>
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+      <div className="text-center bg-white p-10 rounded-3xl shadow-sm border border-slate-200 animate-fade-in-up">
+        <div className="w-16 h-16 border-4 border-slate-200 border-t-orange-500 rounded-full animate-spin shadow-sm mx-auto mb-6" />
+        <h2 className="text-2xl font-extrabold text-zinc-950 mb-2 tracking-tighter">Authenticating...</h2>
+        <p className="text-sm font-medium text-zinc-500">Please wait while we securely log you in.</p>
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in-up {
+          0% { opacity: 0; transform: translateY(10px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+          animation: fade-in-up 0.4s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 }

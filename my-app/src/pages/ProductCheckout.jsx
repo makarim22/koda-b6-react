@@ -80,11 +80,11 @@ function ProductCheckout() {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen bg-slate-50" style={{ fontFamily: "'Outfit', sans-serif" }}>
+      <div className="flex flex-col min-h-screen bg-slate-50">
         <Header bgColor="bg-zinc-950" />
-        <div className="flex items-center justify-center flex-1 flex-col gap-3">
-          <div className="w-8 h-8 border-2 border-zinc-300 border-t-orange-500 rounded-full animate-spin" />
-          <p className="text-zinc-500 text-sm font-medium">Loading checkout...</p>
+        <div className="flex items-center justify-center flex-1 flex-col gap-4 animate-fade-in-up">
+          <div className="w-10 h-10 border-4 border-slate-200 border-t-orange-500 rounded-full animate-spin shadow-sm" />
+          <p className="text-zinc-500 text-sm font-semibold uppercase tracking-widest">Loading checkout...</p>
         </div>
         <Footer />
       </div>
@@ -92,36 +92,51 @@ function ProductCheckout() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50" style={{ fontFamily: "'Outfit', sans-serif" }}>
+    <div className="flex flex-col min-h-screen bg-slate-50">
       <Header bgColor="bg-zinc-950" />
       
-      <main className="flex-1 max-w-6xl mx-auto w-full px-6 md:px-8 py-12 md:py-20">
-        <div className="mb-10">
-          <p className="text-xs font-semibold text-orange-500 uppercase tracking-widest mb-2">Checkout</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-zinc-900 tracking-tight">
+      {/* Top Banner Context */}
+      <div className="bg-zinc-950 pt-28 pb-10 px-6 md:px-8">
+        <div className="max-w-7xl mx-auto flex gap-2 text-sm font-medium text-zinc-500">
+          <span className="hover:text-white cursor-pointer transition-colors">Menu</span>
+          <span>/</span>
+          <span className="text-orange-400">Checkout</span>
+        </div>
+      </div>
+
+      <main className="flex-1 max-w-7xl mx-auto w-full px-6 md:px-8 py-12 md:py-16">
+        <div className="mb-12 border-b border-slate-200 pb-6 animate-fade-in-up">
+          <p className="text-xs font-semibold text-orange-500 uppercase tracking-widest mb-3">Checkout</p>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-zinc-950 tracking-tighter">
             Complete your <span className="text-orange-500">Order</span>
           </h1>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 mb-8 rounded-xl text-sm">
+          <div className="bg-red-50 border border-red-200 text-red-600 px-6 py-4 mb-8 rounded-2xl text-sm font-medium shadow-sm animate-fade-in-up">
             {error}
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          <div className="lg:col-span-2 flex flex-col gap-8">
-            <Cart />
-            <PaymentInfo 
-              onDeliveryMethodChange={setDeliveryMethod}
-              selectedDeliveryMethod={deliveryMethod}
-              onPaymentMethodChange={setPaymentMethod}
-              user={user}
-            />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
+          <div className="lg:col-span-2 flex flex-col gap-8 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
+              <Cart />
+            </div>
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200">
+              <PaymentInfo 
+                onDeliveryMethodChange={setDeliveryMethod}
+                selectedDeliveryMethod={deliveryMethod}
+                onPaymentMethodChange={setPaymentMethod}
+                user={user}
+              />
+            </div>
           </div>
           
-          <div className="lg:col-span-1 sticky top-24">
-            <Invoice paymentDetails={payment} cartItems={items} user={user} paymentMethod={paymentMethod} />
+          <div className="lg:col-span-1 lg:sticky lg:top-28 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+            <div className="bg-white rounded-3xl shadow-lg shadow-zinc-900/5 border border-slate-200 overflow-hidden">
+              <Invoice paymentDetails={payment} cartItems={items} user={user} paymentMethod={paymentMethod} />
+            </div>
           </div> 
         </div>
       </main>
