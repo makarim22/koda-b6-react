@@ -1,35 +1,50 @@
-import React, { useState, useEffect } from 'react'
-import mailIcon from '../assets/icons/mail.svg'
-import Location from '../assets/icons/productPage/Location.svg'
-import Profile from '../assets/icons/productPage/Profile.svg'
-import BCA from '../assets/icons/productPage/BCA.svg'
-import BRI from '../assets/icons/productPage/BRI.svg'
-import DANA from '../assets/icons/productPage/DANA.svg'
-import Gopay from '../assets/icons/productPage/gopay.svg'
-import OVO from '../assets/icons/productPage/Ovo.svg'
-import { Input } from './Input'
-import { CreditCard, Smartphone, Building2 } from 'lucide-react'
+import React, { useState, useEffect } from 'react';
+import { CreditCard, Smartphone, Building2, Mail, User, MapPin } from 'lucide-react';
+import BCA from '../assets/icons/productPage/BCA.svg';
+import BRI from '../assets/icons/productPage/BRI.svg';
+import DANA from '../assets/icons/productPage/DANA.svg';
+import Gopay from '../assets/icons/productPage/gopay.svg';
+import OVO from '../assets/icons/productPage/Ovo.svg';
 
 const PAYMENT_METHODS = [
   {
     id: 'snap',
     label: 'Pay with Midtrans',
     description: 'GoPay, OVO, DANA, Credit Card, Bank Transfer',
-    icon: <CreditCard size={20} className="text-orange-500" />,
+    icon: <CreditCard size={18} className="text-orange-500" />,
   },
   {
     id: 'e_wallet',
     label: 'E-Wallet',
     description: 'GoPay, OVO, DANA',
-    icon: <Smartphone size={20} className="text-blue-500" />,
+    icon: <Smartphone size={18} className="text-blue-500" />,
   },
   {
     id: 'bank_transfer',
     label: 'Bank Transfer',
     description: 'BCA, BRI, Mandiri, BNI',
-    icon: <Building2 size={20} className="text-green-600" />,
+    icon: <Building2 size={18} className="text-emerald-500" />,
   },
-]
+];
+
+function InputField({ label, icon: Icon, ...props }) {
+  return (
+    <div>
+      <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
+        {label}
+      </label>
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+          <Icon size={16} className="text-zinc-400" />
+        </div>
+        <input
+          {...props}
+          className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm text-zinc-900 placeholder-slate-400 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-colors shadow-sm"
+        />
+      </div>
+    </div>
+  );
+}
 
 function PaymentInfo({ 
   onDeliveryMethodChange, 
@@ -38,174 +53,153 @@ function PaymentInfo({
   selectedDeliveryMethod = 'dine-in', 
   user
 }) {
-    const [deliveryMethod, setDeliveryMethod] = useState(selectedDeliveryMethod)
-    const [paymentMethod, setPaymentMethod] = useState('snap')
-    const [formData, setFormData] = useState({
-        email: '',
-        fullName: '',
-        address: ''
-    })
+  const [deliveryMethod, setDeliveryMethod] = useState(selectedDeliveryMethod);
+  const [paymentMethod, setPaymentMethod] = useState('snap');
+  const [formData, setFormData] = useState({
+    email: '',
+    fullName: '',
+    address: ''
+  });
 
-    useEffect(() => {
-        if (user) {
-            setFormData({
-                email: user.user?.email || '',
-                fullName: user.user?.fullname || '',
-                address: user.user?.address || ''
-            });
-        }
-    }, [user]);
-
-    // Notify parent on mount with default payment method
-    useEffect(() => {
-        if (onPaymentMethodChange) onPaymentMethodChange('snap');
-    }, []);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        const updatedFormData = { ...formData, [name]: value };
-        setFormData(updatedFormData);
-        if (onFormDataChange) onFormDataChange(updatedFormData);
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        email: user.user?.email || '',
+        fullName: user.user?.fullname || '',
+        address: user.user?.address || ''
+      });
     }
+  }, [user]);
 
-    const handleDeliveryChange = (method) => {
-        setDeliveryMethod(method)
-        if (onDeliveryMethodChange) onDeliveryMethodChange(method);
-    }
+  useEffect(() => {
+    if (onPaymentMethodChange) onPaymentMethodChange('snap');
+  }, []);
 
-    const handlePaymentMethodChange = (method) => {
-        setPaymentMethod(method)
-        if (onPaymentMethodChange) onPaymentMethodChange(method);
-    }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    const updatedFormData = { ...formData, [name]: value };
+    setFormData(updatedFormData);
+    if (onFormDataChange) onFormDataChange(updatedFormData);
+  };
 
-    return (
-        <div className="bg-white rounded-lg p-6 w-full shadow">
-            <h2 className="text-2xl font-bold mb-6 text-gray-900">Payment Info & Delivery</h2>
+  const handleDeliveryChange = (method) => {
+    setDeliveryMethod(method);
+    if (onDeliveryMethodChange) onDeliveryMethodChange(method);
+  };
 
-            <form className="space-y-5">
-                <div>
-                    <Input
-                        label="Email"
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Enter Your Email"
-                        required
-                        icon={mailIcon}
-                        iconAlt="Email Icon"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <Input
-                        label="Full Name"
-                        type="text"
-                        id="fullname"
-                        name="fullName"
-                        placeholder="Enter Your Full Name"
-                        required
-                        icon={Profile}
-                        iconAlt="User Icon"
-                        value={formData.fullName}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <Input
-                        label="Address"
-                        type="text"
-                        id="address"
-                        name="address"
-                        placeholder="Enter Your Address"
-                        required
-                        icon={Location}
-                        iconAlt="Location Icon"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                    />
-                </div>
+  const handlePaymentMethodChange = (method) => {
+    setPaymentMethod(method);
+    if (onPaymentMethodChange) onPaymentMethodChange(method);
+  };
 
-                {/* Delivery Method */}
-                <div>
-                    <label className="block text-gray-900 font-semibold mb-3">
-                        Delivery Method
-                    </label>
-                    <div className="grid grid-cols-3 gap-3">
-                        {[
-                            { id: 'dine-in', label: 'Dine In' },
-                            { id: 'door-delivery', label: 'Door Delivery' },
-                            { id: 'pick-up', label: 'Pick Up' }
-                        ].map((option) => (
-                            <button
-                                key={option.id}
-                                type="button"
-                                onClick={() => handleDeliveryChange(option.id)}
-                                className={`py-3 px-3 rounded-lg font-semibold transition ${
-                                    deliveryMethod === option.id
-                                        ? 'bg-orange-500 text-white border-2 border-orange-500'
-                                        : 'bg-white text-gray-700 border-2 border-gray-300 hover:border-orange-500'
-                                }`}
-                            >
-                                {option.label}
-                            </button>
-                        ))}
-                    </div>
-                </div>
+  return (
+    <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-6 md:p-8 w-full">
+      <h2 className="text-xl font-bold mb-6 text-zinc-900 tracking-tight">Delivery & Info</h2>
 
-                {/* Payment Method */}
-                <div>
-                    <label className="block text-gray-900 font-semibold mb-3">
-                        Payment Method
-                    </label>
-                    <div className="space-y-3">
-                        {PAYMENT_METHODS.map((method) => (
-                            <button
-                                key={method.id}
-                                type="button"
-                                onClick={() => handlePaymentMethodChange(method.id)}
-                                className={`w-full flex items-center gap-3 p-4 rounded-lg border-2 transition text-left ${
-                                    paymentMethod === method.id
-                                        ? 'border-orange-500 bg-orange-50'
-                                        : 'border-gray-200 bg-white hover:border-orange-300'
-                                }`}
-                            >
-                                <div className={`p-2 rounded-full ${paymentMethod === method.id ? 'bg-orange-100' : 'bg-gray-100'}`}>
-                                    {method.icon}
-                                </div>
-                                <div className="flex-1">
-                                    <div className="font-semibold text-gray-800 text-sm">{method.label}</div>
-                                    <div className="text-xs text-gray-500 mt-0.5">{method.description}</div>
-                                </div>
-                                {method.id === 'snap' && (
-                                    <div className="flex gap-1 items-center">
-                                        <img src={Gopay} alt="GoPay" className="h-5 w-auto" />
-                                        <img src={OVO} alt="OVO" className="h-5 w-auto" />
-                                        <img src={DANA} alt="DANA" className="h-5 w-auto" />
-                                    </div>
-                                )}
-                                {method.id === 'bank_transfer' && (
-                                    <div className="flex gap-1 items-center">
-                                        <img src={BCA} alt="BCA" className="h-5 w-auto" />
-                                        <img src={BRI} alt="BRI" className="h-5 w-auto" />
-                                    </div>
-                                )}
-                                <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
-                                    paymentMethod === method.id 
-                                        ? 'border-orange-500 bg-orange-500' 
-                                        : 'border-gray-300'
-                                }`}>
-                                    {paymentMethod === method.id && (
-                                        <div className="w-full h-full rounded-full bg-white scale-[0.4] transform" />
-                                    )}
-                                </div>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </form>
+      <form className="space-y-6">
+        <div className="space-y-4">
+          <InputField
+            label="Email Address"
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            icon={Mail}
+            value={formData.email}
+            onChange={handleInputChange}
+          />
+          <InputField
+            label="Full Name"
+            type="text"
+            name="fullName"
+            placeholder="Enter your full name"
+            icon={User}
+            value={formData.fullName}
+            onChange={handleInputChange}
+          />
+          <InputField
+            label="Delivery Address"
+            type="text"
+            name="address"
+            placeholder="Enter your address"
+            icon={MapPin}
+            value={formData.address}
+            onChange={handleInputChange}
+          />
         </div>
-    )
+
+        {/* Delivery Method */}
+        <div className="pt-2 border-t border-slate-100">
+          <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">
+            Delivery Method
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              { id: 'dine-in', label: 'Dine In' },
+              { id: 'door-delivery', label: 'Door Delivery' },
+              { id: 'pick-up', label: 'Pick Up' }
+            ].map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => handleDeliveryChange(option.id)}
+                className={`py-2.5 px-3 rounded-xl text-sm font-medium transition-colors ${
+                  deliveryMethod === option.id
+                    ? 'bg-orange-500 text-white shadow-sm'
+                    : 'bg-white border border-slate-200 text-zinc-600 hover:border-slate-300 hover:text-zinc-800'
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Payment Method */}
+        <div className="pt-2 border-t border-slate-100">
+          <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">
+            Payment Method
+          </label>
+          <div className="space-y-3">
+            {PAYMENT_METHODS.map((method) => (
+              <button
+                key={method.id}
+                type="button"
+                onClick={() => handlePaymentMethodChange(method.id)}
+                className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-colors text-left group ${
+                  paymentMethod === method.id
+                    ? 'border-orange-500/50 bg-orange-50'
+                    : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
+                }`}
+              >
+                <div className={`p-2.5 rounded-xl transition-colors ${
+                  paymentMethod === method.id ? 'bg-orange-100' : 'bg-slate-50 group-hover:bg-slate-100'
+                }`}>
+                  {method.icon}
+                </div>
+                
+                <div className="flex-1 min-w-0">
+                  <div className={`font-semibold text-sm ${paymentMethod === method.id ? 'text-orange-600' : 'text-zinc-800'}`}>
+                    {method.label}
+                  </div>
+                  <div className="text-xs text-zinc-500 mt-0.5 truncate">{method.description}</div>
+                </div>
+
+                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                  paymentMethod === method.id 
+                    ? 'border-orange-500' 
+                    : 'border-slate-300 group-hover:border-slate-400'
+                }`}>
+                  {paymentMethod === method.id && (
+                    <div className="w-2 h-2 rounded-full bg-orange-500" />
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </form>
+    </div>
+  );
 }
 
 export default PaymentInfo;

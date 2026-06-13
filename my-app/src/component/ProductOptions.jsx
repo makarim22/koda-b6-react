@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Heart } from "lucide-react";
+import { Heart, ShoppingBag, Plus, Minus, Star, ChevronRight } from "lucide-react";
 import http from "../lib/http";
-import SuccessModal from "../component/SuccessModal.jsx"
+import SuccessModal from "../component/SuccessModal.jsx";
 
 export default function ProductOptions({
   props,
@@ -15,7 +15,6 @@ export default function ProductOptions({
   const {
     id = 1,
     title = "Hazelnut Latte",
-    originalPrice = "IDR 20.000",
     description = "Cold brewing is a method of brewing that combines ground coffee and cool water and uses time instead of heat to extract the flavor. It is brewed in small batches and steeped for as long as 48 hours.",
     rating = 5.0,
     reviews = "200+",
@@ -26,10 +25,6 @@ export default function ProductOptions({
   } = {
     id: apiProduct.id || 1,
     title: apiProduct.product_name || "Hazelnut Latte",
-    price: apiProduct.base_price
-      ? `IDR ${apiProduct.base_price.toLocaleString("id-ID")}`
-      : "IDR 10.000",
-    originalPrice: apiProduct.originalPrice || "IDR 20.000",
     description:
       apiProduct.description ||
       "Cold brewing is a method of brewing that combines ground coffee and cool water and uses time instead of heat to extract the flavor. It is brewed in small batches and steeped for as long as 48 hours.",
@@ -37,19 +32,21 @@ export default function ProductOptions({
     reviews: apiProduct.reviews || "200+",
     isFlashSale: apiProduct.isFlashSale || false,
     stock: apiProduct.stock || 0,
-    image: apiProduct.images || apiProduct.image || "",
   };
+
+  const originalPriceText = apiProduct.originalPrice || "IDR 20.000";
 
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
-  const [selectedTemp, setSelectedTemp] = useState(temperature);
   const [qty, setQty] = useState(quantity);
   const [sizeAdditionalPrice, setSizeAdditionalPrice] = useState(0);
   const [variantAdditionalPrice, setVariantAdditionalPrice] = useState(0);
+  
   const [fetchedSizes, setFetchedSizes] = useState([]);
   const [fetchedVariants, setFetchedVariants] = useState([]);
   const [loadingSizes, setLoadingSizes] = useState(true);
   const [loadingVariants, setLoadingVariants] = useState(true);
+  
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
@@ -62,23 +59,16 @@ export default function ProductOptions({
       try {
         setLoadingSizes(true);
         const response = await http(`/api/products/${id}/sizes`);
-        console.log("response", response);
         if (!response.ok) throw new Error("Failed to fetch sizes");
         const json = await response.json();
-        const data = json.data || [];
-        setFetchedSizes(Array.isArray(data) ? data : []);
-        console.log("Sizes fetched:", data);
+        setFetchedSizes(Array.isArray(json.data) ? json.data : []);
       } catch (error) {
-        console.error("Error fetching sizes:", error);
         setFetchedSizes([]);
       } finally {
         setLoadingSizes(false);
       }
     };
-
-    if (id) {
-      fetchSizes();
-    }
+    if (id) fetchSizes();
   }, [id]);
 
   useEffect(() => {
@@ -86,23 +76,16 @@ export default function ProductOptions({
       try {
         setLoadingVariants(true);
         const response = await http(`/api/products/${id}/variants`);
-        console.log("response", response);
         if (!response.ok) throw new Error("Failed to fetch variants");
         const json = await response.json();
-        const data = json.data || [];
-        setFetchedVariants(Array.isArray(data) ? data : []);
-        console.log("Variants fetched:", data);
+        setFetchedVariants(Array.isArray(json.data) ? json.data : []);
       } catch (error) {
-        console.error("Error fetching variants:", error);
         setFetchedVariants([]);
       } finally {
         setLoadingVariants(false);
       }
     };
-
-    if (id) {
-      fetchVariants();
-    }
+    if (id) fetchVariants();
   }, [id]);
 
   useEffect(() => {
@@ -118,13 +101,9 @@ export default function ProductOptions({
         const response = await http(`/api/wishlists/${id}/status`, null, { method: 'GET', token });
         if (response.ok) {
           const result = await response.json();
-          if (result.success && result.data) {
-            setIsFavorite(result.data.is_favorite);
-          }
+          if (result.success && result.data) setIsFavorite(result.data.is_favorite);
         }
-      } catch (err) {
-        console.error("Failed to fetch favorite status:", err);
-      }
+      } catch (err) {}
     };
     fetchFavoriteStatus();
   }, [id]);
@@ -135,13 +114,13 @@ export default function ProductOptions({
     
     const userStr = localStorage.getItem('currentUserSession');
     if (!userStr) {
-      alert("Silakan login terlebih dahulu untuk menyimpan produk favorit");
+      alert("Please login first to save favorites.");
       return;
     }
     const userSession = JSON.parse(userStr);
     const token = userSession?.token || userSession?.user?.token;
     if (!token) {
-      alert("Silakan login terlebih dahulu untuk menyimpan produk favorit");
+      alert("Please login first to save favorites.");
       return;
     }
 
@@ -154,9 +133,7 @@ export default function ProductOptions({
         const res = await http(`/api/wishlists`, { product_id: id }, { method: 'POST', token });
         if (res.ok) setIsFavorite(true);
       }
-    } catch (err) {
-      console.error("Failed to toggle favorite:", err);
-    } finally {
+    } catch (err) {} finally {
       setIsLoadingFavorite(false);
     }
   };
@@ -164,190 +141,143 @@ export default function ProductOptions({
   const handleSizeSelect = (sizeOption) => {
     setSelectedSize(sizeOption.id);
     setSizeAdditionalPrice(sizeOption.additional_price || 0);
-    console.log(
-      "Size selected:",
-      sizeOption.name,
-      "Additional price:",
-      sizeOption.additional_price,
-    );
   };
 
- 
   const handleVariantSelect = (variantOption) => {
-  if (selectedVariant === variantOption.id) {
-    setSelectedVariant(null);
-    setVariantAdditionalPrice(0);
-    console.log("Variant deselected");
-  } else {
-    setSelectedVariant(variantOption.id); 
-    setVariantAdditionalPrice(variantOption.additional_price || 0);
-    console.log(
-      "Variant selected:",
-      variantOption.name,
-      "ID:",
-      variantOption.id,
-      "Additional price:",
-      variantOption.additional_price,
-    );
-  }
-};
+    if (selectedVariant === variantOption.id) {
+      setSelectedVariant(null);
+      setVariantAdditionalPrice(0);
+    } else {
+      setSelectedVariant(variantOption.id); 
+      setVariantAdditionalPrice(variantOption.additional_price || 0);
+    }
+  };
 
   const basePrice = apiProduct.base_price || 0;
-  const totalItemPrice =
-    basePrice + sizeAdditionalPrice + variantAdditionalPrice;
+  const totalItemPrice = basePrice + sizeAdditionalPrice + variantAdditionalPrice;
   const totalCheckoutPrice = qty * totalItemPrice;
 
-  const formatPrice = (priceValue) => {
-    return `IDR ${priceValue.toLocaleString("id-ID")}`;
-  };
+  const formatPrice = (priceValue) => `IDR ${priceValue.toLocaleString("id-ID")}`;
 
-  const handleQuantityChange = (delta) => {
-    setQty(Math.max(1, qty + delta));
-  };
+  const handleQuantityChange = (delta) => setQty(Math.max(1, qty + delta));
 
-const handleBuy = async () => {
-  if (!user) {
-    alert("Silakan Login terlebih dahulu");
-    return;
-  }
-
-  console.log('user', user.token)
-
-    const { token } = user.user;
-
-    console.log("token", token);
-
-   const cartPayload = {
-    product_id: parseInt(id, 10),
-    size_id: selectedSize ? parseInt(selectedSize, 10) : null,
-    variant_id: selectedVariant ? parseInt(selectedVariant, 10) : null,
-    quantity: qty,
-  };
-
-  console.log("cart payload", cartPayload);
-
-  try {
-     console.log("token", user);
-    const response = await http("/cart", cartPayload, {
-      method: "POST",
-      token 
-     
-    });
-
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status}`);
+  const handleBuy = async () => {
+    if (!user) {
+      alert("Silakan Login terlebih dahulu");
+      return;
     }
+    const { token } = user.user;
+    const cartPayload = {
+      product_id: parseInt(id, 10),
+      size_id: selectedSize ? parseInt(selectedSize, 10) : null,
+      variant_id: selectedVariant ? parseInt(selectedVariant, 10) : null,
+      quantity: qty,
+    };
 
-    const result = await response.json();
-    console.log("Order data saved to cart:", result);
-
-    // Show success modal
-    setModalMessage(
-      `${qty}x ${title} - Total: ${formatPrice(totalCheckoutPrice)}`
-    );
-    setShowSuccessModal(true);
-  } catch (error) {
-    console.error("Failed to add to cart:", error);
-    alert(`Gagal menambahkan ke keranjang: ${error.message}`);
-  }
-};
-
-   const handleCloseModal = () => {
-    setShowSuccessModal(false);
+    try {
+      const response = await http("/cart", cartPayload, { method: "POST", token });
+      if (!response.ok) throw new Error(`API Error: ${response.status}`);
+      setModalMessage(`${qty}x ${title} - Total: ${formatPrice(totalCheckoutPrice)}`);
+      setShowSuccessModal(true);
+    } catch (error) {
+      alert(`Gagal menambahkan ke keranjang: ${error.message}`);
+    }
   };
 
-  const handleNavigateToCheckout = () => {
-    setShowSuccessModal(false);
-    Navigate(`/product-checkout/${id}`);
-  };
-
-  const handleNavigateToMenu = () => {
-    setShowSuccessModal(false);
-    Navigate(`/product`)
-  }
   return (
-    <div className="w-full max-w-2xl mx-auto p-8 bg-white">
-      {isFlashSale && (
-        <div className="mb-6">
-          <span className="inline-block bg-red-600 text-white font-bold px-4 py-2 rounded-full text-sm">
-            FLASH SALE!
-          </span>
-        </div>
-      )}
-
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-4xl font-bold text-gray-900">{title}</h1>
-        <button 
-          onClick={toggleFavorite}
-          disabled={isLoadingFavorite}
-          className="p-3 border-2 border-gray-200 rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50"
-          title={isFavorite ? "Remove from Wishlist" : "Add to Wishlist"}
-        >
-          <Heart 
-            size={24} 
-            className={`transition-colors ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} 
-          />
-        </button>
-      </div>
-
+    <div className="w-full flex flex-col h-full bg-slate-50 md:pl-8">
+      {/* Product Header Info */}
       <div className="mb-6">
-        <div className="flex items-center gap-4 mb-4">
-          <span className="text-gray-500 line-through text-lg">
-            {originalPrice}
-          </span>
-          <span className="text-3xl font-bold text-orange-500">
+        <div className="flex items-start justify-between gap-4 mb-3">
+          <div className="flex flex-col gap-2">
+            {isFlashSale && (
+              <span className="inline-flex w-fit items-center px-2.5 py-1 rounded-md text-xs font-bold bg-red-50 text-red-600 border border-red-200">
+                FLASH SALE!
+              </span>
+            )}
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 leading-tight">
+              {title}
+            </h1>
+          </div>
+          <button 
+            onClick={toggleFavorite}
+            disabled={isLoadingFavorite}
+            className={`p-3 shrink-0 rounded-xl border transition-all disabled:opacity-50 group shadow-sm ${
+              isFavorite 
+                ? 'bg-red-50 border-red-200 text-red-500' 
+                : 'bg-white border-slate-200 text-zinc-400 hover:border-slate-300 hover:bg-slate-50'
+            }`}
+            title={isFavorite ? "Remove from Wishlist" : "Add to Wishlist"}
+          >
+            <Heart size={22} className={`transition-transform group-hover:scale-110 ${isFavorite ? 'fill-current' : ''}`} />
+          </button>
+        </div>
+
+        <div className="flex items-center gap-4 mb-6">
+          <span className="text-3xl font-bold text-orange-500 tracking-tight">
             {formatPrice(totalItemPrice)}
           </span>
+          {isFlashSale && (
+            <span className="text-zinc-400 line-through text-lg decoration-red-400">
+              {originalPriceText}
+            </span>
+          )}
         </div>
 
-        <div className="flex items-center gap-2 mb-2">
-          <div className="flex text-orange-400">
-            {[...Array(5)].map((_, i) => (
-              <span key={i} className="text-xl">
-                ★
-              </span>
-            ))}
+        <div className="flex flex-wrap items-center gap-4 text-sm font-medium">
+          <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm">
+            <Star size={16} className="text-orange-400 fill-orange-400" />
+            <span className="text-zinc-700">{rating}</span>
           </div>
-          <span className="font-semibold text-gray-900">{rating}</span>
-        </div>
-
-        <div className="text-sm text-gray-600 mb-4">
-          <span>{reviews} Review</span>
-          <span className="mx-2">|</span>
-          <span>Stock: {stock}</span>
+          <div className="flex items-center gap-2 text-zinc-500">
+            <span>{reviews} Reviews</span>
+            <span className="w-1 h-1 rounded-full bg-slate-300" />
+            <span>Stock: {stock}</span>
+          </div>
         </div>
       </div>
 
-      <p className="text-gray-700 text-sm leading-relaxed mb-8">
+      {/* Description */}
+      <p className="text-zinc-600 text-sm leading-relaxed mb-8">
         {description}
       </p>
 
+      {/* Quantity Selector */}
       <div className="mb-8">
-        <div className="flex items-center gap-2 w-fit">
+        <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">
+          Quantity
+        </label>
+        <div className="flex items-center gap-1 bg-white border border-slate-200 shadow-sm rounded-xl w-fit p-1">
           <button
             onClick={() => handleQuantityChange(-1)}
-            className="w-10 h-10 border-2 border-orange-500 text-orange-500 rounded hover:bg-orange-50 font-bold text-lg"
+            className="w-10 h-10 flex items-center justify-center text-zinc-500 hover:text-zinc-900 hover:bg-slate-100 rounded-lg transition-colors"
           >
-            −
+            <Minus size={18} />
           </button>
           <input
             type="number"
             value={qty}
             readOnly
-            className="w-12 h-10 text-center font-semibold border border-gray-300 rounded"
+            className="w-12 h-10 text-center font-bold text-zinc-900 bg-transparent outline-none focus:outline-none focus:ring-0"
           />
           <button
             onClick={() => handleQuantityChange(1)}
-            className="w-10 h-10 bg-orange-500 text-white rounded hover:bg-orange-600 font-bold text-lg"
+            className="w-10 h-10 flex items-center justify-center text-zinc-500 hover:text-zinc-900 hover:bg-slate-100 rounded-lg transition-colors"
           >
-            +
+            <Plus size={18} />
           </button>
         </div>
       </div>
+
+      {/* Size Selector */}
       <div className="mb-8">
-        <h3 className="font-bold text-gray-900 mb-3">Choose Size</h3>
+        <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">
+          Choose Size
+        </label>
         {loadingSizes ? (
-          <div className="text-gray-500 text-sm">Loading sizes...</div>
+          <div className="animate-pulse flex gap-3">
+            {[1, 2, 3].map(i => <div key={i} className="h-14 flex-1 bg-white shadow-sm rounded-xl border border-slate-200" />)}
+          </div>
         ) : (
           <div className="grid grid-cols-3 gap-3">
             {fetchedSizes && fetchedSizes.length > 0
@@ -355,58 +285,64 @@ const handleBuy = async () => {
                   <button
                     key={sizeOption.id}
                     onClick={() => handleSizeSelect(sizeOption)}
-                    className={`py-3 px-4 rounded border-2 font-semibold transition ${
+                    className={`p-3 rounded-xl border flex flex-col items-center justify-center transition-all shadow-sm ${
                       selectedSize === sizeOption.id
-                        ? "border-orange-500 text-orange-500 bg-orange-50"
-                        : "border-gray-300 text-gray-700 hover:border-gray-400"
+                        ? "border-orange-500 bg-orange-50 text-orange-600 shadow-[0_0_15px_rgba(249,115,22,0.05)]"
+                        : "border-slate-200 bg-white text-zinc-600 hover:border-slate-300 hover:bg-slate-50"
                     }`}
                   >
-                    <div>{sizeOption.name}</div>
+                    <span className="font-semibold text-sm">{sizeOption.name}</span>
                     {sizeOption.additional_price > 0 && (
-                      <div className="text-xs text-gray-600">
+                      <span className={`text-xs mt-0.5 ${selectedSize === sizeOption.id ? 'text-orange-500/80' : 'text-zinc-500'}`}>
                         +{formatPrice(sizeOption.additional_price)}
-                      </div>
+                      </span>
                     )}
                   </button>
                 ))
-              : ["Regular", "Medium", "Large"].map((sizeOption) => (
+              : ["Regular", "Medium", "Large"].map((sizeOption, idx) => (
                   <button
-                    key={sizeOption.id}
+                    key={idx}
                     onClick={() => setSelectedSize(sizeOption)}
-                    className={`py-3 px-4 rounded border-2 font-semibold transition ${
-                      selectedSize === sizeOption.id
-                        ? "border-orange-500 text-orange-500 bg-orange-50"
-                        : "border-gray-300 text-gray-700 hover:border-gray-400"
+                    className={`p-3 rounded-xl border flex flex-col items-center justify-center transition-all shadow-sm ${
+                      selectedSize === sizeOption
+                        ? "border-orange-500 bg-orange-50 text-orange-600 shadow-[0_0_15px_rgba(249,115,22,0.05)]"
+                        : "border-slate-200 bg-white text-zinc-600 hover:border-slate-300 hover:bg-slate-50"
                     }`}
                   >
-                    {sizeOption}
+                    <span className="font-semibold text-sm">{sizeOption}</span>
                   </button>
                 ))}
           </div>
         )}
       </div>
+
+      {/* Variant Selector */}
       {fetchedVariants && fetchedVariants.length > 0 && (
         <div className="mb-8">
-          <h3 className="font-bold text-gray-900 mb-3">Choose Variant</h3>
+          <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">
+            Choose Variant
+          </label>
           {loadingVariants ? (
-            <div className="text-gray-500 text-sm">Loading variants...</div>
+            <div className="animate-pulse flex gap-3">
+              {[1, 2].map(i => <div key={i} className="h-14 flex-1 bg-white shadow-sm rounded-xl border border-slate-200" />)}
+            </div>
           ) : (
             <div className="grid grid-cols-2 gap-3">
               {fetchedVariants.map((variantOption) => (
                 <button
                   key={variantOption.id}
                   onClick={() => handleVariantSelect(variantOption)}
-                  className={`py-3 px-4 rounded border-2 font-semibold transition ${
+                  className={`p-3 rounded-xl border flex flex-col items-center justify-center transition-all shadow-sm ${
                     selectedVariant === variantOption.id
-                      ? "border-orange-500 text-orange-500 bg-orange-50"
-                      : "border-gray-300 text-gray-700 hover:border-gray-400"
+                      ? "border-orange-500 bg-orange-50 text-orange-600 shadow-[0_0_15px_rgba(249,115,22,0.05)]"
+                      : "border-slate-200 bg-white text-zinc-600 hover:border-slate-300 hover:bg-slate-50"
                   }`}
                 >
-                  <div>{variantOption.name}</div>
+                  <span className="font-semibold text-sm">{variantOption.name}</span>
                   {variantOption.additional_price > 0 && (
-                    <div className="text-xs text-gray-600">
+                    <span className={`text-xs mt-0.5 ${selectedVariant === variantOption.id ? 'text-orange-500/80' : 'text-zinc-500'}`}>
                       +{formatPrice(variantOption.additional_price)}
-                    </div>
+                    </span>
                   )}
                 </button>
               ))}
@@ -415,28 +351,42 @@ const handleBuy = async () => {
         </div>
       )}
 
-      <div className="text-2xl font-bold text-orange-600 mb-4 pb-3 border-b-2 border-orange-200">
-        Total: {formatPrice(totalCheckoutPrice)}
-      </div>
+      {/* Spacer to push actions to bottom if needed */}
+      <div className="flex-1 min-h-[2rem]" />
 
-      <div className="flex gap-3">
-        <button
-          onClick={handleBuy}
-          className="flex-1 bg-orange-500 text-white font-bold py-3 px-6 rounded hover:bg-orange-600 transition"
-        >
-          Buy
-        </button>
-        <button onClick={handleBuy} className="flex-1 border-2 border-orange-500 text-orange-500 font-bold py-3 px-6 rounded hover:bg-orange-50 transition flex items-center justify-center gap-2">
-          <span></span> add to cart
-        </button>
+      {/* Actions */}
+      <div className="bg-white border border-slate-200 shadow-sm p-4 md:p-6 rounded-2xl flex flex-col gap-4">
+        <div className="flex justify-between items-center px-1">
+          <span className="text-zinc-500 font-medium">Total Price</span>
+          <span className="text-2xl font-bold text-zinc-900 tracking-tight">
+            {formatPrice(totalCheckoutPrice)}
+          </span>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3">
+          <button
+            onClick={handleBuy}
+            className="flex-1 bg-white border border-slate-200 shadow-sm text-zinc-800 font-bold py-3.5 px-6 rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 group"
+          >
+            <ShoppingBag size={18} className="text-zinc-500 group-hover:text-orange-500 transition-colors" />
+            Add to Cart
+          </button>
+          <button
+            onClick={handleBuy}
+            className="flex-1 bg-orange-500 text-white font-bold py-3.5 px-6 rounded-xl hover:bg-orange-400 transition-all active:scale-95 shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 group"
+          >
+            Buy Now
+            <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
 
         <SuccessModal
-        isOpen={showSuccessModal}
-        onClose={handleCloseModal}
-        message={modalMessage}
-        onNavigate={handleNavigateToCheckout}
-        onChoose={handleNavigateToMenu}
-      />
+          isOpen={showSuccessModal}
+          onClose={() => setShowSuccessModal(false)}
+          message={modalMessage}
+          onNavigate={() => { setShowSuccessModal(false); Navigate(`/product-checkout/${id}`); }}
+          onChoose={() => { setShowSuccessModal(false); Navigate(`/product`); }}
+        />
       </div>
     </div>
   );
