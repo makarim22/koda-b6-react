@@ -25,6 +25,8 @@ import ListVouchers from "./pages/ListVouchers";
 import ListReviews from "./pages/ListReviews";
 import NotFoundPage from "./pages/NotFoundPage";
 import WishlistPage from "./pages/WishlistPage";
+import StaticPage from "./pages/StaticPage";
+import { staticContent } from "./data/staticContent";
 import ScrollToTop from "./utils/scrollRestoration";
 import {CartProvider} from "./context/CartContext"
 import { ProtectedRoute, AdminRoute } from "./component/ProtectedRoutes";
@@ -137,6 +139,16 @@ function App() {
               </ProtectedRoute>
             }
           />
+          
+          {/* Static Footer Pages */}
+          <Route path="/about" element={<StaticPage title="About Us" content={staticContent.about} />} />
+          <Route path="/blog" element={<StaticPage title="Blog" content={staticContent.blog} />} />
+          <Route path="/careers" element={<StaticPage title="Careers" content={staticContent.careers} />} />
+          <Route path="/partner" element={<StaticPage title="Partner With Us" content={staticContent.partner} />} />
+          <Route path="/privacy-policy" element={<StaticPage title="Privacy Policy" content={staticContent.privacy} />} />
+          <Route path="/terms" element={<StaticPage title="Terms of Service" content={staticContent.terms} />} />
+          <Route path="/cookie-policy" element={<StaticPage title="Cookie Policy" content={staticContent.cookies} />} />
+          <Route path="/faq" element={<StaticPage title="FAQ" content={staticContent.faq} />} />
 
           <Route
             path="/admin-dashboard"

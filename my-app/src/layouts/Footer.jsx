@@ -11,16 +11,16 @@ const LINKS = {
     { label: "Profile", to: "/profile" },
   ],
   Company: [
-    { label: "About Us", to: "#" },
-    { label: "Blog", to: "#" },
-    { label: "Careers", to: "#" },
-    { label: "Partner With Us", to: "#" },
+    { label: "About Us", to: "/about" },
+    { label: "Blog", to: "/blog" },
+    { label: "Careers", to: "/careers" },
+    { label: "Partner With Us", to: "/partner" },
   ],
   Legal: [
-    { label: "Privacy Policy", to: "#" },
-    { label: "Terms of Service", to: "#" },
-    { label: "Cookie Policy", to: "#" },
-    { label: "FAQ", to: "#" },
+    { label: "Privacy Policy", to: "/privacy-policy" },
+    { label: "Terms of Service", to: "/terms" },
+    { label: "Cookie Policy", to: "/cookie-policy" },
+    { label: "FAQ", to: "/faq" },
   ],
 };
 
