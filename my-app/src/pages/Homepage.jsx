@@ -4,6 +4,7 @@ import GlobeImage from "../assets/icons/homepage/globe.svg";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import { Link } from "react-router-dom";
+import LocationsMap from "../component/LocationsMap";
 import { ProductGrid } from "../component/ProductGrid";
 import TestimonyCard from "../component/TestimonyCard";
 import { useState, useEffect } from "react";
@@ -252,13 +253,8 @@ const HomePage = () => {
               With 30+ stores across Indonesia, there is always a Koda nearby to fuel your day. Come visit us!
             </p>
           </div>
-          <div className="rounded-3xl overflow-hidden shadow-lg shadow-zinc-900/5 border border-slate-200 bg-white p-2">
-            <img 
-              src={GlobeImage} 
-              alt="Store locations map" 
-              className="w-full h-auto rounded-2xl" 
-              onError={(e) => { e.target.onerror = null; e.target.src = "https://picsum.photos/seed/map/1200/600"; }}
-            />
+          <div className="rounded-3xl overflow-hidden shadow-lg shadow-zinc-900/5 border border-slate-200 bg-white p-2 relative z-0">
+            <LocationsMap />
           </div>
         </div>
       </section>
