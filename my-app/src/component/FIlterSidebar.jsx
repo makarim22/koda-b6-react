@@ -1,61 +1,62 @@
 import { useState } from 'react';
 
-export const FilterSidebar = ({
-  categories,
-  sortOptions,
-  onApplyFilters,
-  onResetFilters,
-}) => {
-  const [localSearchQuery, setLocalSearchQuery] = useState('');
-  const [localSelectedCategories, setLocalSelectedCategories] = useState([]);
-  const [localSelectedSort, setLocalSelectedSort] = useState(null);
-  const [localPriceRange, setLocalPriceRange] = useState([0, 100000]);
+  import { useEffect } from 'react';
 
-  function handleCategoryChange(categoryId) {
-    if (localSelectedCategories.includes(categoryId)) {
-      setLocalSelectedCategories(
-        localSelectedCategories.filter((id) => id !== categoryId)
-      );
-    } else {
-      setLocalSelectedCategories([...localSelectedCategories, categoryId]);
+  export const FilterSidebar = ({
+    categories,
+    sortOptions,
+    onApplyFilters,
+    onResetFilters,
+  }) => {
+    const [localSearchQuery, setLocalSearchQuery] = useState('');
+    const [localSelectedCategories, setLocalSelectedCategories] = useState([]);
+    const [localSelectedSort, setLocalSelectedSort] = useState(null);
+    const [localPriceRange, setLocalPriceRange] = useState([0, 100000]);
+
+    // Apply filters automatically when local state changes
+    useEffect(() => {
+      onApplyFilters({
+        searchQuery: localSearchQuery,
+        categories: localSelectedCategories,
+        sort: localSelectedSort,
+        priceRange: localPriceRange,
+      });
+    }, [localSearchQuery, localSelectedCategories, localSelectedSort, localPriceRange]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    function handleCategoryChange(categoryId) {
+      if (localSelectedCategories.includes(categoryId)) {
+        setLocalSelectedCategories(
+          localSelectedCategories.filter((id) => id !== categoryId)
+        );
+      } else {
+        setLocalSelectedCategories([...localSelectedCategories, categoryId]);
+      }
     }
-  }
 
-  function handleSortChange(sortId) {
-    if (localSelectedSort === sortId) {
+    function handleSortChange(sortId) {
+      if (localSelectedSort === sortId) {
+        setLocalSelectedSort(null);
+      } else {
+        setLocalSelectedSort(sortId);
+      }
+    }
+
+    function handlePriceChange(e) {
+      const newMaxPrice = parseInt(e.target.value, 10);
+      setLocalPriceRange([0, newMaxPrice]);
+    }
+
+    function handleSearchInputChange(e) {
+      setLocalSearchQuery(e.target.value);
+    }
+
+    function handleResetAllFilters() {
+      setLocalSearchQuery('');
+      setLocalSelectedCategories([]);
       setLocalSelectedSort(null);
-    } else {
-      setLocalSelectedSort(sortId);
+      setLocalPriceRange([0, 100000]);
+      onResetFilters();
     }
-  }
-
-  function handlePriceChange(e) {
-    const newMaxPrice = parseInt(e.target.value, 10);
-    setLocalPriceRange([0, newMaxPrice]);
-  }
-
-  function handleSearchInputChange(e) {
-    const value = e.target.value
-    console.log("value", value)
-    setLocalSearchQuery(e.target.value);
-  }
-
-  function handleApplyFilter() {
-    onApplyFilters({
-      searchQuery: localSearchQuery,
-      categories: localSelectedCategories,
-      sort: localSelectedSort,
-      priceRange: localPriceRange,
-    });
-  }
-
-  function handleResetAllFilters() {
-    setLocalSearchQuery('');
-    setLocalSelectedCategories([]);
-    setLocalSelectedSort(null);
-    setLocalPriceRange([0, 100000]);
-    onResetFilters();
-  }
 
   return (
     <div className="bg-black text-white rounded-lg p-6 w-full md:w-64 h-fit sticky top-4">
@@ -145,12 +146,6 @@ export const FilterSidebar = ({
         </div>
       </div>
 
-      <button
-        onClick={handleApplyFilter}
-        className="w-full bg-orange-400 text-black py-2 rounded font-medium text-sm hover:bg-orange-500 transition-colors active:scale-95"
-      >
-        Apply Filter
-      </button>
     </div>
   );
 };

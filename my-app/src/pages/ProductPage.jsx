@@ -35,20 +35,25 @@ const ProductPage = () => {
       console.log("data", data);
 
       const mappedProducts = data
-        .map((product) => ({
-          id: product.id,
-          image: product.images && product.images.length > 0 ? product.images[0].path : glasses,
-          title: product.product_name,
-          price: `IDR ${product.base_price.toLocaleString('id-ID')}`,
-          originalPrice: `IDR ${Math.ceil(product.base_price * 1.15).toLocaleString('id-ID')}`,
-          description: product.description,
-          rating: Math.floor(Math.random() * 2) + 4,
-          reviews: 0,
-          isFlashSale: Math.random() > 0.3,
-          isBuy1Get1: Math.random() > 0.5,
-          isBirthdayPackage: Math.random() > 0.8,
-          categoryIds: product.categories ? product.categories.map(c => c.id) : [],
-        }));
+        .map((product) => {
+          const categoryNames = product.categories ? product.categories.map(c => c.name?.toLowerCase() || '') : [];
+          return {
+            id: product.id,
+            image: product.images && product.images.length > 0 ? product.images[0].path : glasses,
+            title: product.product_name,
+            basePrice: product.base_price || 0,
+            price: `IDR ${(product.base_price || 0).toLocaleString('id-ID')}`,
+            originalPrice: `IDR ${Math.ceil((product.base_price || 0) * 1.15).toLocaleString('id-ID')}`,
+            description: product.description,
+            rating: Math.floor(Math.random() * 2) + 4,
+            reviews: 0,
+            // Map promo flags based on categories if they exist, otherwise fallback to false (not random anymore)
+            isFlashSale: categoryNames.some(name => name.includes('flash sale')),
+            isBuy1Get1: categoryNames.some(name => name.includes('buy 1 get 1')),
+            isBirthdayPackage: categoryNames.some(name => name.includes('birthday')),
+            categoryIds: product.categories ? product.categories.map(c => c.id) : [],
+          };
+        });
 
       setAllProducts(mappedProducts);
     } catch (err) {
@@ -99,8 +104,7 @@ const ProductPage = () => {
 
     // Price range filter
     currentProducts = currentProducts.filter(product => {
-      const price = parseInt(product.price.replace(/[^\d]/g, ''));
-      return price >= appliedFilters.priceRange[0] && price <= appliedFilters.priceRange[1];
+      return product.basePrice >= appliedFilters.priceRange[0] && product.basePrice <= appliedFilters.priceRange[1];
     });
 
     // Sorting
@@ -125,11 +129,7 @@ const ProductPage = () => {
           });
           break;
         case 4:
-          currentProducts.sort((a, b) => {
-            const priceA = parseInt(a.price.replace(/[^\d]/g, ''));
-            const priceB = parseInt(b.price.replace(/[^\d]/g, ''));
-            return priceA - priceB;
-          });
+          currentProducts.sort((a, b) => a.basePrice - b.basePrice);
           break;
         default:
           break;
