@@ -86,9 +86,9 @@ const Header = ({ bgColor }) => {
               <Link to="/wishlist" className={`p-2 rounded-xl transition ${isDark ? 'text-white/70 hover:text-white hover:bg-white/10' : 'text-zinc-500 hover:text-red-500 hover:bg-slate-100'}`}>
                 <Heart size={20} />
               </Link>
-              <button className={`p-2 rounded-xl transition ${isDark ? 'text-white/70 hover:text-white hover:bg-white/10' : 'text-zinc-500 hover:text-zinc-950 hover:bg-slate-100'}`}>
+              <Link to="/cart" className={`p-2 rounded-xl transition ${isDark ? 'text-white/70 hover:text-white hover:bg-white/10' : 'text-zinc-500 hover:text-zinc-950 hover:bg-slate-100'}`}>
                 <ShoppingBag size={20} />
-              </button>
+              </Link>
             </div>
 
             {/* Auth */}
@@ -173,9 +173,9 @@ const Header = ({ bgColor }) => {
                 <Link to="/wishlist" className="p-3 rounded-xl text-zinc-500 hover:text-red-500 hover:bg-white bg-white/50 border border-transparent hover:border-slate-200 transition shadow-sm w-full flex justify-center">
                   <Heart size={20} />
                 </Link>
-                <button className="p-3 rounded-xl text-zinc-500 hover:text-zinc-950 hover:bg-white bg-white/50 border border-transparent hover:border-slate-200 transition shadow-sm w-full flex justify-center">
+                <Link to="/cart" className="p-3 rounded-xl text-zinc-500 hover:text-zinc-950 hover:bg-white bg-white/50 border border-transparent hover:border-slate-200 transition shadow-sm w-full flex justify-center">
                   <ShoppingBag size={20} />
-                </button>
+                </Link>
               </div>
               {loggedInUser ? (
                 <>

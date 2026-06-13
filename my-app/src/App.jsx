@@ -15,6 +15,7 @@ import ProductReview from "./pages/ProductReview";
 import HistoryOrder from "./pages/HistoryOrder";
 import DetailOrder from "./pages/DetailOrder";
 import ProductCheckout from "./pages/ProductCheckout";
+import CartPage from "./pages/CartPage";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import ListProducts from "./pages/ListProducts";
@@ -112,6 +113,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ProductCheckout />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <CartPage />
               </ProtectedRoute>
             }
           />
